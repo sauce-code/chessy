@@ -7,5 +7,6 @@
   <modules>
   	<module>chessy-core</module>
   	<module>chessy-gui</module>
+  	<module>chessy-cli</module>
   </modules>
 </project>
