@@ -8,4 +8,11 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>chessy-core</artifactId>
+	<url>https://www.github.com/sauce-code/chessy/chessy-core</url>
+	<licenses>
+		<license>
+			<name>GNU GENERAL PUBLIC LICENSE</name>
+			<url>LICENSE</url>
+		</license>
+	</licenses>
 </project>

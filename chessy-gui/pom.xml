@@ -44,4 +44,11 @@
 			</plugin>
 		</plugins>
 	</build>
+	<url>https://www.github.com/sauce-code/chessy/chessy-gui</url>
+	<licenses>
+		<license>
+			<name>GNU GENERAL PUBLIC LICENSE</name>
+			<url>LICENSE</url>
+		</license>
+	</licenses>
 </project>
