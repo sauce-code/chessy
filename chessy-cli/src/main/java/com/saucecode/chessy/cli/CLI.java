@@ -2,7 +2,7 @@ package com.saucecode.chessy.cli;
 
 import com.saucecode.chessy.core.Game;
 
-public class Application {
+public class CLI {
 
 	public static void main(String[] args) {
 		Game game = new Game();

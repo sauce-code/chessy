@@ -36,7 +36,7 @@ import javafx.stage.Stage;
  * 
  * @author Torben Kr&uuml;ger
  */
-public class Gui extends Application {
+public class GUI extends Application {
 
 	/**
 	 * The current ply.
@@ -312,7 +312,7 @@ public class Gui extends Application {
 				grid.add(panes[i][j], i, j + 1);
 
 				Rectangle recti = new Rectangle(50, 50);
-				Color color = ((i + j) % 2 == 0) ? Color.BLANCHEDALMOND : Color.INDIANRED;
+				Color color = ((i + j) % 2 == 0) ? Color.BLANCHEDALMOND : Color.GREEN;
 				recti.setFill(color);
 
 				// recti.addEventFilter(MouseEvent.MOUSE_PRESSED,
