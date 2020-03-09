@@ -1,26 +1,37 @@
 package com.saucecode.chessy.gui;
 
+import java.util.Optional;
+
 import com.saucecode.chessy.core.Board;
 import com.saucecode.chessy.core.Game;
 import com.saucecode.chessy.core.Player;
+
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -42,16 +53,6 @@ public class GUI extends Application {
 	 * The current ply.
 	 */
 	private int ply = 1;
-
-	/**
-	 * The ply toggle group.
-	 */
-	private final ToggleGroup plyGroup = new ToggleGroup();
-
-	/**
-	 * A.I. checkbox.
-	 */
-	private final CheckBox ai = new CheckBox("Player Black A.I.");
 
 	/**
 	 * Tells whether black is controlled by an a.i. nor not.<br>
@@ -109,11 +110,108 @@ public class GUI extends Application {
 	 */
 	private Label stateLabel = new Label();
 
+	private Menu initMenuHelp() {
+		final MenuItem about = new MenuItem("A_bout");
+		about.setOnAction(e -> new AboutAlert(null).showAndWait());
+
+		return new Menu("_Help", null, about);
+	}
+	
+	private Menu initMenuSettings() {
+		final CheckMenuItem ai = new CheckMenuItem("_Black Palyer A.I.");
+		ai.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
+				aiBlack = newVal;
+				if (game.getBoard().getCurrentPlayer() == Player.BLACK) {
+					game.move(ply);
+					drawBoard();
+				}
+			}
+		});
+		final Menu menuPly = new Menu("ply");
+		final ToggleGroup groupPly = new ToggleGroup();
+		int maxPly = 4; // TODO make this a constant
+		RadioMenuItem[] items = new RadioMenuItem[maxPly];
+		for (int i = 0; i < maxPly; i++) {
+			items[i] = new RadioMenuItem(Integer.toString(i + 1));
+			items[i].setToggleGroup(groupPly);
+			menuPly.getItems().add(items[i]);
+		}
+		groupPly.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
+				if (newToggle == items[0]) {
+					ply = 1;
+				} else if (newToggle == items[1]) {
+					ply = 2;
+				} else if (newToggle == items[2]) {
+					ply = 3;
+				} else if (newToggle == items[3]) {
+					ply = 4;
+				}
+				System.out.println(newToggle);
+				System.out.println(ply);
+			}
+		});
+		items[0].setSelected(true);
+		
+		return new Menu("_Settings", null, ai, menuPly);
+	}
+	
+	private Menu initMenuEdit() {
+		final MenuItem undo = new MenuItem("_Undo");
+		undo.setAccelerator(KeyCombination.keyCombination("Ctrl + Z"));
+		undo.setOnAction(e -> {
+			if (aiBlack) {
+				game.undo();
+			}
+			game.undo();
+			drawBoard();
+		});
+
+		return new Menu("_Edit", null, undo);
+	}
+
+	private Menu initMenuFile() {
+		final MenuItem restart = new MenuItem("_Restart");
+		restart.setAccelerator(KeyCombination.keyCombination("F2"));
+		restart.setOnAction(e -> {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Restart");
+			alert.setHeaderText("Do you want to start a new game?");
+//			alert.setContentText("Are you ok with this?");
+			Optional<ButtonType> result = alert.showAndWait();
+			// TODO only show if game is not empty
+			if (result.get() == ButtonType.OK){
+			    // ... user chose OK
+				game = new Game();
+				drawBoard();
+			} else {
+			    // ... user chose CANCEL or closed the dialog
+			}
+		});
+
+		final MenuItem exit = new MenuItem("E_xit");
+		exit.setAccelerator(KeyCombination.keyCombination("Alt + F4"));
+		exit.setOnAction(e -> Platform.exit());
+
+		return new Menu("_File", null, restart, new SeparatorMenuItem(), exit);
+	}
+
+	/**
+	 * Initializes the menu bar and returns it.
+	 *
+	 * @return the initialized menubar
+	 */
+	private MenuBar initMenuBar() {
+		final MenuBar menuBar = new MenuBar(initMenuFile(), initMenuEdit(), initMenuSettings(), initMenuHelp());
+		menuBar.setUseSystemMenuBar(true);
+		return menuBar;
+	}
+
 	/**
 	 * Launch the application.
 	 * 
-	 * @param args
-	 *            arguments, unused
+	 * @param args arguments, unused
 	 */
 	public static void main(String[] args) {
 		launch(args);
@@ -121,7 +219,7 @@ public class GUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("Chess Game");
+		primaryStage.setTitle("Chessy");
 
 		initializeGrid();
 
@@ -132,7 +230,10 @@ public class GUI extends Application {
 		putButtonsLabels();
 		setCurrentPlayerText();
 
-		primaryStage.setScene(new Scene(grid, 500, 600));
+		final BorderPane border = new BorderPane(grid);
+		border.setTop(initMenuBar());
+
+		primaryStage.setScene(new Scene(border, 500, 600));
 		primaryStage.show();
 	}
 
@@ -160,51 +261,6 @@ public class GUI extends Application {
 
 		grid.add(vbBtn, 0, 10, 8, 3);
 
-		// Undo Button
-		Button buttonUndo = new Button("Undo");
-
-		buttonUndo.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				if (aiBlack) {
-					game.undo();
-				}
-				game.undo();
-				drawBoard();
-			}
-		});
-		hbBtn.getChildren().add(buttonUndo);
-
-		// Restart Game Button
-		Button buttonRestart = new Button("Restart");
-		buttonRestart.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				game = new Game();
-				drawBoard();
-			}
-		});
-		hbBtn.getChildren().add(buttonRestart);
-
-		// Close Button
-		Button buttonClose = new Button("Close");
-		buttonClose.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				((Node) (event.getSource())).getScene().getWindow().hide();
-			}
-		});
-		hbBtn.getChildren().add(buttonClose);
-
-		// Heading
-		Label heading = new Label("Chess Game");
-		HBox hbhead = new HBox(10);
-		heading.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		hbhead.setAlignment(Pos.CENTER);
-		hbhead.getChildren().add(heading);
-		grid.add(hbhead, 0, 0, 8, 1);
-
 		// Player Label
 		HBox hbPlayer = new HBox(10);
 		hbPlayer.setAlignment(Pos.CENTER);
@@ -212,58 +268,8 @@ public class GUI extends Application {
 		playerLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		// grid.add(hbPlayer, 0, 9, 8, 1);
 
-		// Radio Buttons
-		RadioButton rb1 = new RadioButton("ply 1");
-		rb1.setToggleGroup(plyGroup);
-		RadioButton rb2 = new RadioButton("ply 2");
-		rb2.setToggleGroup(plyGroup);
-		RadioButton rb3 = new RadioButton("ply 3");
-		rb3.setToggleGroup(plyGroup);
-		RadioButton rb4 = new RadioButton("ply 4");
-		rb4.setToggleGroup(plyGroup);
-		rb1.setSelected(true);
-		plyGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-			public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
-				if (newToggle == rb1) {
-					ply = 1;
-				} else if (newToggle == rb2) {
-					ply = 2;
-				} else if (newToggle == rb3) {
-					ply = 3;
-				} else if (newToggle == rb4) {
-					ply = 4;
-				}
-			}
-		});
-
-		HBox rbBox = new HBox(10);
-		rbBox.getChildren().add(rb1);
-		rbBox.getChildren().add(rb2);
-		rbBox.getChildren().add(rb3);
-		rbBox.getChildren().add(rb4);
-		rbBox.setAlignment(Pos.CENTER);
-
 		vbBtn.getChildren().add(hbPlayer);
 		vbBtn.getChildren().add(hbBtn);
-		vbBtn.getChildren().add(rbBox);
-
-		// AI check box
-		ai.setSelected(false);
-		ai.selectedProperty().addListener(new ChangeListener<Boolean>() {
-			public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
-				aiBlack = newVal;
-				if (game.getBoard().getCurrentPlayer() == Player.BLACK) {
-					game.move(ply);
-					drawBoard();
-				}
-			}
-		});
-
-		HBox aiBox = new HBox(10);
-		aiBox.getChildren().add(ai);
-		aiBox.setAlignment(Pos.CENTER);
-
-		vbBtn.getChildren().add(aiBox);
 
 		// state Label
 		HBox hbState = new HBox(10);
@@ -296,9 +302,8 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * Initializes the StackPanes for every rectangle of the chess board and
-	 * draws the rectangles also sets the eventListener for clicks for every
-	 * rectangle.
+	 * Initializes the StackPanes for every rectangle of the chess board and draws
+	 * the rectangles also sets the eventListener for clicks for every rectangle.
 	 */
 	private void initializeStackPanes() {
 		panes = new StackPane[8][8];
@@ -362,12 +367,9 @@ public class GUI extends Application {
 	/**
 	 * Puts a pawn at the given position (<b>chess coordinates</b>).
 	 * 
-	 * @param black
-	 *            true - if the pawn is black, false - if the pawn is white
-	 * @param x
-	 *            coordinate on the chess board of the pawn
-	 * @param y
-	 *            coordinate on the chess board of the pawn
+	 * @param black true - if the pawn is black, false - if the pawn is white
+	 * @param x     coordinate on the chess board of the pawn
+	 * @param y     coordinate on the chess board of the pawn
 	 */
 	private void putPawn(boolean black, int x, int y) {
 		Image image = (black) ? pawnB : pawnW;
@@ -377,12 +379,9 @@ public class GUI extends Application {
 	/**
 	 * Puts a rook at the given position (<b>chess coordinates</b>).
 	 * 
-	 * @param black
-	 *            true - if the rook is black, false - if the rook is white
-	 * @param x
-	 *            coordinate on the chess board of the rook
-	 * @param y
-	 *            coordinate on the chess board of the rook
+	 * @param black true - if the rook is black, false - if the rook is white
+	 * @param x     coordinate on the chess board of the rook
+	 * @param y     coordinate on the chess board of the rook
 	 */
 	private void putRook(boolean black, int x, int y) {
 		Image image = (black) ? rookB : rookW;
@@ -392,12 +391,9 @@ public class GUI extends Application {
 	/**
 	 * Puts a knight at the given position (<b>chess coordinates</b>).
 	 * 
-	 * @param black
-	 *            true - if the knight is black, false - if the knight is white
-	 * @param x
-	 *            coordinate on the chess board of the knight
-	 * @param y
-	 *            coordinate on the chess board of the knight
+	 * @param black true - if the knight is black, false - if the knight is white
+	 * @param x     coordinate on the chess board of the knight
+	 * @param y     coordinate on the chess board of the knight
 	 */
 	private void putKnight(boolean black, int x, int y) {
 		Image image = (black) ? knightB : knightW;
@@ -407,12 +403,9 @@ public class GUI extends Application {
 	/**
 	 * Puts a bishop at the given position (<b>chess coordinates</b>).
 	 * 
-	 * @param black
-	 *            true - if the bishop is black, false - if the bishop is white
-	 * @param x
-	 *            coordinate on the chess board of the bishop
-	 * @param y
-	 *            coordinate on the chess board of the bishop
+	 * @param black true - if the bishop is black, false - if the bishop is white
+	 * @param x     coordinate on the chess board of the bishop
+	 * @param y     coordinate on the chess board of the bishop
 	 */
 	private void putBishop(boolean black, int x, int y) {
 		Image image = (black) ? bishopB : bishopW;
@@ -422,12 +415,9 @@ public class GUI extends Application {
 	/**
 	 * Puts a queen at the given position (<b>chess coordinates</b>).
 	 * 
-	 * @param black
-	 *            true - if the queen is black, false - if the queen is white
-	 * @param x
-	 *            coordinate on the chess board of the queen
-	 * @param y
-	 *            coordinate on the chess board of the queen
+	 * @param black true - if the queen is black, false - if the queen is white
+	 * @param x     coordinate on the chess board of the queen
+	 * @param y     coordinate on the chess board of the queen
 	 */
 	private void putQueen(boolean black, int x, int y) {
 		Image image = (black) ? queenB : queenW;
@@ -437,12 +427,9 @@ public class GUI extends Application {
 	/**
 	 * Puts a king at the given position (<b>chess coordinates</b>).
 	 * 
-	 * @param black
-	 *            true - if the king is black, false - if the king is white
-	 * @param x
-	 *            coordinate on the chess board of the king
-	 * @param y
-	 *            coordinate on the chess board of the king
+	 * @param black true - if the king is black, false - if the king is white
+	 * @param x     coordinate on the chess board of the king
+	 * @param y     coordinate on the chess board of the king
 	 */
 	private void putKing(boolean black, int x, int y) {
 		Image image = (black) ? kingB : kingW;
@@ -451,11 +438,9 @@ public class GUI extends Application {
 
 	/**
 	 * This returns an ImageView containing the transfered image and sets the
-	 * setMouseTransparent-Property of the ImageView to true (so you can click
-	 * it).
+	 * setMouseTransparent-Property of the ImageView to true (so you can click it).
 	 * 
-	 * @param image
-	 *            the image to be set
+	 * @param image the image to be set
 	 * @return the generated ImageView
 	 */
 	private ImageView getImageView(Image image) {
@@ -467,10 +452,8 @@ public class GUI extends Application {
 	/**
 	 * Handles what happens if a field of the grid is clicked.
 	 * 
-	 * @param x
-	 *            the x-coordinate of the clicked field
-	 * @param y
-	 *            the y-coordinate of the clicked field
+	 * @param x the x-coordinate of the clicked field
+	 * @param y the y-coordinate of the clicked field
 	 */
 	private void rectangleClicked(int x, int y) {
 
@@ -576,10 +559,8 @@ public class GUI extends Application {
 	/**
 	 * Delete the ImageView of the given Piece.
 	 * 
-	 * @param x
-	 *            x-coordinate of the piece
-	 * @param y
-	 *            y-coordinate of the piece
+	 * @param x x-coordinate of the piece
+	 * @param y y-coordinate of the piece
 	 */
 	private void deletePiece(int x, int y) {
 		for (Node n : panes[x][y].getChildren()) {
