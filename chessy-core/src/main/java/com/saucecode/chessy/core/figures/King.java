@@ -9,7 +9,7 @@ public class King extends Figure {
 	/**
 	 * The base value.
 	 */
-	private final static int VALUE = 20000;
+	private final static int VALUE = 20_000;
 
 	/**
 	 * The evaluation matrix for mid game.

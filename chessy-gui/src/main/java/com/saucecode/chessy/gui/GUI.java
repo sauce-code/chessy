@@ -4,14 +4,14 @@ import java.util.Optional;
 
 import com.saucecode.chessy.core.Board;
 import com.saucecode.chessy.core.Game;
-import com.saucecode.chessy.core.Player;
+import com.saucecode.chessy.core.GameI;
+import com.saucecode.chessy.core.Selection;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -33,13 +33,9 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 /**
@@ -48,17 +44,6 @@ import javafx.stage.Stage;
  * @author Torben Kr&uuml;ger
  */
 public class GUI extends Application {
-
-	/**
-	 * The current ply.
-	 */
-	private int ply = 1;
-
-	/**
-	 * Tells whether black is controlled by an a.i. nor not.<br>
-	 * {@code true}, if black is being controlled by an a.i.
-	 */
-	private boolean aiBlack = false;
 
 	/**
 	 * The game.
@@ -83,32 +68,7 @@ public class GUI extends Application {
 	/**
 	 * The StackPanes - one for each rectangle of the chess game.
 	 */
-	private StackPane panes[][];
-
-	/**
-	 * Saves one clicked Field of the chess game.
-	 */
-	private int clickedX = -1, clickedY = -1;
-
-	/**
-	 * The x-coordinate of the grid where the chess board starts.
-	 */
-	private final int startBoardX = 0;
-
-	/**
-	 * The y-coordinate of the grid where the chess board starts.
-	 */
-	private final int startBoardY = 1;
-
-	/**
-	 * The Label which displays the current Player.
-	 */
-	private Label playerLabel = new Label();
-
-	/**
-	 * The label which displays the current state.
-	 */
-	private Label stateLabel = new Label();
+	private final StackPane panes[][] = new StackPane[GameI.DIM][GameI.DIM];
 
 	private Menu initMenuHelp() {
 		final MenuItem about = new MenuItem("A_bout");
@@ -116,52 +76,41 @@ public class GUI extends Application {
 
 		return new Menu("_Help", null, about);
 	}
-	
+
 	private Menu initMenuSettings() {
 		final CheckMenuItem ai = new CheckMenuItem("_Black Palyer A.I.");
-		ai.selectedProperty().addListener(new ChangeListener<Boolean>() {
-			public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
-				aiBlack = newVal;
-				if (game.getBoard().getCurrentPlayer() == Player.BLACK) {
-					game.move(ply);
-					drawBoard();
-				}
-			}
-		});
+		ai.selectedProperty().set(game.blackAIProperty().get());
+		game.blackAIProperty().bind(ai.selectedProperty());
 		final Menu menuPly = new Menu("ply");
 		final ToggleGroup groupPly = new ToggleGroup();
-		int maxPly = 4; // TODO make this a constant
-		RadioMenuItem[] items = new RadioMenuItem[maxPly];
-		for (int i = 0; i < maxPly; i++) {
+		RadioMenuItem[] items = new RadioMenuItem[GameI.PLY_MAX];
+		for (int i = 0; i < GameI.PLY_MAX; i++) {
 			items[i] = new RadioMenuItem(Integer.toString(i + 1));
 			items[i].setToggleGroup(groupPly);
 			menuPly.getItems().add(items[i]);
 		}
 		groupPly.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle oldToggle, Toggle newToggle) {
-				if (newToggle == items[0]) {
-					ply = 1;
-				} else if (newToggle == items[1]) {
-					ply = 2;
-				} else if (newToggle == items[2]) {
-					ply = 3;
-				} else if (newToggle == items[3]) {
-					ply = 4;
+				for (int i = 0; i < GameI.PLY_MAX; i++) {
+					if (newToggle == items[i]) {
+						game.plyProperty().set(i + 1);
+					}
 				}
 				System.out.println(newToggle);
-				System.out.println(ply);
+				System.out.println(game.plyProperty().get());
 			}
 		});
-		items[0].setSelected(true);
-		
+		items[game.plyProperty().get() - 1].setSelected(true);
+
 		return new Menu("_Settings", null, ai, menuPly);
 	}
-	
+
 	private Menu initMenuEdit() {
 		final MenuItem undo = new MenuItem("_Undo");
+		undo.disableProperty().bind(game.undoable().not());
 		undo.setAccelerator(KeyCombination.keyCombination("Ctrl + Z"));
 		undo.setOnAction(e -> {
-			if (aiBlack) {
+			if (game.blackAIProperty().get()) {
 				game.undo();
 			}
 			game.undo();
@@ -173,6 +122,7 @@ public class GUI extends Application {
 
 	private Menu initMenuFile() {
 		final MenuItem restart = new MenuItem("_Restart");
+		restart.disableProperty().bind(game.resettable().not());
 		restart.setAccelerator(KeyCombination.keyCombination("F2"));
 		restart.setOnAction(e -> {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -181,12 +131,11 @@ public class GUI extends Application {
 //			alert.setContentText("Are you ok with this?");
 			Optional<ButtonType> result = alert.showAndWait();
 			// TODO only show if game is not empty
-			if (result.get() == ButtonType.OK){
-			    // ... user chose OK
-				game = new Game();
-				drawBoard();
+			if (result.get() == ButtonType.OK) {
+				// ... user chose OK
+				game.reset();
 			} else {
-			    // ... user chose CANCEL or closed the dialog
+				// ... user chose CANCEL or closed the dialog
 			}
 		});
 
@@ -219,7 +168,7 @@ public class GUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("Chessy");
+		primaryStage.setTitle("Chessy"); // TODO constant
 
 		initializeGrid();
 
@@ -227,13 +176,99 @@ public class GUI extends Application {
 		initializeStackPanes();
 		drawBoard();
 
-		putButtonsLabels();
-		setCurrentPlayerText();
-
 		final BorderPane border = new BorderPane(grid);
 		border.setTop(initMenuBar());
 
-		primaryStage.setScene(new Scene(border, 500, 600));
+		GridPane info = new GridPane();
+		
+		int i = 0;
+		
+		Label scoreWhite = new Label("Score White: ");
+		Label scoreWhite2 = new Label("");
+		scoreWhite2.textProperty().bind(game.boardValueWhiteProperty());
+		scoreWhite2.setMaxWidth(Double.MAX_VALUE);
+		scoreWhite2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(scoreWhite, 0, i);
+		info.add(scoreWhite2, 1, i);
+		i++;
+		
+		Label scoreBlack = new Label("Score Black: ");
+		Label scoreBlack2 = new Label("");
+		scoreBlack2.textProperty().bind(game.boardValueBlackProperty());
+		scoreBlack2.setMaxWidth(Double.MAX_VALUE);
+		scoreBlack2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(scoreBlack, 0, i);
+		info.add(scoreBlack2, 1, i);
+		i++;
+		
+		Label ckeck = new Label("In Check: ");
+		Label check2 = new Label("");
+		game.busyProperty().addListener(e -> Platform.runLater(() -> {
+			if (game.inCheckProperty().get() == null) {
+				check2.setText("null");
+			} else {
+				check2.setText(game.inCheckProperty().get().toString());
+			}
+		}));
+		check2.setMaxWidth(Double.MAX_VALUE);
+		check2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(ckeck, 0, i);
+		info.add(check2, 1, i);
+		i++;
+		
+		Label stalemate = new Label("In Stalemate: ");
+		Label stalemate2 = new Label("");
+		game.busyProperty().addListener(e -> Platform.runLater(() -> {
+			if (game.inStalemateProperty().get() == null) {
+				stalemate2.setText("null");
+			} else {
+				stalemate2.setText(game.inCheckProperty().get().toString());
+			}
+		}));
+		stalemate2.setMaxWidth(Double.MAX_VALUE);
+		stalemate2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(stalemate, 0, i);
+		info.add(stalemate2, 1, i);
+		i++;
+		
+		Label currentPlayer = new Label("Current Player: ");
+		Label currentPlayer2 = new Label(game.currentPlayerProperty().get().toString());
+		game.currentPlayerProperty().addListener(e -> Platform.runLater(() -> {
+			currentPlayer2.setText(game.currentPlayerProperty().get().toString());
+		}));
+		currentPlayer2.setMaxWidth(Double.MAX_VALUE);
+		currentPlayer2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(currentPlayer, 0, i);
+		info.add(currentPlayer2, 1, i);
+		i++;
+		
+		Label busy = new Label("Busy: ");
+		Label busy2 = new Label(Boolean.toString(false));
+		game.busyProperty().addListener(e -> Platform.runLater(() -> busy2.setText(Boolean.toString(game.busyProperty().get()))));
+		busy2.setMaxWidth(Double.MAX_VALUE);
+		busy2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(busy, 0, i);
+		info.add(busy2, 1, i);
+		i++;
+
+		border.setRight(info);
+
+		game.boardProperty().addListener(new ChangeListener<Board>() {
+			@Override
+			public void changed(ObservableValue<? extends Board> observable, Board oldValue, Board newValue) {
+				Platform.runLater(() -> drawBoard());
+			}
+		});
+
+		game.selectionProperty().addListener(new ChangeListener<Selection>() {
+			@Override
+			public void changed(ObservableValue<? extends Selection> observable, Selection oldValue,
+					Selection newValue) {
+				Platform.runLater(() -> drawBoard());
+			}
+		});
+
+		primaryStage.setScene(new Scene(border));
 		primaryStage.show();
 	}
 
@@ -243,42 +278,9 @@ public class GUI extends Application {
 	private void initializeGrid() {
 		grid.setHgap(1);
 		grid.setVgap(1); // space between rows
-		grid.setPadding(new Insets(10, 10, 10, 10));
-		// grid.setGridLinesVisible(true);
+//		grid.setPadding(new Insets(10, 10, 10, 10));
+		grid.setGridLinesVisible(true);
 		grid.setAlignment(Pos.CENTER);
-	}
-
-	/**
-	 * Puts Buttons and Labels onto the gui.
-	 */
-	private void putButtonsLabels() {
-
-		// Boxes
-		HBox hbBtn = new HBox(10);
-		hbBtn.setAlignment(Pos.CENTER);
-
-		VBox vbBtn = new VBox(10);
-
-		grid.add(vbBtn, 0, 10, 8, 3);
-
-		// Player Label
-		HBox hbPlayer = new HBox(10);
-		hbPlayer.setAlignment(Pos.CENTER);
-		hbPlayer.getChildren().add(playerLabel);
-		playerLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		// grid.add(hbPlayer, 0, 9, 8, 1);
-
-		vbBtn.getChildren().add(hbPlayer);
-		vbBtn.getChildren().add(hbBtn);
-
-		// state Label
-		HBox hbState = new HBox(10);
-		hbState.setAlignment(Pos.CENTER);
-		hbState.getChildren().add(stateLabel);
-		stateLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-
-		vbBtn.getChildren().add(hbState);
-
 	}
 
 	/**
@@ -286,18 +288,20 @@ public class GUI extends Application {
 	 */
 	private void initializeImages() {
 		// @formatter:off
-		pawnB   = new Image(getClass().getResource( "/bauerBlack.png").toExternalForm(), imgSize, imgSize, false, false);
-		pawnW   = new Image(getClass().getResource( "/bauerWhite.png").toExternalForm(), imgSize, imgSize, false, false);
-		rookB   = new Image(getClass().getResource( "/towerBlack.png").toExternalForm(), imgSize, imgSize, false, false);
-		rookW   = new Image(getClass().getResource( "/towerWhite.png").toExternalForm(), imgSize, imgSize, false, false);
-		knightB = new Image(getClass().getResource( "/horesBlack.png").toExternalForm(), imgSize, imgSize, false, false);
-		knightW = new Image(getClass().getResource( "/horesWhite.png").toExternalForm(), imgSize, imgSize, false, false);
-		bishopB = new Image(getClass().getResource("/bishopBlack.png").toExternalForm(), imgSize, imgSize, false, false);
-		bishopW = new Image(getClass().getResource("/bishopWhite.png").toExternalForm(), imgSize, imgSize, false, false);
-		kingB   = new Image(getClass().getResource(  "/kingBlack.png").toExternalForm(), imgSize, imgSize, false, false);
-		kingW   = new Image(getClass().getResource(  "/kingWhite.png").toExternalForm(), imgSize, imgSize, false, false);
-		queenB  = new Image(getClass().getResource(  "/dameBlack.png").toExternalForm(), imgSize, imgSize, false, false);
-		queenW  = new Image(getClass().getResource(  "/dameWhite.png").toExternalForm(), imgSize, imgSize, false, false);
+		pawnB = new Image(getClass().getResource("/bauerBlack.png").toExternalForm(), imgSize, imgSize, false, false);
+		pawnW = new Image(getClass().getResource("/bauerWhite.png").toExternalForm(), imgSize, imgSize, false, false);
+		rookB = new Image(getClass().getResource("/towerBlack.png").toExternalForm(), imgSize, imgSize, false, false);
+		rookW = new Image(getClass().getResource("/towerWhite.png").toExternalForm(), imgSize, imgSize, false, false);
+		knightB = new Image(getClass().getResource("/horesBlack.png").toExternalForm(), imgSize, imgSize, false, false);
+		knightW = new Image(getClass().getResource("/horesWhite.png").toExternalForm(), imgSize, imgSize, false, false);
+		bishopB = new Image(getClass().getResource("/bishopBlack.png").toExternalForm(), imgSize, imgSize, false,
+				false);
+		bishopW = new Image(getClass().getResource("/bishopWhite.png").toExternalForm(), imgSize, imgSize, false,
+				false);
+		kingB = new Image(getClass().getResource("/kingBlack.png").toExternalForm(), imgSize, imgSize, false, false);
+		kingW = new Image(getClass().getResource("/kingWhite.png").toExternalForm(), imgSize, imgSize, false, false);
+		queenB = new Image(getClass().getResource("/dameBlack.png").toExternalForm(), imgSize, imgSize, false, false);
+		queenW = new Image(getClass().getResource("/dameWhite.png").toExternalForm(), imgSize, imgSize, false, false);
 		// @formatter:on
 	}
 
@@ -306,7 +310,6 @@ public class GUI extends Application {
 	 * the rectangles also sets the eventListener for clicks for every rectangle.
 	 */
 	private void initializeStackPanes() {
-		panes = new StackPane[8][8];
 
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -323,25 +326,13 @@ public class GUI extends Application {
 				// recti.addEventFilter(MouseEvent.MOUSE_PRESSED,
 				// event -> System.out.println("i clicked it"));
 
+				final int x = i;
+				final int y = 7 - j;
 				recti.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent e) {
-
-						// System.out.println("i clicked it ");
-
-						for (Node node : grid.getChildren()) {
-
-							// if( node instanceof Rectangle) {
-							if (node.getBoundsInParent().contains(e.getSceneX(), e.getSceneY())) {
-								// System.out.println(
-								// "Node: " + node + " at " +
-								// GridPane.getRowIndex(node) + "/"
-								// + GridPane.getColumnIndex(node));
-								rectangleClicked(GridPane.getColumnIndex(node), GridPane.getRowIndex(node));
-							}
-							// }
-						}
-
+						game.select(new Selection(x, y)); // TODO platform run later?
+						System.out.println("clicked rectangle at x " + x + " y " + y);
 					}
 				});
 
@@ -349,19 +340,6 @@ public class GUI extends Application {
 
 			}
 		}
-	}
-
-	/**
-	 * Sets the text for the current player.
-	 */
-	private void setCurrentPlayerText() {
-		String player = (game.getBoard().getCurrentPlayer() == Player.WHITE) ? "White" : "Black";
-		// Label playerLabel = new Label("It's " + player + "'s turn");
-		playerLabel.setText("It's " + player + "'s turn");
-	}
-
-	private void setCurrentStateText() {
-		stateLabel.setText(game.getBoard().getCurrentState().toString());
 	}
 
 	/**
@@ -450,61 +428,29 @@ public class GUI extends Application {
 	}
 
 	/**
-	 * Handles what happens if a field of the grid is clicked.
-	 * 
-	 * @param x the x-coordinate of the clicked field
-	 * @param y the y-coordinate of the clicked field
-	 */
-	private void rectangleClicked(int x, int y) {
-
-		// transform coordinates in coordinates of chess board
-		x -= startBoardX;
-		y -= startBoardY;
-		y = 7 - y;
-		// System.out.println("I clicked " + x + "|" + y + " (chess
-		// coordinates)");
-
-		if (game.getBoard().getFigure(x, y) == null
-				|| game.getBoard().getFigure(x, y).getOwner() != game.getBoard().getCurrentPlayer()) {
-			// empty space clicked or enemy figure clicked
-
-			if (clickedX != -1 && clickedY != -1) { // means a figure was
-													// clicked in previous click
-				// System.out.println("a figure was clicked in previous click
-				// -->move!");
-				// System.out.println("from: " + clickedX + "|" + clickedY + "
-				// to " + x + "|" + y);
-
-				if (game.move(clickedX, clickedY, x, y)) {
-
-					// TODO wird nicht rechtzeitig aufgerufen
-					drawBoard();
-
-					if (aiBlack && game.getBoard().getCurrentPlayer() == Player.BLACK) {
-						game.move(ply);
-						drawBoard();
-					}
-				}
-			}
-			clickedX = clickedY = -1;
-		} else {
-			// figure clicked
-			if (game.getBoard().getFigure(x, y).getOwner() == game.getBoard().getCurrentPlayer()) {
-				clickedX = x;
-				clickedY = y;
-				// System.out.println("figure clicked and saved");
-			}
-		}
-	}
-
-	/**
 	 * Draws the board.
 	 */
 	private void drawBoard() {
 
 		deleteAllPieces();
-		setCurrentPlayerText();
-		setCurrentStateText();
+		setColors();
+		Selection select = game.selectionProperty().get();
+		if (select != null) {
+			((Rectangle)panes[select.getX()][7 - select.getY()].getChildren().get(0)).setFill(Color.CYAN);
+		}
+
+//		if (select != null) {
+//			int depth = 200; //Setting the uniform variable for the glow width and height
+//			 
+//			DropShadow borderGlow= new DropShadow();
+//			borderGlow.setOffsetY(0f);
+//			borderGlow.setOffsetX(0f);
+//			borderGlow.setColor(Color.CYAN);
+//			borderGlow.setWidth(depth);
+//			borderGlow.setHeight(depth);
+//			 
+//			panes[select.getX()][7 - select.getY()].setEffect(borderGlow);
+//		}
 
 		Board board = game.getBoard();
 		for (int x = 0; x < 8; x++) {
@@ -552,6 +498,15 @@ public class GUI extends Application {
 						break;
 					}
 				}
+			}
+		}
+	}
+
+	private void setColors() {
+		for (int x = 0; x < 8; x++ ) {
+			for (int y = 0; y < 8; y ++) {
+				Color color = ((x + y) % 2 == 0) ? Color.BLANCHEDALMOND : Color.GREEN;
+				((Rectangle)panes[x][y].getChildren().get(0)).setFill(color);
 			}
 		}
 	}
