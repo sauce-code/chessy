@@ -1,6 +1,11 @@
 package com.saucecode.chessy.core;
 
+import java.util.concurrent.CountDownLatch;
+
 import com.saucecode.chessy.core.figures.*;
+
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * Represents a board of a chess game.
@@ -550,6 +555,57 @@ public class Board {
 			}
 		}
 		return max;
+	}
+	
+	public Board getMaxMultiThreaded(int ply) {
+		// TODO
+		final ObjectProperty<Board> max = new SimpleObjectProperty<Board>(null);
+		final ObjectProperty<Board> temp = new SimpleObjectProperty<Board>(null);
+//		Board max = null;
+//		Board temp;
+		int threadCount = 0;
+		for (int fromX = 0; fromX < 8; fromX++) {
+			for (int fromY = 0; fromY < 8; fromY++) {
+				if (figures[fromX][fromY] != null && figures[fromX][fromY].getOwner() == currentPlayer) {
+					threadCount++;
+				}
+			}
+		}
+		
+		final CountDownLatch latch = new CountDownLatch(threadCount);
+		
+		for (int fromX = 0; fromX < 8; fromX++) {
+			for (int fromY = 0; fromY < 8; fromY++) {
+				if (figures[fromX][fromY] != null && figures[fromX][fromY].getOwner() == currentPlayer) {
+					final int x = fromX;
+					final int y = fromY;
+					new Thread(() -> {
+						System.out.println(Thread.currentThread().getName() + " started");
+						for (int toX = 0; toX < 8; toX++) {
+							for (int toY = 0; toY < 8; toY++) {
+								temp.set(figures[x][y].move(toX, toY));
+								if ((temp.get() != null) && (ply > 1)) {
+									temp.set(temp.get().getMax(ply - 1));
+								}
+								if ((max.get() == null) || ((temp.get() != null)
+										&& (temp.get().getValue(currentPlayer) > max.get().getValue(currentPlayer)))) {
+									max.set(temp.get());
+								}
+							}
+						}
+						latch.countDown();
+						System.out.println(Thread.currentThread().getName() + " ended");
+					}).start();
+				}
+			}
+		}
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return max.get();
 	}
 
 	public Board getMin(int ply) {

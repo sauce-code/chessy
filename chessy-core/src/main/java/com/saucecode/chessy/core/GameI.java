@@ -35,6 +35,8 @@ public interface GameI {
 	
 	public BooleanProperty blackAIProperty();
 	
+	public void undo();
+	
 	public void reset();
 	
 	public ObjectProperty<Player> inCheckProperty();

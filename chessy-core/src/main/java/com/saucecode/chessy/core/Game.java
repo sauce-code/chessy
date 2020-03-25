@@ -114,7 +114,7 @@ public class Game implements GameI {
 				System.out.println("newValue: " + newValue);
 				System.out.println(board.get());
 				if (board.get().getCurrentPlayer() == Player.BLACK) {
-					move(ply.get());
+					moveMultiThreaded(ply.get());
 				}
 			}
 		});
@@ -191,17 +191,31 @@ public class Game implements GameI {
 //			return false;
 //		}
 	}
-
-	/**
-	 * Undos the last move.<br>
-	 * If the game is already in the initial state, nothing happens.
-	 */
-	public void undo() {
-		if (history.size() > 0) {
-			board.set(history.pop());
-		}
-	}
 	
+	private void moveMultiThreaded(int ply) {
+		// TODO
+		final Task<Void> task = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				System.out.println(Thread.currentThread().getName() + " started");
+				busy.set(true);
+				Board temp = board.get().getMaxMultiThreaded(ply);
+				if (temp != null) {
+					for (int i = 0; i < ply - 1; i++) {
+						temp = temp.getPrevious();
+					}
+					history.push(board.get());
+					board.set(temp);
+				}
+				busy.set(false);
+				System.out.println(Thread.currentThread().getName() + " ended");
+				return null;
+			}
+		};
+		Thread thread = new Thread(task);
+		thread.start();
+	}
+
 	@Override
 	public String toString() {
 		return board.get().toString();
@@ -255,7 +269,7 @@ public class Game implements GameI {
 
 						if (blackAIProperty().get() && board.get().getCurrentPlayer() == Player.BLACK) {
 
-							move(ply.get());
+							moveMultiThreaded(ply.get());
 
 						}
 					}
@@ -291,6 +305,14 @@ public class Game implements GameI {
 	public void reset() {
 		if (resettable.get()) {
 			// TODO
+		}
+	}
+
+	@Override
+	public void undo() {
+		// TODO check if busy
+		if (history.size() > 0) {
+			board.set(history.pop());
 		}
 	}
 
