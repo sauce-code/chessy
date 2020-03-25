@@ -1,9 +1,9 @@
 package com.saucecode.chessy.core;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.StringProperty;
 
 public interface GameI {
 	
@@ -19,34 +19,34 @@ public interface GameI {
 	
 	public static final boolean BLACK_AI_STD = true;
 
-	public SimpleStringProperty boardValueWhiteProperty();
+	public StringProperty boardValueWhiteProperty();
 	
-	public SimpleStringProperty boardValueBlackProperty();
+	public StringProperty boardValueBlackProperty();
 	
-	public SimpleObjectProperty<Board> boardProperty();
+	public ObjectProperty<Board> boardProperty();
 	
-	public SimpleBooleanProperty busyProperty();
+	public BooleanProperty busyProperty();
 	
 	public void select(Selection s);
 	
-	public SimpleObjectProperty<Selection> selectionProperty();
+	public ObjectProperty<Selection> selectionProperty();
 	
-	public SimpleIntegerProperty plyProperty();
+	public IntegerProperty plyProperty();
 	
-	public SimpleBooleanProperty blackAIProperty();
+	public BooleanProperty blackAIProperty();
 	
 	public void reset();
 	
-	public SimpleObjectProperty<Player> inCheckProperty();
+	public ObjectProperty<Player> inCheckProperty();
 	
-	public SimpleObjectProperty<Player> inStalemateProperty();
+	public ObjectProperty<Player> inStalemateProperty();
 	
-	public SimpleBooleanProperty gameOverProperty();
+	public BooleanProperty gameOverProperty();
 	
-	public SimpleObjectProperty<Player> currentPlayerProperty();
+	public ObjectProperty<Player> currentPlayerProperty();
 	
-	public SimpleBooleanProperty resettable();
+	public BooleanProperty resettable();
 	
-	public SimpleBooleanProperty undoable();
+	public BooleanProperty undoable();
 	
 }

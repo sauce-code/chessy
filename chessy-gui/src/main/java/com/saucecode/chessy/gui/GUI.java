@@ -452,7 +452,7 @@ public class GUI extends Application {
 //			panes[select.getX()][7 - select.getY()].setEffect(borderGlow);
 //		}
 
-		Board board = game.getBoard();
+		Board board = game.boardProperty().get();
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
 

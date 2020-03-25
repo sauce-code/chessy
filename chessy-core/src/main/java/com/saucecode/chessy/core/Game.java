@@ -3,10 +3,14 @@ package com.saucecode.chessy.core;
 import java.util.Stack;
 
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
@@ -25,30 +29,25 @@ public class Game implements GameI {
 	 */
 	private Stack<Board> history;
 
-	/**
-	 * The current board.
-	 */
-	private Board board;
-
 	private final SimpleStringProperty boardValueWhite = new SimpleStringProperty();
 
 	private final SimpleStringProperty boardValueBlack = new SimpleStringProperty();
 
-	private final SimpleObjectProperty<Board> boardProperty = new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Board> board = new SimpleObjectProperty<>();
 
-	private final SimpleBooleanProperty isBusyProperty = new SimpleBooleanProperty(BUSY_STD);
+	private final SimpleBooleanProperty busy = new SimpleBooleanProperty(BUSY_STD);
 
-	private final SimpleObjectProperty<Selection> selectionProperty = new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Selection> selection = new SimpleObjectProperty<>();
 
-	private final SimpleIntegerProperty plyProperty = new SimpleIntegerProperty(PLY_STD);
+	private final SimpleIntegerProperty ply = new SimpleIntegerProperty(PLY_STD);
 
-	private final SimpleBooleanProperty blackAIProperty = new SimpleBooleanProperty(BLACK_AI_STD);
+	private final SimpleBooleanProperty blackAI = new SimpleBooleanProperty(BLACK_AI_STD);
 
-	private final SimpleObjectProperty<Player> inCheckProperty = new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Player> inCheck = new SimpleObjectProperty<>();
 
-	private final SimpleObjectProperty<Player> inStalemateProperty = new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Player> inStalemate = new SimpleObjectProperty<>();
 
-	private final SimpleBooleanProperty gameOverProperty = new SimpleBooleanProperty(false);
+	private final SimpleBooleanProperty gameOver = new SimpleBooleanProperty(false);
 
 	private final SimpleObjectProperty<Player> currentPlayer = new SimpleObjectProperty<>();
 
@@ -61,23 +60,23 @@ public class Game implements GameI {
 	 */
 	public Game() {
 		this.history = new Stack<Board>();
-		this.board = new Board();
+
 
 		undoable.bind(resettable);
 
-		boardProperty.addListener(new ChangeListener<Board>() {
+		board.addListener(new ChangeListener<Board>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Board> observable, Board oldValue, Board newValue) {
 				Platform.runLater(() -> {
-					boardValueWhite.set(Integer.toString(board.getValue(Player.WHITE)));
-					boardValueBlack.set(Integer.toString(board.getValue(Player.BLACK)));
-					switch (board.getCurrentState()) {
+					boardValueWhite.set(Integer.toString(board.get().getValue(Player.WHITE)));
+					boardValueBlack.set(Integer.toString(board.get().getValue(Player.BLACK)));
+					switch (board.get().getCurrentState()) {
 					case CHECK_BLACK:
-						inCheckProperty.set(Player.BLACK);
+						inCheck.set(Player.BLACK);
 						break;
 					case CHECK_WHITE:
-						inCheckProperty.set(Player.BLACK);
+						inCheck.set(Player.BLACK);
 						break;
 					case CHECKMATE_BLACK:
 						// TODO
@@ -86,19 +85,19 @@ public class Game implements GameI {
 						// TODO
 						break;
 					case STALEMATE_BLACK:
-						inStalemateProperty.set(Player.BLACK);
+						inStalemate.set(Player.BLACK);
 						break;
 					case STALEMATE_WHITE:
-						inStalemateProperty.set(Player.BLACK);
+						inStalemate.set(Player.BLACK);
 						break;
 					case NONE:
-						inCheckProperty.set(null);
-						inStalemateProperty.set(null);
+						inCheck.set(null);
+						inStalemate.set(null);
 						break;
 					default:
 						throw new IllegalStateException("no such state");
 					}
-					currentPlayer.set(board.getCurrentPlayer());
+					currentPlayer.set(board.get().getCurrentPlayer());
 
 					resettable.set(history.size() > 0);
 
@@ -107,20 +106,20 @@ public class Game implements GameI {
 
 		});
 
-		blackAIProperty.addListener(new ChangeListener<Boolean>() {
+		blackAI.addListener(new ChangeListener<Boolean>() {
 
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				System.out.println("oldValue: " + oldValue);
 				System.out.println("newValue: " + newValue);
-				System.out.println(board);
-				if (getBoard().getCurrentPlayer() == Player.BLACK) {
-					move(plyProperty.get());
+				System.out.println(board.get());
+				if (board.get().getCurrentPlayer() == Player.BLACK) {
+					move(ply.get());
 				}
 			}
 		});
 
-		boardProperty.set(board);
+		board.set(new Board());
 	}
 
 	/**
@@ -135,11 +134,10 @@ public class Game implements GameI {
 	 * @return {@code true}, if move was valid
 	 */
 	public boolean move(int fromX, int fromY, int toX, int toY) {
-		Board temp = board.move(fromX, fromY, toX, toY);
+		Board temp = board.get().move(fromX, fromY, toX, toY);
 		if (temp != null) {
-			history.push(board);
-			board = temp;
-			boardProperty.set(temp);
+			history.push(board.get());
+			board.set(temp);
 			return true;
 		} else {
 			return false;
@@ -164,17 +162,16 @@ public class Game implements GameI {
 			@Override
 			protected Void call() throws Exception {
 				System.out.println(Thread.currentThread().getName() + " started");
-				isBusyProperty.set(true);
-				Board temp = board.getMax(ply);
+				busy.set(true);
+				Board temp = board.get().getMax(ply);
 				if (temp != null) {
 					for (int i = 0; i < ply - 1; i++) {
 						temp = temp.getPrevious();
 					}
-					history.push(board);
-					board = temp;
-					boardProperty.set(temp);
+					history.push(board.get());
+					board.set(temp);
 				}
-				isBusyProperty.set(false);
+				busy.set(false);
 				System.out.println(Thread.currentThread().getName() + " ended");
 				return null;
 			}
@@ -201,38 +198,33 @@ public class Game implements GameI {
 	 */
 	public void undo() {
 		if (history.size() > 0) {
-			board = history.pop();
-			boardProperty.set(board);
+			board.set(history.pop());
 		}
 	}
-
-	public Board getBoard() {
-		return board;
-	}
-
+	
 	@Override
 	public String toString() {
-		return board.toString();
+		return board.get().toString();
 	}
 
 	@Override
-	public SimpleStringProperty boardValueWhiteProperty() {
+	public StringProperty boardValueWhiteProperty() {
 		return boardValueWhite;
 	}
 
 	@Override
-	public SimpleStringProperty boardValueBlackProperty() {
+	public StringProperty boardValueBlackProperty() {
 		return boardValueBlack;
 	}
 
 	@Override
-	public SimpleObjectProperty<Board> boardProperty() {
-		return boardProperty;
+	public ObjectProperty<Board> boardProperty() {
+		return board;
 	}
 
 	@Override
-	public SimpleBooleanProperty busyProperty() {
-		return isBusyProperty;
+	public BooleanProperty busyProperty() {
+		return busy;
 	}
 
 	@Override
@@ -242,37 +234,37 @@ public class Game implements GameI {
 		}
 
 		// unselect
-		if (s.equals(selectionProperty.get())) {
-			selectionProperty.set(null);
+		if (s.equals(selection.get())) {
+			selection.set(null);
 		} else {
 			int x = s.getX();
 			int y = s.getY();
 
-			if (getBoard().getFigure(x, y) == null
-					|| getBoard().getFigure(x, y).getOwner() != getBoard().getCurrentPlayer()) {
+			if (board.get().getFigure(x, y) == null
+					|| board.get().getFigure(x, y).getOwner() != board.get().getCurrentPlayer()) {
 				// empty space clicked or enemy figure clicked
 
-				if (selectionProperty.get() != null) { // means a figure was
+				if (selection.get() != null) { // means a figure was
 														// clicked in previous click
 					// System.out.println("a figure was clicked in previous click
 					// -->move!");
 					// System.out.println("from: " + clickedX + "|" + clickedY + "
 					// to " + x + "|" + y);
 
-					if (move(selectionProperty.get().getX(), selectionProperty.get().getY(), x, y)) {
+					if (move(selection.get().getX(), selection.get().getY(), x, y)) {
 
-						if (blackAIProperty().get() && getBoard().getCurrentPlayer() == Player.BLACK) {
+						if (blackAIProperty().get() && board.get().getCurrentPlayer() == Player.BLACK) {
 
-							move(plyProperty.get());
+							move(ply.get());
 
 						}
 					}
 				}
-				selectionProperty.set(null);
+				selection.set(null);
 			} else {
 				// figure clicked
-				if (getBoard().getFigure(x, y).getOwner() == getBoard().getCurrentPlayer()) {
-					selectionProperty.set(new Selection(x, y));
+				if (board.get().getFigure(x, y).getOwner() == board.get().getCurrentPlayer()) {
+					selection.set(new Selection(x, y));
 					System.out.println("figure clicked and saved");
 				}
 			}
@@ -281,18 +273,18 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public SimpleObjectProperty<Selection> selectionProperty() {
-		return selectionProperty;
+	public ObjectProperty<Selection> selectionProperty() {
+		return selection;
 	}
 
 	@Override
-	public SimpleIntegerProperty plyProperty() {
-		return plyProperty;
+	public IntegerProperty plyProperty() {
+		return ply;
 	}
 
 	@Override
-	public SimpleBooleanProperty blackAIProperty() {
-		return blackAIProperty;
+	public BooleanProperty blackAIProperty() {
+		return blackAI;
 	}
 
 	@Override
@@ -303,32 +295,32 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public SimpleObjectProperty<Player> inCheckProperty() {
-		return inCheckProperty;
+	public ObjectProperty<Player> inCheckProperty() {
+		return inCheck;
 	}
 
 	@Override
-	public SimpleObjectProperty<Player> inStalemateProperty() {
-		return inStalemateProperty;
+	public ObjectProperty<Player> inStalemateProperty() {
+		return inStalemate;
 	}
 
 	@Override
-	public SimpleBooleanProperty gameOverProperty() {
-		return gameOverProperty; // TODO
+	public BooleanProperty gameOverProperty() {
+		return gameOver; // TODO
 	}
 
 	@Override
-	public SimpleObjectProperty<Player> currentPlayerProperty() {
+	public ObjectProperty<Player> currentPlayerProperty() {
 		return currentPlayer;
 	}
 
 	@Override
-	public SimpleBooleanProperty resettable() {
+	public BooleanProperty resettable() {
 		return resettable;
 	}
 
 	@Override
-	public SimpleBooleanProperty undoable() {
+	public BooleanProperty undoable() {
 		return undoable;
 	}
 
