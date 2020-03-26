@@ -58,6 +58,10 @@ public class Game implements GameI {
 	private final SimpleBooleanProperty undoable = new SimpleBooleanProperty(false);
 	
 	private final SimpleDoubleProperty progress = new SimpleDoubleProperty();
+	
+	private final BooleanProperty castlingPossibleBlack = new SimpleBooleanProperty();
+	
+	private final BooleanProperty castlingPossibleWhite = new SimpleBooleanProperty();
 
 	/**
 	 * Creates a new game.
@@ -370,6 +374,16 @@ public class Game implements GameI {
 	@Override
 	public DoubleProperty progressProperty() {
 		return progress;
+	}
+
+	@Override
+	public BooleanProperty castlingPossibleBlackProperty() {
+		return castlingPossibleBlack;
+	}
+
+	@Override
+	public BooleanProperty castlingPossibleWhiteProperty() {
+		return castlingPossibleWhite;
 	}
 
 }

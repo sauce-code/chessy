@@ -55,4 +55,8 @@ public interface GameI {
 	
 	public DoubleProperty progressProperty();
 	
+	public BooleanProperty castlingPossibleBlackProperty();
+	
+	public BooleanProperty castlingPossibleWhiteProperty();
+	
 }

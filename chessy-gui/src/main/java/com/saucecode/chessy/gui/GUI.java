@@ -82,7 +82,7 @@ public class GUI extends Application {
 		final CheckMenuItem ai = new CheckMenuItem("_Black Palyer A.I.");
 		ai.selectedProperty().set(game.blackAIProperty().get());
 		game.blackAIProperty().bind(ai.selectedProperty());
-		final Menu menuPly = new Menu("ply");
+		final Menu menuPly = new Menu("Ply");
 		final ToggleGroup groupPly = new ToggleGroup();
 		RadioMenuItem[] items = new RadioMenuItem[GameI.PLY_MAX];
 		for (int i = 0; i < GameI.PLY_MAX; i++) {
