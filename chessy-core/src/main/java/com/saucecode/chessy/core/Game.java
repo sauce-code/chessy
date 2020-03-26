@@ -4,13 +4,13 @@ import java.util.Stack;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
@@ -29,9 +29,9 @@ public class Game implements GameI {
 	 */
 	private Stack<Board> history;
 
-	private final SimpleStringProperty boardValueWhite = new SimpleStringProperty();
+	private final SimpleIntegerProperty boardValueWhite = new SimpleIntegerProperty();
 
-	private final SimpleStringProperty boardValueBlack = new SimpleStringProperty();
+	private final SimpleIntegerProperty boardValueBlack = new SimpleIntegerProperty();
 
 	private final SimpleObjectProperty<Board> board = new SimpleObjectProperty<>();
 
@@ -46,6 +46,8 @@ public class Game implements GameI {
 	private final SimpleObjectProperty<Player> inCheck = new SimpleObjectProperty<>();
 
 	private final SimpleObjectProperty<Player> inStalemate = new SimpleObjectProperty<>();
+	
+	private final SimpleObjectProperty<Player> inCheckmate = new SimpleObjectProperty<>();
 
 	private final SimpleBooleanProperty gameOver = new SimpleBooleanProperty(false);
 
@@ -54,6 +56,8 @@ public class Game implements GameI {
 	private final SimpleBooleanProperty resettable = new SimpleBooleanProperty(false);
 
 	private final SimpleBooleanProperty undoable = new SimpleBooleanProperty(false);
+	
+	private final SimpleDoubleProperty progress = new SimpleDoubleProperty();
 
 	/**
 	 * Creates a new game.
@@ -69,26 +73,26 @@ public class Game implements GameI {
 			@Override
 			public void changed(ObservableValue<? extends Board> observable, Board oldValue, Board newValue) {
 				Platform.runLater(() -> {
-					boardValueWhite.set(Integer.toString(board.get().getValue(Player.WHITE)));
-					boardValueBlack.set(Integer.toString(board.get().getValue(Player.BLACK)));
+					boardValueWhite.set(board.get().getValue(Player.WHITE));
+					boardValueBlack.set(board.get().getValue(Player.BLACK));
 					switch (board.get().getCurrentState()) {
 					case CHECK_BLACK:
 						inCheck.set(Player.BLACK);
 						break;
 					case CHECK_WHITE:
-						inCheck.set(Player.BLACK);
+						inCheck.set(Player.WHITE);
 						break;
 					case CHECKMATE_BLACK:
-						// TODO
+						inCheckmate.set(Player.BLACK);
 						break;
 					case CHECKMATE_WHITE:
-						// TODO
+						inCheckmate.set(Player.WHITE);
 						break;
 					case STALEMATE_BLACK:
 						inStalemate.set(Player.BLACK);
 						break;
 					case STALEMATE_WHITE:
-						inStalemate.set(Player.BLACK);
+						inStalemate.set(Player.WHITE);
 						break;
 					case NONE:
 						inCheck.set(null);
@@ -117,6 +121,17 @@ public class Game implements GameI {
 					moveMultiThreaded(ply.get());
 				}
 			}
+		});
+		
+		busy.addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (!newValue) {
+					Platform.runLater(() -> progress.set(0.0)); // TODO beibelassen?
+				}
+			}
+			
 		});
 
 		board.set(new Board());
@@ -198,8 +213,8 @@ public class Game implements GameI {
 			@Override
 			protected Void call() throws Exception {
 				System.out.println(Thread.currentThread().getName() + " started");
-				busy.set(true);
-				Board temp = board.get().getMaxMultiThreaded(ply);
+				Platform.runLater(() -> busy.set(true)); // TODO sollte nicht sein
+				Board temp = board.get().getMaxMultiThreaded(ply, progress);
 				if (temp != null) {
 					for (int i = 0; i < ply - 1; i++) {
 						temp = temp.getPrevious();
@@ -207,7 +222,8 @@ public class Game implements GameI {
 					history.push(board.get());
 					board.set(temp);
 				}
-				busy.set(false);
+				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
+//				progress.set(0.0); // TODO an busy binden?
 				System.out.println(Thread.currentThread().getName() + " ended");
 				return null;
 			}
@@ -222,12 +238,12 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public StringProperty boardValueWhiteProperty() {
+	public IntegerProperty boardValueWhiteProperty() {
 		return boardValueWhite;
 	}
 
 	@Override
-	public StringProperty boardValueBlackProperty() {
+	public IntegerProperty boardValueBlackProperty() {
 		return boardValueBlack;
 	}
 
@@ -327,6 +343,11 @@ public class Game implements GameI {
 	}
 
 	@Override
+	public ObjectProperty<Player> inCheckmateProperty() {
+		return inCheckmate;
+	}
+
+	@Override
 	public BooleanProperty gameOverProperty() {
 		return gameOver; // TODO
 	}
@@ -344,6 +365,11 @@ public class Game implements GameI {
 	@Override
 	public BooleanProperty undoable() {
 		return undoable;
+	}
+
+	@Override
+	public DoubleProperty progressProperty() {
+		return progress;
 	}
 
 }

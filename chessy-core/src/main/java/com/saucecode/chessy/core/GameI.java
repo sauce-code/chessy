@@ -1,9 +1,9 @@
 package com.saucecode.chessy.core;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.StringProperty;
 
 public interface GameI {
 	
@@ -19,9 +19,9 @@ public interface GameI {
 	
 	public static final boolean BLACK_AI_STD = true;
 
-	public StringProperty boardValueWhiteProperty();
+	public IntegerProperty boardValueWhiteProperty();
 	
-	public StringProperty boardValueBlackProperty();
+	public IntegerProperty boardValueBlackProperty();
 	
 	public ObjectProperty<Board> boardProperty();
 	
@@ -43,6 +43,8 @@ public interface GameI {
 	
 	public ObjectProperty<Player> inStalemateProperty();
 	
+	public ObjectProperty<Player> inCheckmateProperty();
+	
 	public BooleanProperty gameOverProperty();
 	
 	public ObjectProperty<Player> currentPlayerProperty();
@@ -50,5 +52,7 @@ public interface GameI {
 	public BooleanProperty resettable();
 	
 	public BooleanProperty undoable();
+	
+	public DoubleProperty progressProperty();
 	
 }

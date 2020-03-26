@@ -23,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Toggle;
@@ -185,7 +186,7 @@ public class GUI extends Application {
 		
 		Label scoreWhite = new Label("Score White: ");
 		Label scoreWhite2 = new Label("");
-		scoreWhite2.textProperty().bind(game.boardValueWhiteProperty());
+		scoreWhite2.textProperty().bind(game.boardValueWhiteProperty().asString());
 		scoreWhite2.setMaxWidth(Double.MAX_VALUE);
 		scoreWhite2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(scoreWhite, 0, i);
@@ -194,7 +195,7 @@ public class GUI extends Application {
 		
 		Label scoreBlack = new Label("Score Black: ");
 		Label scoreBlack2 = new Label("");
-		scoreBlack2.textProperty().bind(game.boardValueBlackProperty());
+		scoreBlack2.textProperty().bind(game.boardValueBlackProperty().asString());
 		scoreBlack2.setMaxWidth(Double.MAX_VALUE);
 		scoreBlack2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(scoreBlack, 0, i);
@@ -203,13 +204,7 @@ public class GUI extends Application {
 		
 		Label ckeck = new Label("In Check: ");
 		Label check2 = new Label("");
-		game.busyProperty().addListener(e -> Platform.runLater(() -> {
-			if (game.inCheckProperty().get() == null) {
-				check2.setText("null");
-			} else {
-				check2.setText(game.inCheckProperty().get().toString());
-			}
-		}));
+		check2.textProperty().bind(game.inCheckProperty().asString());
 		check2.setMaxWidth(Double.MAX_VALUE);
 		check2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(ckeck, 0, i);
@@ -218,17 +213,20 @@ public class GUI extends Application {
 		
 		Label stalemate = new Label("In Stalemate: ");
 		Label stalemate2 = new Label("");
-		game.busyProperty().addListener(e -> Platform.runLater(() -> {
-			if (game.inStalemateProperty().get() == null) {
-				stalemate2.setText("null");
-			} else {
-				stalemate2.setText(game.inCheckProperty().get().toString());
-			}
-		}));
+		stalemate2.textProperty().bind(game.inStalemateProperty().asString());
 		stalemate2.setMaxWidth(Double.MAX_VALUE);
 		stalemate2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(stalemate, 0, i);
 		info.add(stalemate2, 1, i);
+		i++;
+		
+		Label checkmate = new Label("In Checkmate: ");
+		Label checkmate2 = new Label("");
+		checkmate2.textProperty().bind(game.inCheckmateProperty().asString());
+		checkmate2.setMaxWidth(Double.MAX_VALUE);
+		checkmate2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(checkmate, 0, i);
+		info.add(checkmate2, 1, i);
 		i++;
 		
 		Label currentPlayer = new Label("Current Player: ");
@@ -244,14 +242,31 @@ public class GUI extends Application {
 		
 		Label busy = new Label("Busy: ");
 		Label busy2 = new Label(Boolean.toString(false));
-		game.busyProperty().addListener(e -> Platform.runLater(() -> busy2.setText(Boolean.toString(game.busyProperty().get()))));
+		busy2.textProperty().bind(game.busyProperty().asString());
 		busy2.setMaxWidth(Double.MAX_VALUE);
 		busy2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(busy, 0, i);
 		info.add(busy2, 1, i);
 		i++;
+		
+		Label progress = new Label("Progress: ");
+		Label progress2 = new Label(Boolean.toString(false));
+		progress2.textProperty().bind(game.progressProperty().asString("%.2f"));
+		progress2.setMaxWidth(Double.MAX_VALUE);
+		progress2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(progress, 0, i);
+		info.add(progress2, 1, i);
+		i++;
+		
+		info.setMaxWidth(150.0);
+		info.setMinWidth(150.0);
 
 		border.setRight(info);
+		
+		ProgressBar progressBar = new ProgressBar();
+		progressBar.progressProperty().bind(game.progressProperty());
+		progressBar.setMaxWidth(Double.MAX_VALUE);
+		border.setBottom(progressBar);
 
 		game.boardProperty().addListener(new ChangeListener<Board>() {
 			@Override

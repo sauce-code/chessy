@@ -4,6 +4,8 @@ import java.util.concurrent.CountDownLatch;
 
 import com.saucecode.chessy.core.figures.*;
 
+import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -557,13 +559,15 @@ public class Board {
 		return max;
 	}
 	
-	public Board getMaxMultiThreaded(int ply) {
+	public Board getMaxMultiThreaded(int ply, DoubleProperty progress) {
 		// TODO
 		final ObjectProperty<Board> max = new SimpleObjectProperty<Board>(null);
-		final ObjectProperty<Board> temp = new SimpleObjectProperty<Board>(null);
 //		Board max = null;
 //		Board temp;
 		int threadCount = 0;
+		
+		progress.set(0.0); // TODO eventuell verschieben
+		
 		for (int fromX = 0; fromX < 8; fromX++) {
 			for (int fromY = 0; fromY < 8; fromY++) {
 				if (figures[fromX][fromY] != null && figures[fromX][fromY].getOwner() == currentPlayer) {
@@ -579,21 +583,28 @@ public class Board {
 				if (figures[fromX][fromY] != null && figures[fromX][fromY].getOwner() == currentPlayer) {
 					final int x = fromX;
 					final int y = fromY;
+					final double step = 1.0 / threadCount;
 					new Thread(() -> {
 						System.out.println(Thread.currentThread().getName() + " started");
+						Board temp = null;
 						for (int toX = 0; toX < 8; toX++) {
 							for (int toY = 0; toY < 8; toY++) {
-								temp.set(figures[x][y].move(toX, toY));
-								if ((temp.get() != null) && (ply > 1)) {
-									temp.set(temp.get().getMax(ply - 1));
+								temp = figures[x][y].move(toX, toY);
+								if ((temp != null) && (ply > 1)) {
+									// TODO DEBUG
+									Board a = temp;
+									Board b = a.getMax(ply - 1);
+									temp = b;
 								}
-								if ((max.get() == null) || ((temp.get() != null)
-										&& (temp.get().getValue(currentPlayer) > max.get().getValue(currentPlayer)))) {
-									max.set(temp.get());
+								if ((max.get() == null) || ((temp != null)
+										&& (temp.getValue(currentPlayer) > max.get().getValue(currentPlayer)))) {
+									max.set(temp);
 								}
 							}
 						}
 						latch.countDown();
+						Platform.runLater(() -> progress.set(progress.get() + step));
+						System.out.println(progress);
 						System.out.println(Thread.currentThread().getName() + " ended");
 					}).start();
 				}
