@@ -59,9 +59,9 @@ public class Game implements GameI {
 	
 	private final SimpleDoubleProperty progress = new SimpleDoubleProperty();
 	
-	private final BooleanProperty castlingPossibleBlack = new SimpleBooleanProperty();
+	private final BooleanProperty castlingPossibleBlack = new SimpleBooleanProperty(); // TODO muss weg!
 	
-	private final BooleanProperty castlingPossibleWhite = new SimpleBooleanProperty();
+	private final BooleanProperty castlingPossibleWhite = new SimpleBooleanProperty(); // TODO muss weg!
 	
 	private final ObjectProperty<Selection> from = new SimpleObjectProperty<>(null);
 	
@@ -286,18 +286,10 @@ public class Game implements GameI {
 					|| board.get().getFigure(x, y).getOwner() != board.get().getCurrentPlayer()) {
 				// empty space clicked or enemy figure clicked
 
-				if (selection.get() != null) { // means a figure was
-														// clicked in previous click
-					// System.out.println("a figure was clicked in previous click
-					// -->move!");
-					// System.out.println("from: " + clickedX + "|" + clickedY + "
-					// to " + x + "|" + y);
+				if (selection.get() != null) { 
+					// means a figure was clicked in previous click
 
 					if (move(selection.get().getX(), selection.get().getY(), x, y)) {
-						
-//						TODO remove this
-//						from.set(selection.get());
-//						to.set(s);
 
 						if (blackAIProperty().get() && board.get().getCurrentPlayer() == Player.BLACK) {
 
@@ -311,7 +303,6 @@ public class Game implements GameI {
 				// figure clicked
 				if (board.get().getFigure(x, y).getOwner() == board.get().getCurrentPlayer()) {
 					selection.set(new Selection(x, y));
-					System.out.println("figure clicked and saved");
 				}
 			}
 		}
