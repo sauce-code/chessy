@@ -629,7 +629,7 @@ public class Board {
 					final int y = fromY;
 					final double step = 1.0 / threadCount;
 					new Thread(() -> {
-						System.out.println(Thread.currentThread().getName() + " started");
+						System.out.println(Thread.currentThread().getName() + " started: " + figures[x][y].getClass().getSimpleName() + " (" +  figures[x][y].x + ", " + figures[x][y].y + ")");
 						Board temp = null;
 						for (int toX = 0; toX < 8; toX++) {
 							for (int toY = 0; toY < 8; toY++) {
