@@ -229,7 +229,7 @@ public class Game implements GameI {
 	@Override
 	public void select(Position position) {
 		if (position == null) {
-			throw new NullPointerException("s must not be null");
+			throw new NullPointerException("position must not be null");
 		}
 
 		// unselect
