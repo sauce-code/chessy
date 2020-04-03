@@ -138,11 +138,18 @@ public class GUI extends Application {
 		final MenuItem exit = new MenuItem("E_xit");
 		exit.setAccelerator(KeyCombination.keyCombination("Alt + F4"));
 		exit.setOnAction(e -> {
-			Optional<ButtonType> result = new ExitDialog(game, kingW).showAndWait();
-			if (result.get() == ButtonType.OK) {
-				Platform.exit();
+			if (game.resettable().get()) {
+				// data could be lost. ask if user really wants to quit
+				Optional<ButtonType> result = new ExitDialog(game, kingW).showAndWait();
+				if (result.get() == ButtonType.OK) {
+					// user clicked OK
+					Platform.exit();
+				} else {
+				    // ... user chose CANCEL or closed the dialog
+				}
 			} else {
-			    // ... user chose CANCEL or closed the dialog
+				// no data could be lost. exit without asking
+				Platform.exit();
 			}
 		});
 

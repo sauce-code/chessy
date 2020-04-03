@@ -647,7 +647,6 @@ public class Board {
 						}
 						latch.countDown();
 						Platform.runLater(() -> progress.set(progress.get() + step));
-						System.out.println(progress);
 						System.out.println(Thread.currentThread().getName() + " ended");
 					}).start();
 				}
