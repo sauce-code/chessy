@@ -73,7 +73,7 @@ public class GUI extends Application {
 
 	private Menu initMenuHelp() {
 		final MenuItem about = new MenuItem("A_bout");
-		about.setOnAction(e -> new AboutAlert(null).showAndWait());
+		about.setOnAction(e -> new AboutAlert(kingW).showAndWait());
 
 		return new Menu("_Help", null, about);
 	}
