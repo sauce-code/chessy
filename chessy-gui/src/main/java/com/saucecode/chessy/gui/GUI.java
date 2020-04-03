@@ -453,6 +453,14 @@ public class GUI extends Application {
 		if (select != null) {
 			((Rectangle)panes[select.getX()][7 - select.getY()].getChildren().get(0)).setFill(Color.CYAN);
 		}
+		Selection from = game.fromProperty().get();
+		if (from != null) {
+			((Rectangle)panes[from.getX()][7 - from.getY()].getChildren().get(0)).setFill(Color.ORCHID);
+		}
+		Selection to = game.toProperty().get();
+		if (to != null) {
+			((Rectangle)panes[to.getX()][7 - to.getY()].getChildren().get(0)).setFill(Color.ORCHID);
+		}
 
 //		if (select != null) {
 //			int depth = 200; //Setting the uniform variable for the glow width and height

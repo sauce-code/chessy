@@ -3,6 +3,7 @@ package com.saucecode.chessy.core.figures;
 import com.saucecode.chessy.core.Board;
 import com.saucecode.chessy.core.Figure;
 import com.saucecode.chessy.core.Player;
+import com.saucecode.chessy.core.State;
 
 public class King extends Figure {
 
@@ -115,7 +116,8 @@ public class King extends Figure {
 		}
 
 		// castling rule to the right
-		if (!hasBeenMoved && (toX == 6) && (toY == y) && (board.getFigure(7, toY) != null)
+		if (board.getCurrentState() != State.CHECK_BLACK && board.getCurrentState() != State.CHECK_WHITE
+				&& !hasBeenMoved && (toX == 6) && (toY == y) && (board.getFigure(7, toY) != null)
 				&& (board.getFigure(7, toY) instanceof Rook) && (!((Rook) board.getFigure(7, toY)).isHasBeenMoved())
 				&& (board.getFigure(5, toY) == null) && (board.getFigure(6, toY) == null)) {
 			Board temp = board.clone();
@@ -127,15 +129,8 @@ public class King extends Figure {
 		}
 
 		// castling rule to the left 
-
-//		if ( (board.getFigure(0, toY) != null)
-//				&& (board.getFigure(0, toY) instanceof Rook)) {
-//		System.out.println(owner.toString() + " " + board.getFigure(0, toY).toString() + " "
-//				+ ((Rook) board.getFigure(0, toY)).isHasBeenMoved());	
-//		}
-
-		
-		if (!hasBeenMoved && (toX == 2) && (toY == y) && (board.getFigure(0, toY) != null)
+		if (board.getCurrentState() != State.CHECK_BLACK && board.getCurrentState() != State.CHECK_WHITE
+				&& !hasBeenMoved && (toX == 2) && (toY == y) && (board.getFigure(0, toY) != null)
 				&& (board.getFigure(0, toY) instanceof Rook) && (!((Rook) board.getFigure(0, toY)).isHasBeenMoved())
 				&& (board.getFigure(3, toY) == null) && (board.getFigure(2, toY) == null)
 				&& (board.getFigure(1, toY) == null)) {
@@ -148,7 +143,7 @@ public class King extends Figure {
 		}
 
 		if ((Math.abs(toX - x) < 2) && (Math.abs(toY - y) < 2)) {
-			hasBeenMoved = true;
+//			hasBeenMoved = true; TODO
 			return true;
 		} else {
 			return false;
@@ -167,6 +162,7 @@ public class King extends Figure {
 		if (isSquareReachable(toX, toY)) {
 			ret = board.clone();
 			ret.resetMarker();
+			((King)ret.getFigure(x, y)).hasBeenMoved = true; // TODO stimmt das so?
 			ret.setFigure(toX, toY, ret.removeFigure(x, y));
 			ret.getFigure(toX, toY).setX(toX);
 			ret.getFigure(toX, toY).setY(toY);

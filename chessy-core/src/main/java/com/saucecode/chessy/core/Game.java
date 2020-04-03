@@ -62,6 +62,10 @@ public class Game implements GameI {
 	private final BooleanProperty castlingPossibleBlack = new SimpleBooleanProperty();
 	
 	private final BooleanProperty castlingPossibleWhite = new SimpleBooleanProperty();
+	
+	private final ObjectProperty<Selection> from = new SimpleObjectProperty<>(null);
+	
+	private final ObjectProperty<Selection> to = new SimpleObjectProperty<>(null);
 
 	/**
 	 * Creates a new game.
@@ -286,6 +290,9 @@ public class Game implements GameI {
 					// to " + x + "|" + y);
 
 					if (move(selection.get().getX(), selection.get().getY(), x, y)) {
+						
+						from.set(selection.get());
+						to.set(s);
 
 						if (blackAIProperty().get() && board.get().getCurrentPlayer() == Player.BLACK) {
 
@@ -384,6 +391,16 @@ public class Game implements GameI {
 	@Override
 	public BooleanProperty castlingPossibleWhiteProperty() {
 		return castlingPossibleWhite;
+	}
+
+	@Override
+	public ObjectProperty<Selection> fromProperty() {
+		return from;
+	}
+
+	@Override
+	public ObjectProperty<Selection> toProperty() {
+		return to;
 	}
 
 }

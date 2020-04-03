@@ -59,4 +59,8 @@ public interface GameI {
 	
 	public BooleanProperty castlingPossibleWhiteProperty();
 	
+	public ObjectProperty<Selection> fromProperty();
+	
+	public ObjectProperty<Selection> toProperty();
+	
 }
