@@ -139,7 +139,14 @@ public class GUI extends Application {
 
 		final MenuItem exit = new MenuItem("E_xit");
 		exit.setAccelerator(KeyCombination.keyCombination("Alt + F4"));
-		exit.setOnAction(e -> Platform.exit());
+		exit.setOnAction(e -> {
+			Optional<ButtonType> result = new ExitDialog(game, kingW).showAndWait();
+			if (result.get() == ButtonType.OK) {
+				Platform.exit();
+			} else {
+			    // ... user chose CANCEL or closed the dialog
+			}
+		});
 
 		return new Menu("_File", null, restart, new SeparatorMenuItem(), exit);
 	}

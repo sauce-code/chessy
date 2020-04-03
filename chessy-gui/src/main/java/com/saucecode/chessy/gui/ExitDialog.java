@@ -6,12 +6,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class ResetDialog extends Alert {
+public class ExitDialog extends Alert {
 	
-	public ResetDialog(GameI game, Image icon) {
+	public ExitDialog(GameI game, Image icon) {
 		super(AlertType.CONFIRMATION);
-		setTitle("Restart");
-		setHeaderText("Do you really want to start a new game?");
+		setTitle("Exit");
+		setHeaderText("Do you really want to exit?");
 		setContentText("All progress will be lost.");
 		
 		// Get the Stage.
