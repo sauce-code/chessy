@@ -18,7 +18,7 @@ public class CLI {
 			toX = terminal.readInt();
 			System.out.println("toY: ");
 			toY = terminal.readInt();
-			game.move(fromX, fromY, toX, toY);
+//			game.move(fromX, fromY, toX, toY); TODO
 		}
 	}
 

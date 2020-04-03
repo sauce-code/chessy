@@ -59,10 +59,6 @@ public class Game implements GameI {
 	
 	private final SimpleDoubleProperty progress = new SimpleDoubleProperty();
 	
-	private final BooleanProperty castlingPossibleBlack = new SimpleBooleanProperty(); // TODO muss weg!
-	
-	private final BooleanProperty castlingPossibleWhite = new SimpleBooleanProperty(); // TODO muss weg!
-	
 	private final ObjectProperty<Selection> from = new SimpleObjectProperty<>(null);
 	
 	private final ObjectProperty<Selection> to = new SimpleObjectProperty<>(null);
@@ -157,7 +153,7 @@ public class Game implements GameI {
 	 * @param toY   y destiny
 	 * @return {@code true}, if move was valid
 	 */
-	public boolean move(int fromX, int fromY, int toX, int toY) {
+	private boolean move(int fromX, int fromY, int toX, int toY) {
 		Board temp = board.get().move(fromX, fromY, toX, toY);
 		if (temp != null) {
 			history.push(board.get());
@@ -287,8 +283,10 @@ public class Game implements GameI {
 
 	@Override
 	public void reset() {
+		// TODO check if busy
 		if (resettable.get()) {
-			// TODO
+			history.clear();
+			board.set(new Board());
 		}
 	}
 
@@ -338,16 +336,6 @@ public class Game implements GameI {
 	@Override
 	public DoubleProperty progressProperty() {
 		return progress;
-	}
-
-	@Override
-	public BooleanProperty castlingPossibleBlackProperty() {
-		return castlingPossibleBlack;
-	}
-
-	@Override
-	public BooleanProperty castlingPossibleWhiteProperty() {
-		return castlingPossibleWhite;
 	}
 
 	@Override

@@ -79,7 +79,7 @@ public class GUI extends Application {
 	}
 
 	private Menu initMenuSettings() {
-		final CheckMenuItem ai = new CheckMenuItem("_Black Palyer A.I.");
+		final CheckMenuItem ai = new CheckMenuItem("_Black Player A.I.");
 		ai.selectedProperty().set(game.blackAIProperty().get());
 		game.blackAIProperty().bind(ai.selectedProperty());
 		
@@ -102,7 +102,7 @@ public class GUI extends Application {
 		});
 		items[game.plyProperty().get() - 1].setSelected(true);
 		
-		final CheckMenuItem multiThreaded = new CheckMenuItem("Multi-Threading");
+		final CheckMenuItem multiThreaded = new CheckMenuItem("_Multi-Threading");
 		multiThreaded.selectedProperty().set(game.multiThreadedProperty().get());
 		game.multiThreadedProperty().bind(multiThreaded.selectedProperty());
 
@@ -132,7 +132,7 @@ public class GUI extends Application {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Restart");
 			alert.setHeaderText("Do you want to start a new game?");
-//			alert.setContentText("Are you ok with this?");
+			alert.setContentText("All progress will be lost.");
 			Optional<ButtonType> result = alert.showAndWait();
 			// TODO only show if game is not empty
 			if (result.get() == ButtonType.OK) {
