@@ -10,3 +10,4 @@
 - add move history?
 - make GameI Properties read-only
 - add calculation time
+- make a.i. able to find checkmate
