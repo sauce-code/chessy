@@ -538,8 +538,50 @@ public class Board {
 			return valueBlack - valueWhite;
 		}
 	}
+	
+	public Board getMax(int ply, DoubleProperty progress, boolean multiThreaded) {
+		if (multiThreaded) {
+			return getMaxMultiThreaded(ply, progress);
+		} else {
+			int figuresToMove = 0;
+			
+			progress.set(0.0); // TODO eventuell verschieben
+			
+			for (int fromX = 0; fromX < 8; fromX++) {
+				for (int fromY = 0; fromY < 8; fromY++) {
+					if (figures[fromX][fromY] != null && figures[fromX][fromY].getOwner() == currentPlayer) {
+						figuresToMove++;
+					}
+				}
+			}
+			final double step = 1.0 / figuresToMove;
+			Board max = null;
+			Board temp;
+			for (int fromX = 0; fromX < 8; fromX++) {
+				for (int fromY = 0; fromY < 8; fromY++) {
+					if (figures[fromX][fromY] != null && figures[fromX][fromY].getOwner() == currentPlayer) {
+						for (int toX = 0; toX < 8; toX++) {
+							for (int toY = 0; toY < 8; toY++) {
+								temp = figures[fromX][fromY].move(toX, toY);
+								if ((temp != null) && (ply > 1)) {
+									temp = temp.getMaxSingleThreaded(ply - 1);
+								}
+								if ((max == null) || ((temp != null)
+										&& (temp.getValue(currentPlayer) > max.getValue(currentPlayer)))) {
+									max = temp;
+								}
+							}
+						}
+						Platform.runLater(() -> progress.set(progress.get() + step));
+						System.out.println(progress);
+					}
+				}
+			}
+			return max;
+		}
+	}
 
-	public Board getMax(int ply) {
+	private Board getMaxSingleThreaded(int ply) {
 		Board max = null;
 		Board temp;
 		for (int fromX = 0; fromX < 8; fromX++) {
@@ -549,7 +591,7 @@ public class Board {
 						for (int toY = 0; toY < 8; toY++) {
 							temp = figures[fromX][fromY].move(toX, toY);
 							if ((temp != null) && (ply > 1)) {
-								temp = temp.getMax(ply - 1);
+								temp = temp.getMaxSingleThreaded(ply - 1);
 							}
 							if ((max == null) || ((temp != null)
 									&& (temp.getValue(currentPlayer) > max.getValue(currentPlayer)))) {
@@ -563,11 +605,9 @@ public class Board {
 		return max;
 	}
 	
-	public Board getMaxMultiThreaded(int ply, DoubleProperty progress) {
+	private Board getMaxMultiThreaded(int ply, DoubleProperty progress) {
 		// TODO
 		final ObjectProperty<Board> max = new SimpleObjectProperty<Board>(null);
-//		Board max = null;
-//		Board temp;
 		int threadCount = 0;
 		
 		progress.set(0.0); // TODO eventuell verschieben
@@ -597,7 +637,7 @@ public class Board {
 								if ((temp != null) && (ply > 1)) {
 									// TODO DEBUG
 									Board a = temp;
-									Board b = a.getMax(ply - 1);
+									Board b = a.getMaxSingleThreaded(ply - 1);
 									temp = b;
 								}
 								if ((max.get() == null) || ((temp != null)
@@ -633,7 +673,7 @@ public class Board {
 						for (int toY = 0; toY < 8; toY++) {
 							temp = figures[fromX][fromY].move(toX, toY);
 							if ((temp != null) && (ply > 1)) {
-								temp = temp.getMax(ply - 1);
+								temp = temp.getMaxSingleThreaded(ply - 1);
 							}
 							if ((min == null) || ((temp != null) && (temp.getValue() < min.getValue()))) {
 								min = temp;

@@ -191,11 +191,7 @@ public class Game implements GameI {
 				System.out.println(Thread.currentThread().getName() + " started");
 				Platform.runLater(() -> busy.set(true)); // TODO sollte nicht sein
 				Board temp = null;
-				if (multiThreaded.get()) {
-					temp = board.get().getMaxMultiThreaded(ply, progress);
-				} else {
-					temp = board.get().getMax(ply);
-				}
+				temp = board.get().getMax(ply, progress, multiThreaded.get());
 				if (temp != null) {
 					for (int i = 0; i < ply - 1; i++) {
 						temp = temp.getPrevious();
