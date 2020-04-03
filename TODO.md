@@ -8,3 +8,4 @@
 - add logging
 - add javadoc
 - remove weird en passant bug
+- add option to toggle multithreading
