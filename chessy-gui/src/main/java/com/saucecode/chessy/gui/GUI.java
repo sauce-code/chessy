@@ -129,17 +129,11 @@ public class GUI extends Application {
 		restart.disableProperty().bind(game.resettable().not());
 		restart.setAccelerator(KeyCombination.keyCombination("F2"));
 		restart.setOnAction(e -> {
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Restart");
-			alert.setHeaderText("Do you want to start a new game?");
-			alert.setContentText("All progress will be lost.");
-			Optional<ButtonType> result = alert.showAndWait();
-			// TODO only show if game is not empty
+			Optional<ButtonType> result = new ResetDialog(game, kingW).showAndWait();
 			if (result.get() == ButtonType.OK) {
-				// ... user chose OK
-				game.reset();
+			    game.reset();
 			} else {
-				// ... user chose CANCEL or closed the dialog
+			    // ... user chose CANCEL or closed the dialog
 			}
 		});
 
@@ -338,6 +332,7 @@ public class GUI extends Application {
 		});
 
 		primaryStage.setScene(new Scene(border));
+		primaryStage.getIcons().add(kingW);
 		primaryStage.show();
 	}
 
