@@ -227,17 +227,17 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public void select(Position s) {
-		if (s == null) {
+	public void select(Position position) {
+		if (position == null) {
 			throw new NullPointerException("s must not be null");
 		}
 
 		// unselect
-		if (s.equals(selection.get())) {
+		if (position.equals(selection.get())) {
 			selection.set(null);
 		} else {
-			int x = s.getX();
-			int y = s.getY();
+			int x = position.getX();
+			int y = position.getY();
 
 			if (board.get().getFigure(x, y) == null
 					|| board.get().getFigure(x, y).getOwner() != board.get().getCurrentPlayer()) {
