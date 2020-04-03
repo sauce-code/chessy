@@ -3,7 +3,7 @@ package com.saucecode.chessy.core.figures;
 import com.saucecode.chessy.core.Board;
 import com.saucecode.chessy.core.Figure;
 import com.saucecode.chessy.core.Player;
-import com.saucecode.chessy.core.Selection;
+import com.saucecode.chessy.core.Position;
 
 public class Pawn extends Figure {
 
@@ -124,8 +124,8 @@ public class Pawn extends Figure {
 		if (isSquareReachable(toX, toY)) {
 			ret = board.clone();
 			ret.resetMarker();
-			ret.setFrom(new Selection(x, y));
-			ret.setTo(new Selection(toX, toY));
+			ret.setFrom(new Position(x, y));
+			ret.setTo(new Position(toX, toY));
 			if (enPassant != -1) {
 				ret.removeFigure(enPassant, y);
 			}

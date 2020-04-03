@@ -60,9 +60,9 @@ public class Board {
 	 */
 	private int valueBlack;
 	
-	private Selection from;
+	private Position from;
 	
-	private Selection to;
+	private Position to;
 
 	/**
 	 * Creates a new {@link Board} and spawns all {@link Figure}.
@@ -685,19 +685,19 @@ public class Board {
 		return min;
 	}
 
-	public Selection getFrom() {
+	public Position getFrom() {
 		return from;
 	}
 
-	public void setFrom(Selection from) {
+	public void setFrom(Position from) {
 		this.from = from;
 	}
 
-	public Selection getTo() {
+	public Position getTo() {
 		return to;
 	}
 
-	public void setTo(Selection to) {
+	public void setTo(Position to) {
 		this.to = to;
 	}
 

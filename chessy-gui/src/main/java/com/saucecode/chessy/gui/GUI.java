@@ -5,7 +5,7 @@ import java.util.Optional;
 import com.saucecode.chessy.core.Board;
 import com.saucecode.chessy.core.Game;
 import com.saucecode.chessy.core.GameI;
-import com.saucecode.chessy.core.Selection;
+import com.saucecode.chessy.core.Position;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -312,26 +312,26 @@ public class GUI extends Application {
 			}
 		});
 
-		game.selectionProperty().addListener(new ChangeListener<Selection>() {
+		game.selectionProperty().addListener(new ChangeListener<Position>() {
 			@Override
-			public void changed(ObservableValue<? extends Selection> observable, Selection oldValue,
-					Selection newValue) {
+			public void changed(ObservableValue<? extends Position> observable, Position oldValue,
+					Position newValue) {
 				Platform.runLater(() -> drawBoard());
 			}
 		});
 		
-		game.fromProperty().addListener(new ChangeListener<Selection>() {
+		game.fromProperty().addListener(new ChangeListener<Position>() {
 			@Override
-			public void changed(ObservableValue<? extends Selection> observable, Selection oldValue,
-					Selection newValue) {
+			public void changed(ObservableValue<? extends Position> observable, Position oldValue,
+					Position newValue) {
 				Platform.runLater(() -> drawBoard());
 			}
 		});
 		
-		game.toProperty().addListener(new ChangeListener<Selection>() {
+		game.toProperty().addListener(new ChangeListener<Position>() {
 			@Override
-			public void changed(ObservableValue<? extends Selection> observable, Selection oldValue,
-					Selection newValue) {
+			public void changed(ObservableValue<? extends Position> observable, Position oldValue,
+					Position newValue) {
 				Platform.runLater(() -> drawBoard());
 			}
 		});
@@ -400,7 +400,7 @@ public class GUI extends Application {
 				recti.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent e) {
-						game.select(new Selection(x, y)); // TODO platform run later?
+						game.select(new Position(x, y)); // TODO platform run later?
 						System.out.println("clicked rectangle at x " + x + " y " + y);
 					}
 				});
@@ -503,15 +503,15 @@ public class GUI extends Application {
 
 		deleteAllPieces();
 		setColors();
-		Selection select = game.selectionProperty().get();
+		Position select = game.selectionProperty().get();
 		if (select != null) {
 			((Rectangle)panes[select.getX()][7 - select.getY()].getChildren().get(0)).setFill(Color.CYAN);
 		}
-		Selection from = game.fromProperty().get();
+		Position from = game.fromProperty().get();
 		if (from != null) {
 			((Rectangle)panes[from.getX()][7 - from.getY()].getChildren().get(0)).setFill(Color.AQUAMARINE);
 		}
-		Selection to = game.toProperty().get();
+		Position to = game.toProperty().get();
 		if (to != null) {
 			((Rectangle)panes[to.getX()][7 - to.getY()].getChildren().get(0)).setFill(Color.AQUAMARINE);
 		}

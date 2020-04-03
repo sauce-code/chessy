@@ -37,7 +37,7 @@ public class Game implements GameI {
 
 	private final SimpleBooleanProperty busy = new SimpleBooleanProperty(BUSY_STD);
 
-	private final SimpleObjectProperty<Selection> selection = new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Position> selection = new SimpleObjectProperty<>();
 
 	private final SimpleIntegerProperty ply = new SimpleIntegerProperty(PLY_STD);
 
@@ -59,9 +59,9 @@ public class Game implements GameI {
 	
 	private final SimpleDoubleProperty progress = new SimpleDoubleProperty();
 	
-	private final ObjectProperty<Selection> from = new SimpleObjectProperty<>(null);
+	private final ObjectProperty<Position> from = new SimpleObjectProperty<>(null);
 	
-	private final ObjectProperty<Selection> to = new SimpleObjectProperty<>(null);
+	private final ObjectProperty<Position> to = new SimpleObjectProperty<>(null);
 	
 	private final SimpleBooleanProperty multiThreaded = new SimpleBooleanProperty(MULTI_THREADED_STD);
 
@@ -227,7 +227,7 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public void select(Selection s) {
+	public void select(Position s) {
 		if (s == null) {
 			throw new NullPointerException("s must not be null");
 		}
@@ -259,7 +259,7 @@ public class Game implements GameI {
 			} else {
 				// figure clicked
 				if (board.get().getFigure(x, y).getOwner() == board.get().getCurrentPlayer()) {
-					selection.set(new Selection(x, y));
+					selection.set(new Position(x, y));
 				}
 			}
 		}
@@ -267,7 +267,7 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public ObjectProperty<Selection> selectionProperty() {
+	public ObjectProperty<Position> selectionProperty() {
 		return selection;
 	}
 
@@ -339,12 +339,12 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public ObjectProperty<Selection> fromProperty() {
+	public ObjectProperty<Position> fromProperty() {
 		return from;
 	}
 
 	@Override
-	public ObjectProperty<Selection> toProperty() {
+	public ObjectProperty<Position> toProperty() {
 		return to;
 	}
 	

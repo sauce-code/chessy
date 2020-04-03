@@ -29,9 +29,9 @@ public interface GameI {
 	
 	public BooleanProperty busyProperty();
 	
-	public void select(Selection s);
+	public void select(Position s);
 	
-	public ObjectProperty<Selection> selectionProperty();
+	public ObjectProperty<Position> selectionProperty();
 	
 	public IntegerProperty plyProperty();
 	
@@ -57,9 +57,9 @@ public interface GameI {
 	
 	public DoubleProperty progressProperty();
 	
-	public ObjectProperty<Selection> fromProperty();
+	public ObjectProperty<Position> fromProperty();
 	
-	public ObjectProperty<Selection> toProperty();
+	public ObjectProperty<Position> toProperty();
 	
 	public BooleanProperty multiThreadedProperty();
 	

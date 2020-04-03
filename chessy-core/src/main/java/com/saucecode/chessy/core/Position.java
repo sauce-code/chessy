@@ -1,6 +1,6 @@
 package com.saucecode.chessy.core;
 
-public class Selection {
+public class Position {
 	
 	public static final int MIN = 0;
 	
@@ -11,7 +11,7 @@ public class Selection {
 
 	private final int y;
 
-	public Selection(int x, int y) {
+	public Position(int x, int y) {
 		if (x < MIN || y < MIN || x > MAX || y > MAX) {
 			throw new IllegalArgumentException("invalid values");
 		}
@@ -49,7 +49,7 @@ public class Selection {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Selection other = (Selection) obj;
+		Position other = (Position) obj;
 		if (x != other.x)
 			return false;
 		if (y != other.y)
