@@ -206,18 +206,6 @@ public class Game implements GameI {
 		};
 		Thread thread = new Thread(task);
 		thread.start();
-//		Board temp = board.getMax(ply);
-//		if (temp != null) {
-//			for (int i = 0; i < ply - 1; i++) {
-//				temp = temp.getPrevious();
-//			}
-//			history.push(board);
-//			board = temp;
-//			boardProperty.set(temp);
-//			return true;
-//		} else {
-//			return false;
-//		}
 	}
 
 	@Override
