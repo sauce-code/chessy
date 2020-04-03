@@ -126,9 +126,6 @@ public class Game implements GameI {
 
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				System.out.println("oldValue: " + oldValue);
-				System.out.println("newValue: " + newValue);
-				System.out.println(board.get());
 				if (board.get().getCurrentPlayer() == Player.BLACK) {
 					move(ply.get());
 				}
