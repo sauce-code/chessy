@@ -130,7 +130,7 @@ public class Game implements GameI {
 				System.out.println("newValue: " + newValue);
 				System.out.println(board.get());
 				if (board.get().getCurrentPlayer() == Player.BLACK) {
-					moveMultiThreaded(ply.get());
+					move(ply.get());
 				}
 			}
 		});
@@ -189,8 +189,13 @@ public class Game implements GameI {
 			@Override
 			protected Void call() throws Exception {
 				System.out.println(Thread.currentThread().getName() + " started");
-				busy.set(true);
-				Board temp = board.get().getMax(ply);
+				Platform.runLater(() -> busy.set(true)); // TODO sollte nicht sein
+				Board temp = null;
+				if (multiThreaded.get()) {
+					temp = board.get().getMaxMultiThreaded(ply, progress);
+				} else {
+					temp = board.get().getMax(ply);
+				}
 				if (temp != null) {
 					for (int i = 0; i < ply - 1; i++) {
 						temp = temp.getPrevious();
@@ -198,7 +203,7 @@ public class Game implements GameI {
 					history.push(board.get());
 					board.set(temp);
 				}
-				busy.set(false);
+				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
 				System.out.println(Thread.currentThread().getName() + " ended");
 				return null;
 			}
@@ -217,31 +222,6 @@ public class Game implements GameI {
 //		} else {
 //			return false;
 //		}
-	}
-	
-	private void moveMultiThreaded(int ply) {
-		// TODO
-		final Task<Void> task = new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				System.out.println(Thread.currentThread().getName() + " started");
-				Platform.runLater(() -> busy.set(true)); // TODO sollte nicht sein
-				Board temp = board.get().getMaxMultiThreaded(ply, progress);
-				if (temp != null) {
-					for (int i = 0; i < ply - 1; i++) {
-						temp = temp.getPrevious();
-					}
-					history.push(board.get());
-					board.set(temp);
-				}
-				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
-//				progress.set(0.0); // TODO an busy binden?
-				System.out.println(Thread.currentThread().getName() + " ended");
-				return null;
-			}
-		};
-		Thread thread = new Thread(task);
-		thread.start();
 	}
 
 	@Override
@@ -293,7 +273,7 @@ public class Game implements GameI {
 
 						if (blackAIProperty().get() && board.get().getCurrentPlayer() == Player.BLACK) {
 
-							moveMultiThreaded(ply.get());
+							move(ply.get());
 
 						}
 					}
