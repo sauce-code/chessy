@@ -59,6 +59,10 @@ public class Board {
 	 * Black's value for this board.
 	 */
 	private int valueBlack;
+	
+	private Selection from;
+	
+	private Selection to;
 
 	/**
 	 * Creates a new {@link Board} and spawns all {@link Figure}.
@@ -640,6 +644,22 @@ public class Board {
 			}
 		}
 		return min;
+	}
+
+	public Selection getFrom() {
+		return from;
+	}
+
+	public void setFrom(Selection from) {
+		this.from = from;
+	}
+
+	public Selection getTo() {
+		return to;
+	}
+
+	public void setTo(Selection to) {
+		this.to = to;
 	}
 
 }

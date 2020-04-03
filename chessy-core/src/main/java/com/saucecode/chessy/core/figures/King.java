@@ -3,6 +3,7 @@ package com.saucecode.chessy.core.figures;
 import com.saucecode.chessy.core.Board;
 import com.saucecode.chessy.core.Figure;
 import com.saucecode.chessy.core.Player;
+import com.saucecode.chessy.core.Selection;
 import com.saucecode.chessy.core.State;
 
 public class King extends Figure {
@@ -162,6 +163,8 @@ public class King extends Figure {
 		if (isSquareReachable(toX, toY)) {
 			ret = board.clone();
 			ret.resetMarker();
+			ret.setFrom(new Selection(x, y));
+			ret.setTo(new Selection(toX, toY));
 			((King)ret.getFigure(x, y)).hasBeenMoved = true; // TODO stimmt das so?
 			ret.setFigure(toX, toY, ret.removeFigure(x, y));
 			ret.getFigure(toX, toY).setX(toX);

@@ -66,6 +66,8 @@ public class Game implements GameI {
 	private final ObjectProperty<Selection> from = new SimpleObjectProperty<>(null);
 	
 	private final ObjectProperty<Selection> to = new SimpleObjectProperty<>(null);
+	
+	private final SimpleBooleanProperty multiThreaded = new SimpleBooleanProperty(MULTI_THREADED_STD);
 
 	/**
 	 * Creates a new game.
@@ -112,7 +114,9 @@ public class Game implements GameI {
 					currentPlayer.set(board.get().getCurrentPlayer());
 
 					resettable.set(history.size() > 0);
-
+					
+					from.set(board.get().getFrom());
+					to.set(board.get().getTo());
 				});
 			}
 
@@ -291,8 +295,9 @@ public class Game implements GameI {
 
 					if (move(selection.get().getX(), selection.get().getY(), x, y)) {
 						
-						from.set(selection.get());
-						to.set(s);
+//						TODO remove this
+//						from.set(selection.get());
+//						to.set(s);
 
 						if (blackAIProperty().get() && board.get().getCurrentPlayer() == Player.BLACK) {
 
@@ -401,6 +406,11 @@ public class Game implements GameI {
 	@Override
 	public ObjectProperty<Selection> toProperty() {
 		return to;
+	}
+	
+	@Override
+	public BooleanProperty multiThreadedProperty() {
+		return multiThreaded;
 	}
 
 }

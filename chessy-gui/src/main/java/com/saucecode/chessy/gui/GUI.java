@@ -82,6 +82,7 @@ public class GUI extends Application {
 		final CheckMenuItem ai = new CheckMenuItem("_Black Palyer A.I.");
 		ai.selectedProperty().set(game.blackAIProperty().get());
 		game.blackAIProperty().bind(ai.selectedProperty());
+		
 		final Menu menuPly = new Menu("Ply");
 		final ToggleGroup groupPly = new ToggleGroup();
 		RadioMenuItem[] items = new RadioMenuItem[GameI.PLY_MAX];
@@ -97,13 +98,15 @@ public class GUI extends Application {
 						game.plyProperty().set(i + 1);
 					}
 				}
-				System.out.println(newToggle);
-				System.out.println(game.plyProperty().get());
 			}
 		});
 		items[game.plyProperty().get() - 1].setSelected(true);
+		
+		final CheckMenuItem multiThreaded = new CheckMenuItem("Multi-Threading");
+		multiThreaded.selectedProperty().set(game.multiThreadedProperty().get());
+		game.multiThreadedProperty().bind(multiThreaded.selectedProperty());
 
-		return new Menu("_Settings", null, ai, menuPly);
+		return new Menu("_Settings", null, ai, multiThreaded, menuPly);
 	}
 
 	private Menu initMenuEdit() {
@@ -240,6 +243,41 @@ public class GUI extends Application {
 		info.add(currentPlayer2, 1, i);
 		i++;
 		
+		Label blank0 = new Label("");
+		info.add(blank0, 0, i);
+		i++;
+		
+		Label selected = new Label("Selected: ");
+		Label selected2 = new Label("");
+		selected2.textProperty().bind(game.selectionProperty().asString());
+		selected2.setMaxWidth(Double.MAX_VALUE);
+		selected2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(selected, 0, i);
+		info.add(selected2, 1, i);
+		i++;
+		
+		Label from = new Label("From: ");
+		Label from2 = new Label("");
+		from2.textProperty().bind(game.fromProperty().asString());
+		from2.setMaxWidth(Double.MAX_VALUE);
+		from2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(from, 0, i);
+		info.add(from2, 1, i);
+		i++;
+		
+		Label to = new Label("To: ");
+		Label to2 = new Label("");
+		to2.textProperty().bind(game.toProperty().asString());
+		to2.setMaxWidth(Double.MAX_VALUE);
+		to2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(to, 0, i);
+		info.add(to2, 1, i);
+		i++;
+		
+		Label blank1 = new Label("");
+		info.add(blank1, 0, i);
+		i++;
+		
 		Label busy = new Label("Busy: ");
 		Label busy2 = new Label(Boolean.toString(false));
 		busy2.textProperty().bind(game.busyProperty().asString());
@@ -258,8 +296,8 @@ public class GUI extends Application {
 		info.add(progress2, 1, i);
 		i++;
 		
-		info.setMaxWidth(150.0);
-		info.setMinWidth(150.0);
+		info.setMaxWidth(120.0);
+		info.setMinWidth(120.0);
 
 		border.setRight(info);
 		
@@ -276,6 +314,22 @@ public class GUI extends Application {
 		});
 
 		game.selectionProperty().addListener(new ChangeListener<Selection>() {
+			@Override
+			public void changed(ObservableValue<? extends Selection> observable, Selection oldValue,
+					Selection newValue) {
+				Platform.runLater(() -> drawBoard());
+			}
+		});
+		
+		game.fromProperty().addListener(new ChangeListener<Selection>() {
+			@Override
+			public void changed(ObservableValue<? extends Selection> observable, Selection oldValue,
+					Selection newValue) {
+				Platform.runLater(() -> drawBoard());
+			}
+		});
+		
+		game.toProperty().addListener(new ChangeListener<Selection>() {
 			@Override
 			public void changed(ObservableValue<? extends Selection> observable, Selection oldValue,
 					Selection newValue) {
@@ -455,11 +509,11 @@ public class GUI extends Application {
 		}
 		Selection from = game.fromProperty().get();
 		if (from != null) {
-			((Rectangle)panes[from.getX()][7 - from.getY()].getChildren().get(0)).setFill(Color.ORCHID);
+			((Rectangle)panes[from.getX()][7 - from.getY()].getChildren().get(0)).setFill(Color.AQUAMARINE);
 		}
 		Selection to = game.toProperty().get();
 		if (to != null) {
-			((Rectangle)panes[to.getX()][7 - to.getY()].getChildren().get(0)).setFill(Color.ORCHID);
+			((Rectangle)panes[to.getX()][7 - to.getY()].getChildren().get(0)).setFill(Color.AQUAMARINE);
 		}
 
 //		if (select != null) {

@@ -29,7 +29,7 @@ public class Selection {
 
 	@Override
 	public String toString() {
-		return "Selection [x=" + x + ", y=" + y + "]";
+		return "(" + x + "," + y + ")";
 	}
 
 	@Override

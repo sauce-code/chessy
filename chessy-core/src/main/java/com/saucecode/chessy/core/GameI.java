@@ -18,6 +18,8 @@ public interface GameI {
 	public static final boolean BUSY_STD = false;
 	
 	public static final boolean BLACK_AI_STD = true;
+	
+	public static final boolean MULTI_THREADED_STD = true;
 
 	public IntegerProperty boardValueWhiteProperty();
 	
@@ -62,5 +64,7 @@ public interface GameI {
 	public ObjectProperty<Selection> fromProperty();
 	
 	public ObjectProperty<Selection> toProperty();
+	
+	public BooleanProperty multiThreadedProperty();
 	
 }
