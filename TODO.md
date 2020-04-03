@@ -9,3 +9,7 @@
 - add javadoc
 - remove weird en passant bug
 - add option to toggle multithreading
+- add move counter
+- add move history?
+- make GameI Properties read-only
+- add calculation time
