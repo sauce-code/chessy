@@ -357,20 +357,20 @@ public class GUI extends Application {
 	 */
 	private void initializeImages() {
 		// @formatter:off
-		pawnB = new Image(getClass().getResource("/bauerBlack.png").toExternalForm(), imgSize, imgSize, false, false);
-		pawnW = new Image(getClass().getResource("/bauerWhite.png").toExternalForm(), imgSize, imgSize, false, false);
-		rookB = new Image(getClass().getResource("/towerBlack.png").toExternalForm(), imgSize, imgSize, false, false);
-		rookW = new Image(getClass().getResource("/towerWhite.png").toExternalForm(), imgSize, imgSize, false, false);
-		knightB = new Image(getClass().getResource("/horesBlack.png").toExternalForm(), imgSize, imgSize, false, false);
-		knightW = new Image(getClass().getResource("/horesWhite.png").toExternalForm(), imgSize, imgSize, false, false);
-		bishopB = new Image(getClass().getResource("/bishopBlack.png").toExternalForm(), imgSize, imgSize, false,
+		pawnB = new Image(getClass().getResource("/pawnb.png").toExternalForm(), imgSize, imgSize, false, false);
+		pawnW = new Image(getClass().getResource("/pawnw.png").toExternalForm(), imgSize, imgSize, false, false);
+		rookB = new Image(getClass().getResource("/rookb.png").toExternalForm(), imgSize, imgSize, false, false);
+		rookW = new Image(getClass().getResource("/rookw.png").toExternalForm(), imgSize, imgSize, false, false);
+		knightB = new Image(getClass().getResource("/knightb.png").toExternalForm(), imgSize, imgSize, false, false);
+		knightW = new Image(getClass().getResource("/knightw.png").toExternalForm(), imgSize, imgSize, false, false);
+		bishopB = new Image(getClass().getResource("/bishopb.png").toExternalForm(), imgSize, imgSize, false,
 				false);
-		bishopW = new Image(getClass().getResource("/bishopWhite.png").toExternalForm(), imgSize, imgSize, false,
+		bishopW = new Image(getClass().getResource("/bishopw.png").toExternalForm(), imgSize, imgSize, false,
 				false);
-		kingB = new Image(getClass().getResource("/kingBlack.png").toExternalForm(), imgSize, imgSize, false, false);
-		kingW = new Image(getClass().getResource("/kingWhite.png").toExternalForm(), imgSize, imgSize, false, false);
-		queenB = new Image(getClass().getResource("/dameBlack.png").toExternalForm(), imgSize, imgSize, false, false);
-		queenW = new Image(getClass().getResource("/dameWhite.png").toExternalForm(), imgSize, imgSize, false, false);
+		kingB = new Image(getClass().getResource("/kingb.png").toExternalForm(), imgSize, imgSize, false, false);
+		kingW = new Image(getClass().getResource("/kingw.png").toExternalForm(), imgSize, imgSize, false, false);
+		queenB = new Image(getClass().getResource("/queenb.png").toExternalForm(), imgSize, imgSize, false, false);
+		queenW = new Image(getClass().getResource("/queenw.png").toExternalForm(), imgSize, imgSize, false, false);
 		// @formatter:on
 	}
 
