@@ -18,7 +18,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -193,7 +192,7 @@ public class GUI extends Application {
 
 		GridPane info = new GridPane();
 		
-		ConsoleLabel placeholder = new ConsoleLabel("        ");
+		ConsoleLabel placeholder = new ConsoleLabel("         ");
 		info.add(placeholder, 1, 0);
 		
 		int i = 0;
@@ -215,6 +214,30 @@ public class GUI extends Application {
 		info.add(scoreBlack, 0, i);
 		info.add(scoreBlack2, 1, i);
 		i++;
+		
+		ConsoleLabel scoreWhiteRaw = new ConsoleLabel("Score White Raw: ");
+		ConsoleLabel scoreWhiteRaw2 = new ConsoleLabel("");
+		scoreWhiteRaw2.textProperty().bind(game.boardValueRawWhiteProperty().asString());
+		scoreWhiteRaw2.setMaxWidth(Double.MAX_VALUE);
+		scoreWhiteRaw2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(scoreWhiteRaw, 0, i);
+		info.add(scoreWhiteRaw2, 1, i);
+		i++;
+		
+		ConsoleLabel scoreBlackRaw = new ConsoleLabel("Score Black Raw: ");
+		ConsoleLabel scoreBlackRaw2 = new ConsoleLabel("");
+		scoreBlackRaw2.textProperty().bind(game.boardValueRawBlackProperty().asString());
+		scoreBlackRaw2.setMaxWidth(Double.MAX_VALUE);
+		scoreBlackRaw2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(scoreBlackRaw, 0, i);
+		info.add(scoreBlackRaw2, 1, i);
+		i++;
+		
+		{
+			ConsoleLabel blank = new ConsoleLabel("");
+			info.add(blank, 0, i);
+			i++;
+		}
 		
 		ConsoleLabel ckeck = new ConsoleLabel("In Check: ");
 		ConsoleLabel check2 = new ConsoleLabel("");
@@ -308,9 +331,27 @@ public class GUI extends Application {
 		info.add(progress2, 1, i);
 		i++;
 		
+		ConsoleLabel calcs = new ConsoleLabel("Calculated Moves: ");
+		ConsoleLabel calcs2 = new ConsoleLabel();
+		calcs2.textProperty().bind(game.calculatedMovesProperty().asString());
+		calcs2.setMaxWidth(Double.MAX_VALUE);
+		calcs2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(calcs, 0, i);
+		info.add(calcs2, 1, i);
+		i++;
+		
+		ConsoleLabel calcTime = new ConsoleLabel("Calculation Time: ");
+		ConsoleLabel calcTime2 = new ConsoleLabel();
+		calcTime2.textProperty().bind(game.calculationTimeProperty().asString("%d ms"));
+		calcTime2.setMaxWidth(Double.MAX_VALUE);
+		calcTime2.setAlignment(Pos.CENTER_RIGHT);
+		info.add(calcTime, 0, i);
+		info.add(calcTime2, 1, i);
+		i++;
+		
 //		info.setMaxWidth(120.0);
 //		info.setMinWidth(120.0);
-		info.setPadding(new Insets(0.0, 10.0, 0.0, 10.0));
+		info.setPadding(new Insets(10.0));
 
 		border.setRight(info);
 		
@@ -633,13 +674,16 @@ public class GUI extends Application {
 		if (game.resettable().get()) {
 			// data could be lost. ask if user really wants to quit
 			Optional<ButtonType> result = new ExitDialog(game, kingW).showAndWait();
-			if (result.get() == ButtonType.OK) {
-				// user clicked OK
-//				Platform.exit();
-			} else {
-			    // ... user chose CANCEL or closed the dialog
-				 event.consume();
+			if (result.isPresent())  {
+				if (result.get() == ButtonType.OK) {
+					// user clicked OK
+//					Platform.exit();
+				} else {
+				    // ... user chose CANCEL or closed the dialog
+					 event.consume();
+				}
 			}
+
 		} else {
 			// no data could be lost. exit without asking
 //			Platform.exit();

@@ -109,8 +109,9 @@ public class Board {
 		previous = null;
 		markerWhiteX = -1;
 		markerBlackX = -1;
-		valueWhite = Integer.MIN_VALUE;
-		valueBlack = Integer.MIN_VALUE;
+		valueWhite = Integer.MIN_VALUE; // TODO remove
+		valueBlack = Integer.MIN_VALUE; // TODO remove
+		evaluate();
 	}
 
 	/**
@@ -537,6 +538,14 @@ public class Board {
 			return valueWhite - valueBlack;
 		} else {
 			return valueBlack - valueWhite;
+		}
+	}
+	
+	public int getValueRaw(Player player) {
+		if (player == Player.WHITE) {
+			return valueWhite - 20_000; // TODO
+		} else {
+			return valueBlack - 20_000; // TODO;
 		}
 	}
 	

@@ -7,10 +7,12 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,6 +35,10 @@ public class Game implements GameI {
 	private final SimpleIntegerProperty boardValueWhite = new SimpleIntegerProperty();
 
 	private final SimpleIntegerProperty boardValueBlack = new SimpleIntegerProperty();
+	
+	private final SimpleIntegerProperty boardValueRawWhite = new SimpleIntegerProperty();
+
+	private final SimpleIntegerProperty boardValueRawBlack = new SimpleIntegerProperty();
 
 	private final SimpleObjectProperty<Board> board = new SimpleObjectProperty<>();
 
@@ -65,6 +71,10 @@ public class Game implements GameI {
 	private final ObjectProperty<Position> to = new SimpleObjectProperty<>(null);
 	
 	private final SimpleBooleanProperty multiThreaded = new SimpleBooleanProperty(MULTI_THREADED_STD);
+	
+	private final IntegerProperty calculatedMoves = new SimpleIntegerProperty(0);
+	
+	private final LongProperty calculationTime = new SimpleLongProperty(0);
 
 	/**
 	 * Creates a new game.
@@ -82,6 +92,8 @@ public class Game implements GameI {
 				Platform.runLater(() -> {
 					boardValueWhite.set(board.get().getValue(Player.WHITE));
 					boardValueBlack.set(board.get().getValue(Player.BLACK));
+					boardValueRawWhite.set(board.get().getValueRaw(Player.WHITE));
+					boardValueRawBlack.set(board.get().getValueRaw(Player.BLACK));
 					switch (board.get().getCurrentState()) {
 					case CHECK_BLACK:
 						inCheck.set(Player.BLACK);
@@ -197,6 +209,8 @@ public class Game implements GameI {
 				}
 				long timeEnd = System.currentTimeMillis();
 				long timeDiff = timeEnd - timeStart;
+				Platform.runLater(() -> calculatedMoves.set(count.get()));
+				Platform.runLater(() -> calculationTime.set(timeDiff));
 				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
 				System.out.println(Thread.currentThread().getName() + " ended");
 				System.out.println(Thread.currentThread().getName() + "calculated a total of " + count + " possible moves in " + timeDiff + " ms");
@@ -220,6 +234,16 @@ public class Game implements GameI {
 	@Override
 	public IntegerProperty boardValueBlackProperty() {
 		return boardValueBlack;
+	}
+
+	@Override
+	public IntegerProperty boardValueRawWhiteProperty() {
+		return boardValueRawWhite;
+	}
+
+	@Override
+	public IntegerProperty boardValueRawBlackProperty() {
+		return boardValueRawBlack;
 	}
 
 	@Override
@@ -357,6 +381,16 @@ public class Game implements GameI {
 	@Override
 	public BooleanProperty multiThreadedProperty() {
 		return multiThreaded;
+	}
+
+	@Override
+	public IntegerProperty calculatedMovesProperty() {
+		return calculatedMoves;
+	}
+
+	@Override
+	public LongProperty calculationTimeProperty() {
+		return calculationTime;
 	}
 
 }

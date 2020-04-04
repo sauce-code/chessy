@@ -3,6 +3,7 @@ package com.saucecode.chessy.core;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
 
 public interface GameI {
@@ -24,6 +25,10 @@ public interface GameI {
 	public IntegerProperty boardValueWhiteProperty();
 	
 	public IntegerProperty boardValueBlackProperty();
+	
+	public IntegerProperty boardValueRawWhiteProperty();
+	
+	public IntegerProperty boardValueRawBlackProperty();
 	
 	public ObjectProperty<Board> boardProperty();
 	
@@ -62,5 +67,9 @@ public interface GameI {
 	public ObjectProperty<Position> toProperty();
 	
 	public BooleanProperty multiThreadedProperty();
+	
+	public IntegerProperty calculatedMovesProperty();
+	
+	public LongProperty calculationTimeProperty();
 	
 }
