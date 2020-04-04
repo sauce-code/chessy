@@ -36,6 +36,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * This class provides the Gui for the chess game.
@@ -342,9 +343,10 @@ public class GUI extends Application {
 				Platform.runLater(() -> drawBoard());
 			}
 		});
-
+		
 		primaryStage.setScene(new Scene(border));
 		primaryStage.getIcons().add(kingW);
+		primaryStage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
 		primaryStage.show();
 	}
 
@@ -617,6 +619,24 @@ public class GUI extends Application {
 			for (int y = 0; y < 8; y++) {
 				deletePiece(x, y);
 			}
+		}
+	}
+	
+	private void closeWindowEvent(WindowEvent event) {
+        System.out.println("Window close request ...");
+		if (game.resettable().get()) {
+			// data could be lost. ask if user really wants to quit
+			Optional<ButtonType> result = new ExitDialog(game, kingW).showAndWait();
+			if (result.get() == ButtonType.OK) {
+				// user clicked OK
+//				Platform.exit();
+			} else {
+			    // ... user chose CANCEL or closed the dialog
+				 event.consume();
+			}
+		} else {
+			// no data could be lost. exit without asking
+//			Platform.exit();
 		}
 	}
 
