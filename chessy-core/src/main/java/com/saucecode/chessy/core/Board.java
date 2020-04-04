@@ -1,6 +1,7 @@
 package com.saucecode.chessy.core;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.saucecode.chessy.core.figures.*;
 
@@ -539,9 +540,9 @@ public class Board {
 		}
 	}
 	
-	public Board getMax(int ply, DoubleProperty progress, boolean multiThreaded) {
+	public Board getMax(int ply, DoubleProperty progress, boolean multiThreaded, AtomicInteger count) {
 		if (multiThreaded) {
-			return getMaxMultiThreaded(ply, progress);
+			return getMaxMultiThreaded(ply, progress, count);
 		} else {
 			int figuresToMove = 0;
 			
@@ -563,8 +564,11 @@ public class Board {
 						for (int toX = 0; toX < 8; toX++) {
 							for (int toY = 0; toY < 8; toY++) {
 								temp = figures[fromX][fromY].move(toX, toY);
+								if (temp != null) {
+									count.incrementAndGet();
+								}
 								if ((temp != null) && (ply > 1)) {
-									temp = temp.getMaxSingleThreaded(ply - 1);
+									temp = temp.getMaxSingleThreaded(ply - 1, count);
 								}
 								if ((max == null) || ((temp != null)
 										&& (temp.getValue(currentPlayer) > max.getValue(currentPlayer)))) {
@@ -580,7 +584,7 @@ public class Board {
 		}
 	}
 
-	private Board getMaxSingleThreaded(int ply) {
+	private Board getMaxSingleThreaded(int ply, AtomicInteger count) {
 		Board max = null;
 		Board temp;
 		for (int fromX = 0; fromX < 8; fromX++) {
@@ -589,8 +593,11 @@ public class Board {
 					for (int toX = 0; toX < 8; toX++) {
 						for (int toY = 0; toY < 8; toY++) {
 							temp = figures[fromX][fromY].move(toX, toY);
+							if (temp != null) {
+								count.incrementAndGet();
+							}
 							if ((temp != null) && (ply > 1)) {
-								temp = temp.getMaxSingleThreaded(ply - 1);
+								temp = temp.getMaxSingleThreaded(ply - 1, count);
 							}
 							if ((max == null) || ((temp != null)
 									&& (temp.getValue(currentPlayer) > max.getValue(currentPlayer)))) {
@@ -604,7 +611,7 @@ public class Board {
 		return max;
 	}
 	
-	private Board getMaxMultiThreaded(int ply, DoubleProperty progress) {
+	private Board getMaxMultiThreaded(int ply, DoubleProperty progress, AtomicInteger count) {
 		// TODO
 		final ObjectProperty<Board> max = new SimpleObjectProperty<Board>(null);
 		int threadCount = 0;
@@ -633,10 +640,13 @@ public class Board {
 						for (int toX = 0; toX < 8; toX++) {
 							for (int toY = 0; toY < 8; toY++) {
 								temp = figures[x][y].move(toX, toY);
+								if (temp != null) {
+									count.incrementAndGet();
+								}
 								if ((temp != null) && (ply > 1)) {
 									// TODO DEBUG
 									Board a = temp;
-									Board b = a.getMaxSingleThreaded(ply - 1);
+									Board b = a.getMaxSingleThreaded(ply - 1, count);
 									temp = b;
 								}
 								if ((max.get() == null) || ((temp != null)
@@ -661,7 +671,7 @@ public class Board {
 		return max.get();
 	}
 
-	public Board getMin(int ply) {
+	public Board getMin(int ply, AtomicInteger count) {
 		Board min = null;
 		Board temp;
 		for (int fromX = 0; fromX < 8; fromX++) {
@@ -670,8 +680,11 @@ public class Board {
 					for (int toX = 0; toX < 8; toX++) {
 						for (int toY = 0; toY < 8; toY++) {
 							temp = figures[fromX][fromY].move(toX, toY);
+							if (temp != null) {
+								count.incrementAndGet();
+							}
 							if ((temp != null) && (ply > 1)) {
-								temp = temp.getMaxSingleThreaded(ply - 1);
+								temp = temp.getMaxSingleThreaded(ply - 1, count);
 							}
 							if ((min == null) || ((temp != null) && (temp.getValue() < min.getValue()))) {
 								min = temp;

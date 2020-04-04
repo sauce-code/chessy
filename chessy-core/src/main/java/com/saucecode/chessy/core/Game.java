@@ -1,6 +1,7 @@
 package com.saucecode.chessy.core;
 
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -182,9 +183,11 @@ public class Game implements GameI {
 			@Override
 			protected Void call() throws Exception {
 				System.out.println(Thread.currentThread().getName() + " started");
+				long timeStart = System.currentTimeMillis();
 				Platform.runLater(() -> busy.set(true)); // TODO sollte nicht sein
 				Board temp = null;
-				temp = board.get().getMax(ply, progress, multiThreaded.get());
+				AtomicInteger count = new AtomicInteger();
+				temp = board.get().getMax(ply, progress, multiThreaded.get(), count);
 				if (temp != null) {
 					for (int i = 0; i < ply - 1; i++) {
 						temp = temp.getPrevious();
@@ -192,8 +195,11 @@ public class Game implements GameI {
 					history.push(board.get());
 					board.set(temp);
 				}
+				long timeEnd = System.currentTimeMillis();
+				long timeDiff = timeEnd - timeStart;
 				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
 				System.out.println(Thread.currentThread().getName() + " ended");
+				System.out.println("calculated " + count + " possible moves in " + timeDiff + " ms");
 				return null;
 			}
 		};
