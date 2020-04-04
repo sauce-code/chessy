@@ -137,7 +137,7 @@ public class GUI extends Application {
 		});
 
 		final MenuItem exit = new MenuItem("E_xit");
-		exit.setAccelerator(KeyCombination.keyCombination("Alt + F4"));
+//		exit.setAccelerator(KeyCombination.keyCombination("Alt + F4")); // TODO
 		exit.setOnAction(e -> {
 			if (game.resettable().get()) {
 				// data could be lost. ask if user really wants to quit
@@ -670,23 +670,20 @@ public class GUI extends Application {
 	}
 	
 	private void closeWindowEvent(WindowEvent event) {
-        System.out.println("Window close request ...");
 		if (game.resettable().get()) {
 			// data could be lost. ask if user really wants to quit
 			Optional<ButtonType> result = new ExitDialog(game, kingW).showAndWait();
-			if (result.isPresent())  {
-				if (result.get() == ButtonType.OK) {
-					// user clicked OK
-//					Platform.exit();
-				} else {
-				    // ... user chose CANCEL or closed the dialog
-					 event.consume();
-				}
+			if (result.get() == ButtonType.OK) {
+				// user clicked OK
+				// continue
+			} else {
+			    // ... user chose CANCEL or closed the dialog
+				// stop exit
+				 event.consume();
 			}
-
 		} else {
-			// no data could be lost. exit without asking
-//			Platform.exit();
+			// no data could be lost
+			// continue without asking
 		}
 	}
 
