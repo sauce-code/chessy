@@ -9,12 +9,16 @@ Chessy is a simple Chess A.I. using a look-ahead strategy. Its provided as a Mav
 
 ## Install & Run
 
-Just run the following code:
+Just run the following commands:
 
 ```bash
-git clone https://github.com/sauce-code/chessy
+git clone https://github.com/sauce-code/chessy.git
 cd chessy
 mvn install
 cd chessy-gui
-mvn install javafx:run
+mvn javafx:run
 ```
+
+## Changelog
+
+Can be found [here](CHANGELOG.md).
