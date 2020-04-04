@@ -7,6 +7,6 @@
 - add move counter
 - add move history?
 - make GameI Properties read-only
-- add calculation time
 - make a.i. able to find checkmate
 - add a way to interrupt
+- set king value to 0
