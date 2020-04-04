@@ -637,16 +637,17 @@ public class Board {
 					new Thread(() -> {
 						System.out.println(Thread.currentThread().getName() + " started: " + figures[x][y].getClass().getSimpleName() + " (" +  figures[x][y].x + "," + figures[x][y].y + ")");
 						Board temp = null;
+						AtomicInteger countInternal = new AtomicInteger();
 						for (int toX = 0; toX < 8; toX++) {
 							for (int toY = 0; toY < 8; toY++) {
 								temp = figures[x][y].move(toX, toY);
 								if (temp != null) {
-									count.incrementAndGet();
+									countInternal.incrementAndGet();
 								}
 								if ((temp != null) && (ply > 1)) {
 									// TODO DEBUG
 									Board a = temp;
-									Board b = a.getMaxSingleThreaded(ply - 1, count);
+									Board b = a.getMaxSingleThreaded(ply - 1, countInternal);
 									temp = b;
 								}
 								if ((max.get() == null) || ((temp != null)
@@ -655,9 +656,11 @@ public class Board {
 								}
 							}
 						}
+						count.addAndGet(countInternal.get());
 						latch.countDown();
 						Platform.runLater(() -> progress.set(progress.get() + step));
 						System.out.println(Thread.currentThread().getName() + " ended");
+						System.out.println(Thread.currentThread().getName() + " calculated " + countInternal + " possible moves");
 					}).start();
 				}
 			}

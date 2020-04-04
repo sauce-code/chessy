@@ -199,7 +199,7 @@ public class Game implements GameI {
 				long timeDiff = timeEnd - timeStart;
 				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
 				System.out.println(Thread.currentThread().getName() + " ended");
-				System.out.println("calculated " + count + " possible moves in " + timeDiff + " ms");
+				System.out.println(Thread.currentThread().getName() + "calculated a total of " + count + " possible moves in " + timeDiff + " ms");
 				return null;
 			}
 		};
