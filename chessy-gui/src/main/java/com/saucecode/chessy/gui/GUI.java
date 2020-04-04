@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -192,10 +193,13 @@ public class GUI extends Application {
 
 		GridPane info = new GridPane();
 		
+		ConsoleLabel placeholder = new ConsoleLabel("        ");
+		info.add(placeholder, 1, 0);
+		
 		int i = 0;
 		
-		Label scoreWhite = new Label("Score White: ");
-		Label scoreWhite2 = new Label("");
+		ConsoleLabel scoreWhite = new ConsoleLabel("Score White: ");
+		ConsoleLabel scoreWhite2 = new ConsoleLabel("");
 		scoreWhite2.textProperty().bind(game.boardValueWhiteProperty().asString());
 		scoreWhite2.setMaxWidth(Double.MAX_VALUE);
 		scoreWhite2.setAlignment(Pos.CENTER_RIGHT);
@@ -203,8 +207,8 @@ public class GUI extends Application {
 		info.add(scoreWhite2, 1, i);
 		i++;
 		
-		Label scoreBlack = new Label("Score Black: ");
-		Label scoreBlack2 = new Label("");
+		ConsoleLabel scoreBlack = new ConsoleLabel("Score Black: ");
+		ConsoleLabel scoreBlack2 = new ConsoleLabel("");
 		scoreBlack2.textProperty().bind(game.boardValueBlackProperty().asString());
 		scoreBlack2.setMaxWidth(Double.MAX_VALUE);
 		scoreBlack2.setAlignment(Pos.CENTER_RIGHT);
@@ -212,8 +216,8 @@ public class GUI extends Application {
 		info.add(scoreBlack2, 1, i);
 		i++;
 		
-		Label ckeck = new Label("In Check: ");
-		Label check2 = new Label("");
+		ConsoleLabel ckeck = new ConsoleLabel("In Check: ");
+		ConsoleLabel check2 = new ConsoleLabel("");
 		check2.textProperty().bind(game.inCheckProperty().asString());
 		check2.setMaxWidth(Double.MAX_VALUE);
 		check2.setAlignment(Pos.CENTER_RIGHT);
@@ -221,8 +225,8 @@ public class GUI extends Application {
 		info.add(check2, 1, i);
 		i++;
 		
-		Label stalemate = new Label("In Stalemate: ");
-		Label stalemate2 = new Label("");
+		ConsoleLabel stalemate = new ConsoleLabel("In Stalemate: ");
+		ConsoleLabel stalemate2 = new ConsoleLabel("");
 		stalemate2.textProperty().bind(game.inStalemateProperty().asString());
 		stalemate2.setMaxWidth(Double.MAX_VALUE);
 		stalemate2.setAlignment(Pos.CENTER_RIGHT);
@@ -230,8 +234,8 @@ public class GUI extends Application {
 		info.add(stalemate2, 1, i);
 		i++;
 		
-		Label checkmate = new Label("In Checkmate: ");
-		Label checkmate2 = new Label("");
+		ConsoleLabel checkmate = new ConsoleLabel("In Checkmate: ");
+		ConsoleLabel checkmate2 = new ConsoleLabel("");
 		checkmate2.textProperty().bind(game.inCheckmateProperty().asString());
 		checkmate2.setMaxWidth(Double.MAX_VALUE);
 		checkmate2.setAlignment(Pos.CENTER_RIGHT);
@@ -239,8 +243,8 @@ public class GUI extends Application {
 		info.add(checkmate2, 1, i);
 		i++;
 		
-		Label currentPlayer = new Label("Current Player: ");
-		Label currentPlayer2 = new Label(game.currentPlayerProperty().get().toString());
+		ConsoleLabel currentPlayer = new ConsoleLabel("Current Player: ");
+		ConsoleLabel currentPlayer2 = new ConsoleLabel(game.currentPlayerProperty().get().toString());
 		game.currentPlayerProperty().addListener(e -> Platform.runLater(() -> {
 			currentPlayer2.setText(game.currentPlayerProperty().get().toString());
 		}));
@@ -250,12 +254,12 @@ public class GUI extends Application {
 		info.add(currentPlayer2, 1, i);
 		i++;
 		
-		Label blank0 = new Label("");
+		ConsoleLabel blank0 = new ConsoleLabel("");
 		info.add(blank0, 0, i);
 		i++;
 		
-		Label selected = new Label("Selected: ");
-		Label selected2 = new Label("");
+		ConsoleLabel selected = new ConsoleLabel("Selected: ");
+		ConsoleLabel selected2 = new ConsoleLabel("");
 		selected2.textProperty().bind(game.selectionProperty().asString());
 		selected2.setMaxWidth(Double.MAX_VALUE);
 		selected2.setAlignment(Pos.CENTER_RIGHT);
@@ -263,8 +267,8 @@ public class GUI extends Application {
 		info.add(selected2, 1, i);
 		i++;
 		
-		Label from = new Label("From: ");
-		Label from2 = new Label("");
+		ConsoleLabel from = new ConsoleLabel("From: ");
+		ConsoleLabel from2 = new ConsoleLabel("");
 		from2.textProperty().bind(game.fromProperty().asString());
 		from2.setMaxWidth(Double.MAX_VALUE);
 		from2.setAlignment(Pos.CENTER_RIGHT);
@@ -272,8 +276,8 @@ public class GUI extends Application {
 		info.add(from2, 1, i);
 		i++;
 		
-		Label to = new Label("To: ");
-		Label to2 = new Label("");
+		ConsoleLabel to = new ConsoleLabel("To: ");
+		ConsoleLabel to2 = new ConsoleLabel("");
 		to2.textProperty().bind(game.toProperty().asString());
 		to2.setMaxWidth(Double.MAX_VALUE);
 		to2.setAlignment(Pos.CENTER_RIGHT);
@@ -281,12 +285,13 @@ public class GUI extends Application {
 		info.add(to2, 1, i);
 		i++;
 		
-		Label blank1 = new Label("");
+		ConsoleLabel blank1 = new ConsoleLabel("");
+
 		info.add(blank1, 0, i);
 		i++;
 		
-		Label busy = new Label("Busy: ");
-		Label busy2 = new Label(Boolean.toString(false));
+		ConsoleLabel busy = new ConsoleLabel("Busy: ");
+		ConsoleLabel busy2 = new ConsoleLabel(Boolean.toString(false));
 		busy2.textProperty().bind(game.busyProperty().asString());
 		busy2.setMaxWidth(Double.MAX_VALUE);
 		busy2.setAlignment(Pos.CENTER_RIGHT);
@@ -294,8 +299,8 @@ public class GUI extends Application {
 		info.add(busy2, 1, i);
 		i++;
 		
-		Label progress = new Label("Progress: ");
-		Label progress2 = new Label(Boolean.toString(false));
+		ConsoleLabel progress = new ConsoleLabel("Progress: ");
+		ConsoleLabel progress2 = new ConsoleLabel(Boolean.toString(false));
 		progress2.textProperty().bind(game.progressProperty().asString("%.2f"));
 		progress2.setMaxWidth(Double.MAX_VALUE);
 		progress2.setAlignment(Pos.CENTER_RIGHT);
@@ -303,8 +308,9 @@ public class GUI extends Application {
 		info.add(progress2, 1, i);
 		i++;
 		
-		info.setMaxWidth(120.0);
-		info.setMinWidth(120.0);
+//		info.setMaxWidth(120.0);
+//		info.setMinWidth(120.0);
+		info.setPadding(new Insets(0.0, 10.0, 0.0, 10.0));
 
 		border.setRight(info);
 		
