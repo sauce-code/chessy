@@ -62,9 +62,9 @@ public class Game implements GameI {
 
 	private final SimpleBooleanProperty resettable = new SimpleBooleanProperty(false);
 
-	private final SimpleBooleanProperty undoable = new SimpleBooleanProperty(false);
+	private final SimpleBooleanProperty undoEnabled = new SimpleBooleanProperty(false);
 	
-	private final SimpleDoubleProperty progress = new SimpleDoubleProperty();
+	private final SimpleDoubleProperty progressProperty = new SimpleDoubleProperty();
 	
 	private final ObjectProperty<Position> from = new SimpleObjectProperty<>(null);
 	
@@ -83,7 +83,7 @@ public class Game implements GameI {
 		this.history = new Stack<Board>();
 
 
-		undoable.bind(resettable);
+		undoEnabled.bind(resettable);
 
 		board.addListener(new ChangeListener<Board>() {
 
@@ -146,7 +146,7 @@ public class Game implements GameI {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				if (!newValue) {
-					Platform.runLater(() -> progress.set(0.0)); // TODO beibelassen?
+					Platform.runLater(() -> progressProperty.set(0.0)); // TODO beibelassen?
 				}
 			}
 			
@@ -199,7 +199,7 @@ public class Game implements GameI {
 				Platform.runLater(() -> busy.set(true)); // TODO sollte nicht sein
 				Board temp = null;
 				AtomicInteger count = new AtomicInteger();
-				temp = board.get().getMax(ply, progress, multiThreaded.get(), count);
+				temp = board.get().getMax(ply, progressProperty, multiThreaded.get(), count);
 				if (temp != null) {
 					for (int i = 0; i < ply - 1; i++) {
 						temp = temp.getPrevious();
@@ -354,18 +354,18 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public BooleanProperty resettable() {
+	public BooleanProperty resetEnabledProperty() {
 		return resettable;
 	}
 
 	@Override
-	public BooleanProperty undoable() {
-		return undoable;
+	public BooleanProperty undoEnabledPropoerty() {
+		return undoEnabled;
 	}
 
 	@Override
 	public DoubleProperty progressProperty() {
-		return progress;
+		return progressProperty;
 	}
 
 	@Override

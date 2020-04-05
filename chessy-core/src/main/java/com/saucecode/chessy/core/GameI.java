@@ -34,17 +34,11 @@ public interface GameI {
 	
 	public BooleanProperty busyProperty();
 	
-	public void select(Position s);
-	
 	public ObjectProperty<Position> selectionProperty();
 	
 	public IntegerProperty plyProperty();
 	
 	public BooleanProperty blackAIProperty();
-	
-	public void undo();
-	
-	public void reset();
 	
 	public ObjectProperty<Player> inCheckProperty();
 	
@@ -56,9 +50,9 @@ public interface GameI {
 	
 	public ObjectProperty<Player> currentPlayerProperty();
 	
-	public BooleanProperty resettable();
+	public BooleanProperty resetEnabledProperty();
 	
-	public BooleanProperty undoable();
+	public BooleanProperty undoEnabledPropoerty();
 	
 	public DoubleProperty progressProperty();
 	
@@ -71,5 +65,11 @@ public interface GameI {
 	public IntegerProperty calculatedMovesProperty();
 	
 	public LongProperty calculationTimeProperty();
+
+	public void undo();
+
+	public void reset();
+
+	public void select(Position position);
 	
 }

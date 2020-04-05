@@ -110,7 +110,7 @@ public class GUI extends Application {
 
 	private Menu initMenuEdit() {
 		final MenuItem undo = new MenuItem("_Undo");
-		undo.disableProperty().bind(game.undoable().not());
+		undo.disableProperty().bind(game.undoEnabledPropoerty().not());
 		undo.setAccelerator(KeyCombination.keyCombination("Ctrl + Z"));
 		undo.setOnAction(e -> {
 			if (game.blackAIProperty().get()) {
@@ -125,7 +125,7 @@ public class GUI extends Application {
 
 	private Menu initMenuFile() {
 		final MenuItem restart = new MenuItem("_Restart");
-		restart.disableProperty().bind(game.resettable().not());
+		restart.disableProperty().bind(game.resetEnabledProperty().not());
 		restart.setAccelerator(KeyCombination.keyCombination("F2"));
 		restart.setOnAction(e -> {
 			Optional<ButtonType> result = new ResetDialog(game, kingW).showAndWait();
@@ -139,7 +139,7 @@ public class GUI extends Application {
 		final MenuItem exit = new MenuItem("E_xit");
 //		exit.setAccelerator(KeyCombination.keyCombination("Alt + F4")); // TODO
 		exit.setOnAction(e -> {
-			if (game.resettable().get()) {
+			if (game.resetEnabledProperty().get()) {
 				// data could be lost. ask if user really wants to quit
 				Optional<ButtonType> result = new ExitDialog(game, kingW).showAndWait();
 				if (result.get() == ButtonType.OK) {
@@ -670,7 +670,7 @@ public class GUI extends Application {
 	}
 	
 	private void closeWindowEvent(WindowEvent event) {
-		if (game.resettable().get()) {
+		if (game.resetEnabledProperty().get()) {
 			// data could be lost. ask if user really wants to quit
 			Optional<ButtonType> result = new ExitDialog(game, kingW).showAndWait();
 			if (result.get() == ButtonType.OK) {
