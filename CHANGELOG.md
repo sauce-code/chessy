@@ -10,4 +10,4 @@
 
 ### Known Bugs
 
-- A.I. is not capable of finding checkmate positions
+- A.I. is not capable of finding checkmate positions (#1)
