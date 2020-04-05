@@ -46,7 +46,7 @@ public class Game implements GameI {
 
 	private final SimpleObjectProperty<Position> selection = new SimpleObjectProperty<>();
 
-	private final SimpleIntegerProperty ply = new SimpleIntegerProperty(PLY_STD);
+	private final SimpleIntegerProperty ply = new SimpleIntegerProperty(PLY_STD); // TODO set range
 
 	private final SimpleBooleanProperty blackAI = new SimpleBooleanProperty(BLACK_AI_STD);
 
