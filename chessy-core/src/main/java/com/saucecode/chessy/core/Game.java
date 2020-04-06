@@ -1,5 +1,6 @@
 package com.saucecode.chessy.core;
 
+import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -258,9 +259,7 @@ public class Game implements GameI {
 
 	@Override
 	public void select(Position position) {
-		if (position == null) {
-			throw new NullPointerException("position must not be null");
-		}
+		Objects.requireNonNull(position, "position must not be null");
 
 		// unselect
 		if (position.equals(selection.get())) {
