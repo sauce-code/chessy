@@ -6,14 +6,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyLongProperty;
+import javafx.beans.property.ReadOnlyLongWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,49 +38,49 @@ public class Game implements GameI {
 	 */
 	private Stack<Board> history;
 
-	private final SimpleIntegerProperty boardValueWhite = new SimpleIntegerProperty();
+	private final ReadOnlyIntegerWrapper boardValueWhite = new ReadOnlyIntegerWrapper();
 
-	private final SimpleIntegerProperty boardValueBlack = new SimpleIntegerProperty();
+	private final ReadOnlyIntegerWrapper boardValueBlack = new ReadOnlyIntegerWrapper();
 	
-	private final SimpleIntegerProperty boardValueRawWhite = new SimpleIntegerProperty();
+	private final ReadOnlyIntegerWrapper boardValueRawWhite = new ReadOnlyIntegerWrapper();
 
-	private final SimpleIntegerProperty boardValueRawBlack = new SimpleIntegerProperty();
+	private final ReadOnlyIntegerWrapper boardValueRawBlack = new ReadOnlyIntegerWrapper();
 
-	private final SimpleObjectProperty<Board> board = new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Board> board = new SimpleObjectProperty<>(); // TODO
 
-	private final SimpleBooleanProperty busy = new SimpleBooleanProperty(BUSY_STD);
+	private final ReadOnlyBooleanWrapper busy = new ReadOnlyBooleanWrapper();
 
-	private final SimpleObjectProperty<Position> selection = new SimpleObjectProperty<>();
+	private final ReadOnlyObjectWrapper<Position> selection = new ReadOnlyObjectWrapper<>();
 
-	private final SimpleIntegerProperty ply = new SimpleIntegerProperty(PLY_STD); // TODO set range
+	private final ReadOnlyObjectWrapper<Player> inCheck = new ReadOnlyObjectWrapper<>();
+
+	private final ReadOnlyObjectWrapper<Player> inStalemate = new ReadOnlyObjectWrapper<>();
+	
+	private final ReadOnlyObjectWrapper<Player> inCheckmate = new ReadOnlyObjectWrapper<>();
+
+	private final ReadOnlyBooleanWrapper gameOver = new ReadOnlyBooleanWrapper();
+
+	private final ReadOnlyObjectWrapper<Player> currentPlayer = new ReadOnlyObjectWrapper<>();
+
+	private final ReadOnlyBooleanWrapper resetEnabled = new ReadOnlyBooleanWrapper();
+
+	private final ReadOnlyBooleanWrapper undoEnabled = new ReadOnlyBooleanWrapper();
+	
+	private final ReadOnlyDoubleWrapper progressProperty = new ReadOnlyDoubleWrapper();
+	
+	private final ReadOnlyObjectWrapper<Position> from = new ReadOnlyObjectWrapper<>();
+	
+	private final ReadOnlyObjectWrapper<Position> to = new ReadOnlyObjectWrapper<>();
+	
+	private final ReadOnlyIntegerWrapper calculatedMoves = new ReadOnlyIntegerWrapper();
+	
+	private final ReadOnlyLongWrapper calculationTime = new ReadOnlyLongWrapper();
+
+	private final SimpleBooleanProperty multiThreaded = new SimpleBooleanProperty(MULTI_THREADED_STD);
 
 	private final SimpleBooleanProperty blackAI = new SimpleBooleanProperty(BLACK_AI_STD);
 
-	private final SimpleObjectProperty<Player> inCheck = new SimpleObjectProperty<>();
-
-	private final SimpleObjectProperty<Player> inStalemate = new SimpleObjectProperty<>();
-	
-	private final SimpleObjectProperty<Player> inCheckmate = new SimpleObjectProperty<>();
-
-	private final SimpleBooleanProperty gameOver = new SimpleBooleanProperty(false);
-
-	private final SimpleObjectProperty<Player> currentPlayer = new SimpleObjectProperty<>();
-
-	private final SimpleBooleanProperty resettable = new SimpleBooleanProperty(false);
-
-	private final SimpleBooleanProperty undoEnabled = new SimpleBooleanProperty(false);
-	
-	private final SimpleDoubleProperty progressProperty = new SimpleDoubleProperty();
-	
-	private final ObjectProperty<Position> from = new SimpleObjectProperty<>(null);
-	
-	private final ObjectProperty<Position> to = new SimpleObjectProperty<>(null);
-	
-	private final SimpleBooleanProperty multiThreaded = new SimpleBooleanProperty(MULTI_THREADED_STD);
-	
-	private final IntegerProperty calculatedMoves = new SimpleIntegerProperty(0);
-	
-	private final LongProperty calculationTime = new SimpleLongProperty(0);
+	private final BoundedIntegerProperty ply = new BoundedIntegerProperty(PLY_STD, PLY_MIN, PLY_MAX);
 
 	/**
 	 * Creates a new game.
@@ -84,7 +89,7 @@ public class Game implements GameI {
 		this.history = new Stack<Board>();
 
 
-		undoEnabled.bind(resettable);
+		undoEnabled.bind(resetEnabled);
 
 		board.addListener(new ChangeListener<Board>() {
 
@@ -123,7 +128,7 @@ public class Game implements GameI {
 					}
 					currentPlayer.set(board.get().getCurrentPlayer());
 
-					resettable.set(history.size() > 0);
+					resetEnabled.set(history.size() > 0);
 					
 					from.set(board.get().getFrom());
 					to.set(board.get().getTo());
@@ -228,59 +233,139 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public IntegerProperty boardValueWhiteProperty() {
-		return boardValueWhite;
+	public ReadOnlyIntegerProperty boardValueWhiteProperty() {
+		return boardValueWhite.getReadOnlyProperty();
 	}
 
 	@Override
-	public IntegerProperty boardValueBlackProperty() {
-		return boardValueBlack;
+	public ReadOnlyIntegerProperty boardValueBlackProperty() {
+		return boardValueBlack.getReadOnlyProperty();
 	}
 
 	@Override
-	public IntegerProperty boardValueRawWhiteProperty() {
-		return boardValueRawWhite;
+	public ReadOnlyIntegerProperty boardValueRawWhiteProperty() {
+		return boardValueRawWhite.getReadOnlyProperty();
 	}
 
 	@Override
-	public IntegerProperty boardValueRawBlackProperty() {
-		return boardValueRawBlack;
+	public ReadOnlyIntegerProperty boardValueRawBlackProperty() {
+		return boardValueRawBlack.getReadOnlyProperty();
 	}
 
-	@Override
+	@Override // TODO
 	public ObjectProperty<Board> boardProperty() {
 		return board;
 	}
 
 	@Override
-	public BooleanProperty busyProperty() {
-		return busy;
+	public ReadOnlyBooleanProperty busyProperty() {
+		return busy.getReadOnlyProperty();
+	}
+
+	@Override
+	public ReadOnlyObjectProperty<Position> selectionProperty() {
+		return selection.getReadOnlyProperty();
+	}
+
+	@Override
+	public BooleanProperty blackAIProperty() {
+		return blackAI;
+	}
+
+	@Override
+	public ReadOnlyObjectProperty<Player> inCheckProperty() {
+		return inCheck.getReadOnlyProperty();
+	}
+
+	@Override
+	public ReadOnlyObjectProperty<Player> inStalemateProperty() {
+		return inStalemate.getReadOnlyProperty();
+	}
+
+	@Override
+	public ReadOnlyObjectProperty<Player> inCheckmateProperty() {
+		return inCheckmate.getReadOnlyProperty();
+	}
+
+	@Override
+	public ReadOnlyBooleanProperty gameOverProperty() {
+		return gameOver.getReadOnlyProperty(); // TODO
+	}
+
+	@Override
+	public ReadOnlyObjectProperty<Player> currentPlayerProperty() {
+		return currentPlayer.getReadOnlyProperty();
+	}
+
+	@Override
+	public ReadOnlyBooleanProperty resetEnabledProperty() {
+		return resetEnabled.getReadOnlyProperty();
+	}
+
+	@Override
+	public ReadOnlyBooleanProperty undoEnabledPropoerty() {
+		return undoEnabled.getReadOnlyProperty();
+	}
+
+	@Override
+	public ReadOnlyDoubleProperty progressProperty() {
+		return progressProperty.getReadOnlyProperty();
+	}
+
+	@Override
+	public ReadOnlyObjectProperty<Position> fromProperty() {
+		return from.getReadOnlyProperty();
+	}
+
+	@Override
+	public ReadOnlyObjectProperty<Position> toProperty() {
+		return to.getReadOnlyProperty();
+	}
+	
+	@Override
+	public BooleanProperty multiThreadedProperty() {
+		return multiThreaded;
+	}
+
+	@Override
+	public IntegerProperty plyProperty() {
+		return ply;
+	}
+
+	@Override
+	public ReadOnlyIntegerProperty calculatedMovesProperty() {
+		return calculatedMoves.getReadOnlyProperty();
+	}
+
+	@Override
+	public ReadOnlyLongProperty calculationTimeProperty() {
+		return calculationTime.getReadOnlyProperty();
 	}
 
 	@Override
 	public void select(Position position) {
 		Objects.requireNonNull(position, "position must not be null");
-
+	
 		// unselect
 		if (position.equals(selection.get())) {
 			selection.set(null);
 		} else {
 			int x = position.getX();
 			int y = position.getY();
-
+	
 			if (board.get().getFigure(x, y) == null
 					|| board.get().getFigure(x, y).getOwner() != board.get().getCurrentPlayer()) {
 				// empty space clicked or enemy figure clicked
-
+	
 				if (selection.get() != null) { 
 					// means a figure was clicked in previous click
-
+	
 					if (move(selection.get().getX(), selection.get().getY(), x, y)) {
-
+	
 						if (blackAIProperty().get() && board.get().getCurrentPlayer() == Player.BLACK) {
-
+	
 							move(ply.get());
-
+	
 						}
 					}
 				}
@@ -292,28 +377,13 @@ public class Game implements GameI {
 				}
 			}
 		}
-
-	}
-
-	@Override
-	public ObjectProperty<Position> selectionProperty() {
-		return selection;
-	}
-
-	@Override
-	public IntegerProperty plyProperty() {
-		return ply;
-	}
-
-	@Override
-	public BooleanProperty blackAIProperty() {
-		return blackAI;
+	
 	}
 
 	@Override
 	public void reset() {
 		// TODO check if busy
-		if (resettable.get()) {
+		if (resetEnabled.get()) {
 			history.clear();
 			board.set(new Board());
 		}
@@ -325,71 +395,6 @@ public class Game implements GameI {
 		if (history.size() > 0) {
 			board.set(history.pop());
 		}
-	}
-
-	@Override
-	public ObjectProperty<Player> inCheckProperty() {
-		return inCheck;
-	}
-
-	@Override
-	public ObjectProperty<Player> inStalemateProperty() {
-		return inStalemate;
-	}
-
-	@Override
-	public ObjectProperty<Player> inCheckmateProperty() {
-		return inCheckmate;
-	}
-
-	@Override
-	public BooleanProperty gameOverProperty() {
-		return gameOver; // TODO
-	}
-
-	@Override
-	public ObjectProperty<Player> currentPlayerProperty() {
-		return currentPlayer;
-	}
-
-	@Override
-	public BooleanProperty resetEnabledProperty() {
-		return resettable;
-	}
-
-	@Override
-	public BooleanProperty undoEnabledPropoerty() {
-		return undoEnabled;
-	}
-
-	@Override
-	public DoubleProperty progressProperty() {
-		return progressProperty;
-	}
-
-	@Override
-	public ObjectProperty<Position> fromProperty() {
-		return from;
-	}
-
-	@Override
-	public ObjectProperty<Position> toProperty() {
-		return to;
-	}
-	
-	@Override
-	public BooleanProperty multiThreadedProperty() {
-		return multiThreaded;
-	}
-
-	@Override
-	public IntegerProperty calculatedMovesProperty() {
-		return calculatedMoves;
-	}
-
-	@Override
-	public LongProperty calculationTimeProperty() {
-		return calculationTime;
 	}
 
 }

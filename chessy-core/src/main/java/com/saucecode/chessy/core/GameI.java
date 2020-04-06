@@ -1,10 +1,12 @@
 package com.saucecode.chessy.core;
 
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyLongProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 
 /**
  * The Game Interface. Defines the API used for communication between model and
@@ -38,9 +40,9 @@ public interface GameI {
 	 */
 	public static final int PLY_MAX = 5;
 
-	public static final int DIM = 8;
+	public static final int DIM = 8; // TODO remove?
 
-	public static final boolean BUSY_STD = false;
+	public static final boolean BUSY_STD = false; // TODO remove?
 
 	/**
 	 * Default value for {@link #blackAIProperty()}.
@@ -56,49 +58,126 @@ public interface GameI {
 	 */
 	public static final boolean MULTI_THREADED_STD = true;
 
-	public IntegerProperty boardValueWhiteProperty();
+	/**
+	 * Returns the read-only board value white property.
+	 * 
+	 * @return read-only board value white property
+	 * 
+	 * @since 1.0.0
+	 */
+	public ReadOnlyIntegerProperty boardValueWhiteProperty();
 
-	public IntegerProperty boardValueBlackProperty();
+	/**
+	 * Returns the read-only board value black property.
+	 * 
+	 * @return read-only board value black property
+	 * 
+	 * @since 1.0.0
+	 */
+	public ReadOnlyIntegerProperty boardValueBlackProperty();
 
-	public IntegerProperty boardValueRawWhiteProperty();
+	/**
+	 * Returns the read-only board value raw white property.
+	 * 
+	 * @return read-only board value raw white property
+	 * 
+	 * @since 1.0.0
+	 */
+	public ReadOnlyIntegerProperty boardValueRawWhiteProperty();
 
-	public IntegerProperty boardValueRawBlackProperty();
+	/**
+	 * Returns the read-only board value raw black property.
+	 * 
+	 * @return read-only board value raw black property
+	 * 
+	 * @since 1.0.0
+	 */
+	public ReadOnlyIntegerProperty boardValueRawBlackProperty();
 
-	public ObjectProperty<Board> boardProperty();
+	public ObjectProperty<Board> boardProperty(); // TODO remove
 
-	public BooleanProperty busyProperty();
+	/**
+	 * Returns the read-only busy property.
+	 * 
+	 * @return read-only busy property
+	 * 
+	 * @since 1.0.0
+	 */
+	public ReadOnlyBooleanProperty busyProperty();
 
-	public ObjectProperty<Position> selectionProperty();
+	/**
+	 * Returns the read-only selection property.
+	 * 
+	 * @return read-only selection property
+	 * 
+	 * @since 1.0.0
+	 */
+	public ReadOnlyObjectProperty<Position> selectionProperty();
 
-	public IntegerProperty plyProperty();
+	/**
+	 * Returns the in check property.
+	 * 
+	 * @return in check property
+	 * 
+	 * @since 1.0.0
+	 */
+	public ReadOnlyObjectProperty<Player> inCheckProperty();
 
+	/**
+	 * Returns the read-only in stalemate property.
+	 * 
+	 * @return read-only in stalemate property
+	 * 
+	 * @since 1.0.0
+	 */
+	public ReadOnlyObjectProperty<Player> inStalemateProperty();
+
+	/**
+	 * Returns the read-only in checkmate property.
+	 * 
+	 * @return read-only in checkmate property
+	 * 
+	 * @since 1.0.0
+	 */
+	public ReadOnlyObjectProperty<Player> inCheckmateProperty();
+
+	/**
+	 * Returns the read-only in gameover property.
+	 * 
+	 * @return read-only in gameover property
+	 * 
+	 * @since 1.0.0
+	 */
+	public ReadOnlyBooleanProperty gameOverProperty();
+
+	public ReadOnlyObjectProperty<Player> currentPlayerProperty();
+
+	public ReadOnlyBooleanProperty resetEnabledProperty();
+
+	public ReadOnlyBooleanProperty undoEnabledPropoerty();
+
+	public ReadOnlyDoubleProperty progressProperty();
+
+	public ReadOnlyObjectProperty<Position> fromProperty();
+
+	public ReadOnlyObjectProperty<Position> toProperty();
+
+	public ReadOnlyIntegerProperty calculatedMovesProperty();
+
+	public ReadOnlyLongProperty calculationTimeProperty();
+
+	public ReadOnlyIntegerProperty plyProperty();
+
+	/**
+	 * Returns the read-only black a.i. property.
+	 * 
+	 * @return read-only black a.i. property
+	 * 
+	 * @since 1.0.0
+	 */
 	public BooleanProperty blackAIProperty();
 
-	public ObjectProperty<Player> inCheckProperty();
-
-	public ObjectProperty<Player> inStalemateProperty();
-
-	public ObjectProperty<Player> inCheckmateProperty();
-
-	public BooleanProperty gameOverProperty();
-
-	public ObjectProperty<Player> currentPlayerProperty();
-
-	public BooleanProperty resetEnabledProperty();
-
-	public BooleanProperty undoEnabledPropoerty();
-
-	public DoubleProperty progressProperty();
-
-	public ObjectProperty<Position> fromProperty();
-
-	public ObjectProperty<Position> toProperty();
-
 	public BooleanProperty multiThreadedProperty();
-
-	public IntegerProperty calculatedMovesProperty();
-
-	public LongProperty calculationTimeProperty();
 
 	/**
 	 * Performs an undo.
