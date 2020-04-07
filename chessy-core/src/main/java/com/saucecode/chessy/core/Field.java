@@ -1,33 +1,24 @@
 package com.saucecode.chessy.core;
 
-public class Field {
-	
-	public boolean isSelected() {
-		return false;
-	}
-	
-	public boolean isFrom() {
-		return false;
-	}
-	
-	public boolean isTo() {
-		return false;
-	}
-	
-	public Class<? extends Figure> getType() {
-		return null;
-	}
-	
-	public Player getOwner() {
-		return null;
+public class Field implements FieldI {
+
+	private final Figure figure;
+
+	private final Modifier modifier;
+
+	public Field(Figure figure, Modifier modifier) {
+		this.figure = figure;
+		this.modifier = modifier;
 	}
 
-	
-	public enum Modifier {
-		SELECTED,
-		FROM,
-		TO
+	@Override
+	public Figure getFigure() {
+		return figure;
 	}
-	
-	
+
+	@Override
+	public Modifier getModifier() {
+		return modifier;
+	}
+
 }
