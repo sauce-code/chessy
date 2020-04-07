@@ -15,7 +15,6 @@ import javafx.beans.property.ReadOnlyObjectProperty;
  * @since 1.0.0
  * 
  * @author Torben Kr&uuml;ger
- *
  */
 public interface GameI {
 
