@@ -21,4 +21,34 @@ public class Field implements FieldI {
 		return modifier;
 	}
 
+	@Override
+	public String toString() {
+		return "Field [figure=" + figure + ", modifier=" + modifier + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((figure == null) ? 0 : figure.hashCode());
+		result = prime * result + ((modifier == null) ? 0 : modifier.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Field other = (Field) obj;
+		if (figure != other.figure)
+			return false;
+		if (modifier != other.modifier)
+			return false;
+		return true;
+	}
+
 }
