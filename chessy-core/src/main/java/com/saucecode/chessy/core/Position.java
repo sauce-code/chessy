@@ -1,11 +1,6 @@
 package com.saucecode.chessy.core;
 
-public class Position {
-	
-	public static final int MIN = 0;
-	
-	// inclusive
-	public static final int MAX = 7;
+public class Position implements PositionI {
 
 	private final int x;
 
@@ -19,10 +14,12 @@ public class Position {
 		this.y = y;
 	}
 
+	@Override
 	public int getX() {
 		return x;
 	}
 
+	@Override
 	public int getY() {
 		return y;
 	}
