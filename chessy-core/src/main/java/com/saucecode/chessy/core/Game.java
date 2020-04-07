@@ -1,8 +1,13 @@
 package com.saucecode.chessy.core;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import com.saucecode.chessy.core.FieldI.FigureType;
+import com.saucecode.chessy.core.FieldI.Modifier;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -23,6 +28,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
+import javafx.geometry.Pos;
 
 /**
  * Represents a chess game.
@@ -41,7 +47,7 @@ public class Game implements GameI {
 	private final ReadOnlyIntegerWrapper boardValueWhite = new ReadOnlyIntegerWrapper();
 
 	private final ReadOnlyIntegerWrapper boardValueBlack = new ReadOnlyIntegerWrapper();
-	
+
 	private final ReadOnlyIntegerWrapper boardValueRawWhite = new ReadOnlyIntegerWrapper();
 
 	private final ReadOnlyIntegerWrapper boardValueRawBlack = new ReadOnlyIntegerWrapper();
@@ -55,7 +61,7 @@ public class Game implements GameI {
 	private final ReadOnlyObjectWrapper<Player> inCheck = new ReadOnlyObjectWrapper<>();
 
 	private final ReadOnlyObjectWrapper<Player> inStalemate = new ReadOnlyObjectWrapper<>();
-	
+
 	private final ReadOnlyObjectWrapper<Player> inCheckmate = new ReadOnlyObjectWrapper<>();
 
 	private final ReadOnlyBooleanWrapper gameOver = new ReadOnlyBooleanWrapper();
@@ -65,16 +71,18 @@ public class Game implements GameI {
 	private final ReadOnlyBooleanWrapper resetEnabled = new ReadOnlyBooleanWrapper();
 
 	private final ReadOnlyBooleanWrapper undoEnabled = new ReadOnlyBooleanWrapper();
-	
+
 	private final ReadOnlyDoubleWrapper progressProperty = new ReadOnlyDoubleWrapper();
-	
+
 	private final ReadOnlyObjectWrapper<Position> from = new ReadOnlyObjectWrapper<>();
-	
+
 	private final ReadOnlyObjectWrapper<Position> to = new ReadOnlyObjectWrapper<>();
-	
+
 	private final ReadOnlyIntegerWrapper calculatedMoves = new ReadOnlyIntegerWrapper();
-	
+
 	private final ReadOnlyLongWrapper calculationTime = new ReadOnlyLongWrapper();
+
+	private final Map<Position, ReadOnlyObjectWrapper<FieldI>> fieldMap = new HashMap<>();
 
 	private final SimpleBooleanProperty multiThreaded = new SimpleBooleanProperty(MULTI_THREADED_STD);
 
@@ -87,7 +95,12 @@ public class Game implements GameI {
 	 */
 	public Game() {
 		this.history = new Stack<Board>();
-
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 8; y++) {
+				Position pos = new Position(x, y);
+				fieldMap.put(pos, new ReadOnlyObjectWrapper<FieldI>());
+			}
+		}
 
 		undoEnabled.bind(resetEnabled);
 
@@ -132,6 +145,28 @@ public class Game implements GameI {
 					
 					from.set(board.get().getFrom());
 					to.set(board.get().getTo());
+					
+					for (int x = 0; x < 8; x++) {
+						for (int y = 0; y < 8; y++) {
+							Position pos = new Position(x, y);
+							ReadOnlyObjectWrapper<FieldI> field = fieldMap.get(pos);
+							FigureType figureType = null;
+							Modifier modifier = null;
+							if (board.get().getBoard()[x][y] != null) {
+								figureType = board.get().getBoard()[x][y].getFigureType();
+							}
+							if (selection.get().equals(pos)) {
+								modifier = Modifier.SELECTED;
+							}
+							else if (from.get().equals(pos)) {
+								modifier = Modifier.FROM;
+							}
+							else if (to.get().equals(pos)) {
+								modifier = Modifier.TO;
+							}
+							field.set(new Field(figureType, modifier));
+						}
+					}
 				});
 			}
 
@@ -219,7 +254,8 @@ public class Game implements GameI {
 				Platform.runLater(() -> calculationTime.set(timeDiff));
 				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
 				System.out.println(Thread.currentThread().getName() + " ended");
-				System.out.println(Thread.currentThread().getName() + "calculated a total of " + count + " possible moves in " + timeDiff + " ms");
+				System.out.println(Thread.currentThread().getName() + "calculated a total of " + count
+						+ " possible moves in " + timeDiff + " ms");
 				return null;
 			}
 		};
@@ -321,7 +357,7 @@ public class Game implements GameI {
 	public ReadOnlyObjectProperty<Position> toProperty() {
 		return to.getReadOnlyProperty();
 	}
-	
+
 	@Override
 	public BooleanProperty multiThreadedProperty() {
 		return multiThreaded;
@@ -343,29 +379,35 @@ public class Game implements GameI {
 	}
 
 	@Override
+	public ReadOnlyObjectProperty<FieldI> fieldProperty(Position position) {
+		Objects.requireNonNull(position, "position must not be null");
+		return fieldMap.get(position).getReadOnlyProperty();
+	}
+
+	@Override
 	public void select(Position position) {
 		Objects.requireNonNull(position, "position must not be null");
-	
+
 		// unselect
 		if (position.equals(selection.get())) {
 			selection.set(null);
 		} else {
 			int x = position.getX();
 			int y = position.getY();
-	
+
 			if (board.get().getFigure(x, y) == null
 					|| board.get().getFigure(x, y).getOwner() != board.get().getCurrentPlayer()) {
 				// empty space clicked or enemy figure clicked
-	
-				if (selection.get() != null) { 
+
+				if (selection.get() != null) {
 					// means a figure was clicked in previous click
-	
+
 					if (move(selection.get().getX(), selection.get().getY(), x, y)) {
-	
+
 						if (blackAIProperty().get() && board.get().getCurrentPlayer() == Player.BLACK) {
-	
+
 							move(ply.get());
-	
+
 						}
 					}
 				}
@@ -377,7 +419,7 @@ public class Game implements GameI {
 				}
 			}
 		}
-	
+
 	}
 
 	@Override

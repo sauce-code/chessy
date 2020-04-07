@@ -156,5 +156,7 @@ public abstract class Figure {
 	 * Returns the value of this piece for a player.
 	 */
 	public abstract int getValue();
+	
+	public abstract FieldI.FigureType getFigureType();
 
 }

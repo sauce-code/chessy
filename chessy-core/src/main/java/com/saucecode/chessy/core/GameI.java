@@ -166,6 +166,8 @@ public interface GameI {
 	public ReadOnlyLongProperty calculationTimeProperty();
 
 	public ReadOnlyIntegerProperty plyProperty();
+	
+	public ReadOnlyObjectProperty<FieldI> fieldProperty(Position position);
 
 	/**
 	 * Returns the read-only black a.i. property.

@@ -1,6 +1,7 @@
 package com.saucecode.chessy.core.figures;
 
 import com.saucecode.chessy.core.Board;
+import com.saucecode.chessy.core.FieldI;
 import com.saucecode.chessy.core.Figure;
 import com.saucecode.chessy.core.Player;
 import com.saucecode.chessy.core.Position;
@@ -160,6 +161,18 @@ public class Pawn extends Figure {
 			throw new IllegalArgumentException();
 		}
 		return value;
+	}
+	
+	@Override
+	public com.saucecode.chessy.core.FieldI.FigureType getFigureType() {
+		switch (owner) {
+		case WHITE:
+			return FieldI.FigureType.PAWN_WHITE;
+		case BLACK:
+			return FieldI.FigureType.PAWN_BLACK;
+		default:
+			throw new InternalError("no such enum");
+		}
 	}
 
 }

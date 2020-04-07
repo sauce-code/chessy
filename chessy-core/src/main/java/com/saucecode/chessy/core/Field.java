@@ -2,17 +2,17 @@ package com.saucecode.chessy.core;
 
 public class Field implements FieldI {
 
-	private final Figure figure;
+	private final FigureType figure;
 
 	private final Modifier modifier;
 
-	public Field(Figure figure, Modifier modifier) {
+	public Field(FigureType figure, Modifier modifier) {
 		this.figure = figure;
 		this.modifier = modifier;
 	}
 
 	@Override
-	public Figure getFigure() {
+	public FigureType getFigure() {
 		return figure;
 	}
 

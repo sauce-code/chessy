@@ -18,7 +18,7 @@ public interface FieldI {
 	 * @since 1.0.0
 	 */
 	// TODO return null or none?
-	public Figure getFigure();
+	public FigureType getFigure();
 
 	/**
 	 * Returns the modifier for this field.
@@ -48,7 +48,7 @@ public interface FieldI {
 	 * 
 	 * @author Torben Kr&uuml;ger
 	 */
-	public enum Figure {
+	public enum FigureType {
 		BISHOP_BLACK, BISHOP_WHITE, KING_BLACK, KING_WHITE, KNIGHT_BLACK, KNIGHT_WHITE, PAWN_BLACK, PAWN_WHITE,
 		QUEEN_BLACK, QUEEN_WHITE, ROOK_BLACK, ROOK_WHITE
 	}
