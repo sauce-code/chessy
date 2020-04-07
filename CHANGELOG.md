@@ -10,4 +10,5 @@
 
 ### Known Bugs
 
-- A.I. is not capable of finding checkmate positions (#1)
+- A.I. is not capable of finding checkmate positions
+- [En Passant allows weird moves, which should not be possible](https://github.com/sauce-code/chessy/issues/1)
