@@ -1,11 +1,35 @@
 package com.saucecode.chessy.core;
 
+/**
+ * An implementation of {@link PositionI}.
+ * 
+ * @see PositionI
+ * 
+ * @author Torben Kr&uuml;ger
+ */
 public class Position implements PositionI {
 
+	/**
+	 * X-position. This value is always is range of {@link PositionI#MIN}
+	 * (inclusive) and {@link PositionI#MAX} (inclusive).
+	 */
 	private final int x;
 
+	/**
+	 * Y-position. This value is always is range of {@link PositionI#MIN}
+	 * (inclusive) and {@link PositionI#MAX} (inclusive).
+	 */
 	private final int y;
 
+	/**
+	 * Creates a new {@link Position}.
+	 * 
+	 * @param x x-position
+	 * @param y y-position
+	 * @throws IllegalArgumentException if {@code x} or {@code y} are not in range
+	 *                                  of {@link PositionI#MIN} (inclusive) and
+	 *                                  {@link PositionI#MAX} (inclusive)
+	 */
 	public Position(int x, int y) {
 		if (x < MIN || y < MIN || x > MAX || y > MAX) {
 			throw new IllegalArgumentException("invalid values");
