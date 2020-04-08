@@ -4,6 +4,7 @@ import com.saucecode.chessy.core.Game;
 
 public class CLI {
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Game game = new Game();
 		Terminal terminal = new Terminal();
