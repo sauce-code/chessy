@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.log4j.Logger;
+
 import com.saucecode.chessy.core.FieldI.FigureType;
 import com.saucecode.chessy.core.FieldI.Modifier;
 import com.saucecode.chessy.core.logic.Board;
@@ -39,6 +41,8 @@ import javafx.concurrent.Task;
  * @author Torben Kr&uuml;ger
  */
 public class Game implements GameI {
+
+	final static Logger logger = Logger.getLogger(Game.class);
 
 	/**
 	 * Saves all previous boards.
@@ -179,10 +183,10 @@ public class Game implements GameI {
 							}
 							Field newField = new Field(figureType, modifier);
 							if (field.get() == null) {
-								System.out.println("changed: " + newField);
+								logger.debug(Thread.currentThread().getName() + " changed: " + newField);
 								field.set(newField);
 							} else if (!field.get().equals(newField)) {
-								System.out.println("changed: " + newField);
+								logger.debug(Thread.currentThread().getName() + " changed: " + newField);
 								field.set(newField);
 							}
 						}
@@ -255,7 +259,7 @@ public class Game implements GameI {
 		final Task<Void> task = new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				System.out.println(Thread.currentThread().getName() + " started");
+				logger.debug(Thread.currentThread().getName() + " started");
 				long timeStart = System.currentTimeMillis();
 				Platform.runLater(() -> busy.set(true)); // TODO sollte nicht sein
 				Board temp = null;
@@ -273,8 +277,7 @@ public class Game implements GameI {
 				Platform.runLater(() -> calculatedMoves.set(count.get()));
 				Platform.runLater(() -> calculationTime.set(timeDiff));
 				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
-				System.out.println(Thread.currentThread().getName() + " ended");
-				System.out.println(Thread.currentThread().getName() + "calculated a total of " + count
+				logger.debug(Thread.currentThread().getName() + " finished and calculated a total of " + count
 						+ " possible moves in " + timeDiff + " ms");
 				return null;
 			}
