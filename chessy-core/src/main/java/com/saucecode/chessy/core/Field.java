@@ -2,12 +2,29 @@ package com.saucecode.chessy.core;
 
 import java.util.Objects;
 
+/**
+ * In implementation of {@link FieldI}.
+ * 
+ * @author Torben Kr&uuml;ger
+ */
 public class Field implements FieldI {
 
+	/**
+	 * Stored figure type.
+	 */
 	private final FigureType figureType;
 
+	/**
+	 * Stored Modifier.
+	 */
 	private final Modifier modifier;
 
+	/**
+	 * Creates a new Field with given values.
+	 * 
+	 * @param figureType figure type
+	 * @param modifier   modifier
+	 */
 	public Field(FigureType figureType, Modifier modifier) {
 		Objects.requireNonNull(figureType, "figureType must not be null");
 		Objects.requireNonNull(modifier, "figureType must not be null");
