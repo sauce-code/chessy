@@ -1,6 +1,7 @@
 package com.saucecode.chessy.core;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
@@ -142,24 +143,98 @@ public interface GameI {
 	 */
 	public ReadOnlyBooleanProperty gameOverProperty();
 
+	/**
+	 * Returns the read-only current player property.
+	 * 
+	 * @return read-only current player property
+	 * 
+	 * @since 1.0.0
+	 */
 	public ReadOnlyObjectProperty<Player> currentPlayerProperty();
 
+	/**
+	 * Returns the read-only reset enabled property.
+	 * 
+	 * @return read-only reset enabled property
+	 * 
+	 * @since 1.0.0
+	 */
 	public ReadOnlyBooleanProperty resetEnabledProperty();
 
+	/**
+	 * Returns the read-only undo enabled property.
+	 * 
+	 * @return read-only undo enabled property
+	 * 
+	 * @since 1.0.0
+	 */
 	public ReadOnlyBooleanProperty undoEnabledPropoerty();
 
+	/**
+	 * Returns the read-only progress property.
+	 * 
+	 * @return read-only progress property
+	 * 
+	 * @since 1.0.0
+	 */
 	public ReadOnlyDoubleProperty progressProperty();
 
+	/**
+	 * Returns the read-only from property.
+	 * 
+	 * @return read-only from property
+	 * 
+	 * @since 1.0.0
+	 */
 	public ReadOnlyObjectProperty<Position> fromProperty();
 
+	/**
+	 * Returns the read-only to property.
+	 * 
+	 * @return read-only to property
+	 * 
+	 * @since 1.0.0
+	 */
 	public ReadOnlyObjectProperty<Position> toProperty();
 
+	/**
+	 * Returns the read-only calculated moves property.
+	 * 
+	 * @return read-only calculated moves property
+	 * 
+	 * @since 1.0.0
+	 */
 	public ReadOnlyIntegerProperty calculatedMovesProperty();
 
+	/**
+	 * Returns the read-only calculation time property.
+	 * 
+	 * @return read-only calculation time property
+	 * 
+	 * @since 1.0.0
+	 */
 	public ReadOnlyLongProperty calculationTimeProperty();
 
-	public ReadOnlyIntegerProperty plyProperty();
-	
+	/**
+	 * Returns the ply property.
+	 * 
+	 * @return ply property
+	 * 
+	 * @since 1.0.0
+	 */
+	public IntegerProperty plyProperty();
+
+	/**
+	 * Returns the read-only in field property for a given position.
+	 * 
+	 * @param position position
+	 * 
+	 * @return the read-only in field property for a given position
+	 * 
+	 * @throws NullPointerException if {@code position} is {@code null}
+	 * 
+	 * @since 1.0.0
+	 */
 	public ReadOnlyObjectProperty<FieldI> fieldProperty(Position position);
 
 	/**
