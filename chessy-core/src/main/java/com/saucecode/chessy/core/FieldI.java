@@ -6,7 +6,7 @@ package com.saucecode.chessy.core;
  * 
  * @since 1.0.0
  * 
- * @author tk
+ * @author Torben Kr&uuml;ger
  */
 public interface FieldI {
 
