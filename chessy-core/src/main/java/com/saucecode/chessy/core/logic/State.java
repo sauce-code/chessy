@@ -1,4 +1,4 @@
-package com.saucecode.chessy.core;
+package com.saucecode.chessy.core.logic;
 
 /**
  * All possible states for a chess game.

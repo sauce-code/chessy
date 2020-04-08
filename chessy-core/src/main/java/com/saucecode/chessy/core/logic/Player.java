@@ -1,4 +1,4 @@
-package com.saucecode.chessy.core;
+package com.saucecode.chessy.core.logic;
 
 /**
  * The Players.

@@ -1,5 +1,7 @@
 package com.saucecode.chessy.core;
 
+import com.saucecode.chessy.core.logic.Player;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;

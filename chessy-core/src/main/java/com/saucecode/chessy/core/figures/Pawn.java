@@ -1,10 +1,10 @@
 package com.saucecode.chessy.core.figures;
 
-import com.saucecode.chessy.core.Board;
 import com.saucecode.chessy.core.FieldI;
-import com.saucecode.chessy.core.Figure;
-import com.saucecode.chessy.core.Player;
 import com.saucecode.chessy.core.Position;
+import com.saucecode.chessy.core.logic.Board;
+import com.saucecode.chessy.core.logic.Figure;
+import com.saucecode.chessy.core.logic.Player;
 
 public class Pawn extends Figure {
 

@@ -1,4 +1,7 @@
-package com.saucecode.chessy.core;
+package com.saucecode.chessy.core.logic;
+
+import com.saucecode.chessy.core.FieldI;
+import com.saucecode.chessy.core.Position;
 
 /**
  * Represents a figure.

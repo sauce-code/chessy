@@ -1,8 +1,9 @@
-package com.saucecode.chessy.core;
+package com.saucecode.chessy.core.logic;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.saucecode.chessy.core.Position;
 import com.saucecode.chessy.core.figures.*;
 
 import javafx.application.Platform;

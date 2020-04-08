@@ -8,6 +8,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.saucecode.chessy.core.FieldI.FigureType;
 import com.saucecode.chessy.core.FieldI.Modifier;
+import com.saucecode.chessy.core.logic.Board;
+import com.saucecode.chessy.core.logic.Player;
+import com.saucecode.chessy.core.util.BoundedIntegerProperty;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;

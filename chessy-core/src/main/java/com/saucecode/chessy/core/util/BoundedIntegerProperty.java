@@ -1,4 +1,4 @@
-package com.saucecode.chessy.core;
+package com.saucecode.chessy.core.util;
 
 import javafx.beans.property.SimpleIntegerProperty;
 
