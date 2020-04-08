@@ -332,7 +332,7 @@ public class GUI extends Application {
 
 		ConsoleLabel calcs = new ConsoleLabel("Calculated Moves: ");
 		ConsoleLabel calcs2 = new ConsoleLabel();
-		calcs2.textProperty().bind(game.calculatedMovesProperty().asString());
+		calcs2.textProperty().bind(game.calculatedMovesProperty().asString("%,d"));
 		calcs2.setMaxWidth(Double.MAX_VALUE);
 		calcs2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(calcs, 0, i);
