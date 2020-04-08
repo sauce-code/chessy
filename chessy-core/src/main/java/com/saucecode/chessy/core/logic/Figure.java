@@ -30,6 +30,14 @@ public abstract class Figure {
 	 */
 	protected int y;
 
+	/**
+	 * Creates a new figure.
+	 * 
+	 * @param owner owner
+	 * @param board board
+	 * @param x     y-position
+	 * @param y     y-position
+	 */
 	protected Figure(Player owner, Board board, int x, int y) {
 		this.owner = owner;
 		this.board = board;
@@ -49,12 +57,10 @@ public abstract class Figure {
 	/**
 	 * Moves this figure to a desired location
 	 * 
-	 * @param toX
-	 *            x-coordinate of target location
-	 * @param toY
-	 *            y-coordinate of target location
+	 * @param toX x-coordinate of target location
+	 * @param toY y-coordinate of target location
 	 * @return
-	 * 		<ul>
+	 *         <ul>
 	 *         <li>the resulting board of the move</li>
 	 *         <li>{@code null}, if the move is not valid</li>
 	 *         </ul>
@@ -83,13 +89,11 @@ public abstract class Figure {
 
 	/**
 	 * Returns whether a square is reachable or not. <br>
-	 * A square is not reachable if it contains a piece from the same owner or
-	 * if it is not reachable according to the the chess rules.
+	 * A square is not reachable if it contains a piece from the same owner or if it
+	 * is not reachable according to the the chess rules.
 	 * 
-	 * @param toX
-	 *            x-coordinate of target location
-	 * @param toY
-	 *            y-coordinate of target location
+	 * @param toX x-coordinate of target location
+	 * @param toY y-coordinate of target location
 	 * @return {@code true}, if the move is valid
 	 */
 	protected boolean isSquareReachable(int x, int y) {
@@ -101,6 +105,12 @@ public abstract class Figure {
 		return owner.toString();
 	}
 
+	/**
+	 * Creates a clone of this figure, on a given board.
+	 * 
+	 * @param board given board
+	 * @return clone of this figure
+	 */
 	protected abstract Figure clone(Board board);
 
 	/**
@@ -115,8 +125,7 @@ public abstract class Figure {
 	/**
 	 * Sets the x-coordinate.
 	 * 
-	 * @param x
-	 *            x-coordinate
+	 * @param x x-coordinate
 	 */
 	public void setX(int x) {
 		this.x = x;
@@ -134,8 +143,7 @@ public abstract class Figure {
 	/**
 	 * Sets the y-coordinate.
 	 * 
-	 * @param y
-	 *            y-coordinate
+	 * @param y y-coordinate
 	 */
 	public void setY(int y) {
 		this.y = y;
@@ -145,10 +153,8 @@ public abstract class Figure {
 	 * Returns if the piece has the same owner as the piece on the transfered
 	 * coordinates
 	 * 
-	 * @param pieceX
-	 *            x-coordinate
-	 * @param pieceY
-	 *            y-coordinate
+	 * @param pieceX x-coordinate
+	 * @param pieceY y-coordinate
 	 * @return {@code true}, if both have the same owner
 	 */
 	protected boolean hasSameOwner(int pieceX, int pieceY) {
@@ -159,7 +165,12 @@ public abstract class Figure {
 	 * Returns the value of this piece for a player.
 	 */
 	public abstract int getValue();
-	
+
+	/**
+	 * Returns the figure type.
+	 * 
+	 * @return figure type
+	 */
 	public abstract FieldI.FigureType getFigureType();
 
 }
