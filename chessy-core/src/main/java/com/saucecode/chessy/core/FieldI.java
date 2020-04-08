@@ -36,7 +36,27 @@ public interface FieldI {
 	 * @author Torben Kr&uuml;ger
 	 */
 	public enum Modifier {
-		SELECTED, FROM, TO, NONE
+
+		/**
+		 * Describes that this field has been selected by a player for a move.
+		 */
+		SELECTED,
+
+		/**
+		 * Describes that a figure has been moved from this field.
+		 */
+		FROM,
+
+		/**
+		 * Describes that a figure has been moved to this field.
+		 */
+		TO,
+
+		/**
+		 * No modifier has been applied to this field.
+		 */
+		NONE
+
 	}
 
 	/**
@@ -47,8 +67,72 @@ public interface FieldI {
 	 * @author Torben Kr&uuml;ger
 	 */
 	public enum FigureType {
-		BISHOP_BLACK, BISHOP_WHITE, KING_BLACK, KING_WHITE, KNIGHT_BLACK, KNIGHT_WHITE, PAWN_BLACK, PAWN_WHITE,
-		QUEEN_BLACK, QUEEN_WHITE, ROOK_BLACK, ROOK_WHITE, NONE
+		
+		/**
+		 * Black bishop.
+		 */
+		BISHOP_BLACK, 
+		
+		/**
+		 * White bishop.
+		 */
+		BISHOP_WHITE, 
+		
+		/**
+		 * Black King.
+		 */
+		KING_BLACK, 
+		
+		/**
+		 * White King.
+		 */
+		KING_WHITE, 
+		
+		/**
+		 * Black Knight.
+		 */
+		KNIGHT_BLACK,
+		
+		/**
+		 * White Knight.
+		 */
+		KNIGHT_WHITE, 
+		
+		/**
+		 * Black Pawn.
+		 */
+		PAWN_BLACK, 
+		
+		/**
+		 * White Pawn.
+		 */
+		PAWN_WHITE,
+		
+		/**
+		 * Black Queen.
+		 */
+		QUEEN_BLACK,
+		
+		/**
+		 * White Queen.
+		 */
+		QUEEN_WHITE,
+		
+		/**
+		 * Black Rook.
+		 */
+		ROOK_BLACK, 
+		
+		/**
+		 * White Rook.
+		 */
+		ROOK_WHITE, 
+		
+		/**
+		 * No figure.
+		 */
+		NONE
+		
 	}
 
 }
