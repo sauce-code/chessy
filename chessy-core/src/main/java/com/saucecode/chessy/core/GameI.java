@@ -1,7 +1,6 @@
 package com.saucecode.chessy.core;
 
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
@@ -38,10 +37,6 @@ public interface GameI {
 	 * @since 1.0.0
 	 */
 	public static final int PLY_MAX = 5;
-
-	public static final int DIM = 8; // TODO remove?
-
-	public static final boolean BUSY_STD = false; // TODO remove?
 
 	/**
 	 * Default value for {@link #blackAIProperty()}.
@@ -92,8 +87,6 @@ public interface GameI {
 	 * @since 1.0.0
 	 */
 	public ReadOnlyIntegerProperty boardValueRawBlackProperty();
-
-	public ObjectProperty<Board> boardProperty(); // TODO remove
 
 	/**
 	 * Returns the read-only busy property.

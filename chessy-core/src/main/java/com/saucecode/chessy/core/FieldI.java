@@ -17,7 +17,6 @@ public interface FieldI {
 	 * 
 	 * @since 1.0.0
 	 */
-	// TODO return null or none?
 	public FigureType getFigure();
 
 	/**
@@ -27,7 +26,6 @@ public interface FieldI {
 	 * 
 	 * @since 1.0.0
 	 */
-	// TODO return null or none?
 	public Modifier getModifier();
 
 	/**
@@ -38,7 +36,7 @@ public interface FieldI {
 	 * @author Torben Kr&uuml;ger
 	 */
 	public enum Modifier {
-		SELECTED, FROM, TO
+		SELECTED, FROM, TO, NONE
 	}
 
 	/**
@@ -50,7 +48,7 @@ public interface FieldI {
 	 */
 	public enum FigureType {
 		BISHOP_BLACK, BISHOP_WHITE, KING_BLACK, KING_WHITE, KNIGHT_BLACK, KNIGHT_WHITE, PAWN_BLACK, PAWN_WHITE,
-		QUEEN_BLACK, QUEEN_WHITE, ROOK_BLACK, ROOK_WHITE
+		QUEEN_BLACK, QUEEN_WHITE, ROOK_BLACK, ROOK_WHITE, NONE
 	}
 
 }

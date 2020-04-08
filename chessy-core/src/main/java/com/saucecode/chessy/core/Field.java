@@ -1,19 +1,23 @@
 package com.saucecode.chessy.core;
 
+import java.util.Objects;
+
 public class Field implements FieldI {
 
-	private final FigureType figure;
+	private final FigureType figureType;
 
 	private final Modifier modifier;
 
-	public Field(FigureType figure, Modifier modifier) {
-		this.figure = figure;
+	public Field(FigureType figureType, Modifier modifier) {
+		Objects.requireNonNull(figureType, "figureType must not be null");
+		Objects.requireNonNull(modifier, "figureType must not be null");
+		this.figureType = figureType;
 		this.modifier = modifier;
 	}
 
 	@Override
 	public FigureType getFigure() {
-		return figure;
+		return figureType;
 	}
 
 	@Override
@@ -23,14 +27,14 @@ public class Field implements FieldI {
 
 	@Override
 	public String toString() {
-		return "Field [figure=" + figure + ", modifier=" + modifier + "]";
+		return "Field [figure=" + figureType + ", modifier=" + modifier + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((figure == null) ? 0 : figure.hashCode());
+		result = prime * result + ((figureType == null) ? 0 : figureType.hashCode());
 		result = prime * result + ((modifier == null) ? 0 : modifier.hashCode());
 		return result;
 	}
@@ -44,7 +48,7 @@ public class Field implements FieldI {
 		if (getClass() != obj.getClass())
 			return false;
 		Field other = (Field) obj;
-		if (figure != other.figure)
+		if (figureType != other.figureType)
 			return false;
 		if (modifier != other.modifier)
 			return false;

@@ -1,8 +1,11 @@
 package com.saucecode.chessy.gui;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-import com.saucecode.chessy.core.Board;
+import com.saucecode.chessy.core.FieldI;
+import com.saucecode.chessy.core.FieldI.FigureType;
 import com.saucecode.chessy.core.Game;
 import com.saucecode.chessy.core.GameI;
 import com.saucecode.chessy.core.Position;
@@ -61,18 +64,15 @@ public class GUI extends Application {
 	private final int imgSize = 40;
 
 	/**
-	 * All the Images.
-	 */
-	private Image pawnB, pawnW, rookB, rookW, knightB, knightW, bishopB, bishopW, kingB, kingW, queenB, queenW;
-
-	/**
 	 * The StackPanes - one for each rectangle of the chess game.
 	 */
-	private final StackPane panes[][] = new StackPane[GameI.DIM][GameI.DIM];
+	private final StackPane panes[][] = new StackPane[8][8];
+
+	private final Map<FieldI.FigureType, Image> imageMap = new HashMap<>();
 
 	private Menu initMenuHelp() {
 		final MenuItem about = new MenuItem("A_bout");
-		about.setOnAction(e -> new AboutAlert(kingW).showAndWait());
+		about.setOnAction(e -> new AboutAlert(imageMap.get(FigureType.KING_WHITE)).showAndWait());
 
 		return new Menu("_Help", null, about);
 	}
@@ -81,7 +81,7 @@ public class GUI extends Application {
 		final CheckMenuItem ai = new CheckMenuItem("_Black Player A.I.");
 		ai.selectedProperty().set(game.blackAIProperty().get());
 		game.blackAIProperty().bind(ai.selectedProperty());
-		
+
 		final Menu menuPly = new Menu("Ply");
 		final ToggleGroup groupPly = new ToggleGroup();
 		RadioMenuItem[] items = new RadioMenuItem[GameI.PLY_MAX];
@@ -100,7 +100,7 @@ public class GUI extends Application {
 			}
 		});
 		items[game.plyProperty().get() - 1].setSelected(true);
-		
+
 		final CheckMenuItem multiThreaded = new CheckMenuItem("_Multi-Threading");
 		multiThreaded.selectedProperty().set(game.multiThreadedProperty().get());
 		game.multiThreadedProperty().bind(multiThreaded.selectedProperty());
@@ -117,7 +117,6 @@ public class GUI extends Application {
 				game.undo();
 			}
 			game.undo();
-			drawBoard();
 		});
 
 		return new Menu("_Edit", null, undo);
@@ -128,11 +127,11 @@ public class GUI extends Application {
 		restart.disableProperty().bind(game.resetEnabledProperty().not());
 		restart.setAccelerator(KeyCombination.keyCombination("F2"));
 		restart.setOnAction(e -> {
-			Optional<ButtonType> result = new ResetDialog(game, kingW).showAndWait();
+			Optional<ButtonType> result = new ResetDialog(game, imageMap.get(FigureType.KING_WHITE)).showAndWait();
 			if (result.get() == ButtonType.OK) {
-			    game.reset();
+				game.reset();
 			} else {
-			    // ... user chose CANCEL or closed the dialog
+				// ... user chose CANCEL or closed the dialog
 			}
 		});
 
@@ -141,12 +140,12 @@ public class GUI extends Application {
 		exit.setOnAction(e -> {
 			if (game.resetEnabledProperty().get()) {
 				// data could be lost. ask if user really wants to quit
-				Optional<ButtonType> result = new ExitDialog(game, kingW).showAndWait();
+				Optional<ButtonType> result = new ExitDialog(game, imageMap.get(FigureType.KING_WHITE)).showAndWait();
 				if (result.get() == ButtonType.OK) {
 					// user clicked OK
 					Platform.exit();
 				} else {
-				    // ... user chose CANCEL or closed the dialog
+					// ... user chose CANCEL or closed the dialog
 				}
 			} else {
 				// no data could be lost. exit without asking
@@ -185,18 +184,18 @@ public class GUI extends Application {
 
 		initializeImages();
 		initializeStackPanes();
-		drawBoard();
+//		drawBoard();
 
 		final BorderPane border = new BorderPane(grid);
 		border.setTop(initMenuBar());
 
 		GridPane info = new GridPane();
-		
+
 		ConsoleLabel placeholder = new ConsoleLabel("         ");
 		info.add(placeholder, 1, 0);
-		
+
 		int i = 0;
-		
+
 		ConsoleLabel scoreWhite = new ConsoleLabel("Score White: ");
 		ConsoleLabel scoreWhite2 = new ConsoleLabel("");
 		scoreWhite2.textProperty().bind(game.boardValueWhiteProperty().asString());
@@ -205,7 +204,7 @@ public class GUI extends Application {
 		info.add(scoreWhite, 0, i);
 		info.add(scoreWhite2, 1, i);
 		i++;
-		
+
 		ConsoleLabel scoreBlack = new ConsoleLabel("Score Black: ");
 		ConsoleLabel scoreBlack2 = new ConsoleLabel("");
 		scoreBlack2.textProperty().bind(game.boardValueBlackProperty().asString());
@@ -214,7 +213,7 @@ public class GUI extends Application {
 		info.add(scoreBlack, 0, i);
 		info.add(scoreBlack2, 1, i);
 		i++;
-		
+
 		ConsoleLabel scoreWhiteRaw = new ConsoleLabel("Score White Raw: ");
 		ConsoleLabel scoreWhiteRaw2 = new ConsoleLabel("");
 		scoreWhiteRaw2.textProperty().bind(game.boardValueRawWhiteProperty().asString());
@@ -223,7 +222,7 @@ public class GUI extends Application {
 		info.add(scoreWhiteRaw, 0, i);
 		info.add(scoreWhiteRaw2, 1, i);
 		i++;
-		
+
 		ConsoleLabel scoreBlackRaw = new ConsoleLabel("Score Black Raw: ");
 		ConsoleLabel scoreBlackRaw2 = new ConsoleLabel("");
 		scoreBlackRaw2.textProperty().bind(game.boardValueRawBlackProperty().asString());
@@ -232,13 +231,13 @@ public class GUI extends Application {
 		info.add(scoreBlackRaw, 0, i);
 		info.add(scoreBlackRaw2, 1, i);
 		i++;
-		
+
 		{
 			ConsoleLabel blank = new ConsoleLabel("");
 			info.add(blank, 0, i);
 			i++;
 		}
-		
+
 		ConsoleLabel ckeck = new ConsoleLabel("In Check: ");
 		ConsoleLabel check2 = new ConsoleLabel("");
 		check2.textProperty().bind(game.inCheckProperty().asString());
@@ -247,7 +246,7 @@ public class GUI extends Application {
 		info.add(ckeck, 0, i);
 		info.add(check2, 1, i);
 		i++;
-		
+
 		ConsoleLabel stalemate = new ConsoleLabel("In Stalemate: ");
 		ConsoleLabel stalemate2 = new ConsoleLabel("");
 		stalemate2.textProperty().bind(game.inStalemateProperty().asString());
@@ -256,7 +255,7 @@ public class GUI extends Application {
 		info.add(stalemate, 0, i);
 		info.add(stalemate2, 1, i);
 		i++;
-		
+
 		ConsoleLabel checkmate = new ConsoleLabel("In Checkmate: ");
 		ConsoleLabel checkmate2 = new ConsoleLabel("");
 		checkmate2.textProperty().bind(game.inCheckmateProperty().asString());
@@ -265,7 +264,7 @@ public class GUI extends Application {
 		info.add(checkmate, 0, i);
 		info.add(checkmate2, 1, i);
 		i++;
-		
+
 		ConsoleLabel currentPlayer = new ConsoleLabel("Current Player: ");
 		ConsoleLabel currentPlayer2 = new ConsoleLabel(game.currentPlayerProperty().get().toString());
 		game.currentPlayerProperty().addListener(e -> Platform.runLater(() -> {
@@ -276,11 +275,11 @@ public class GUI extends Application {
 		info.add(currentPlayer, 0, i);
 		info.add(currentPlayer2, 1, i);
 		i++;
-		
+
 		ConsoleLabel blank0 = new ConsoleLabel("");
 		info.add(blank0, 0, i);
 		i++;
-		
+
 		ConsoleLabel selected = new ConsoleLabel("Selected: ");
 		ConsoleLabel selected2 = new ConsoleLabel("");
 		selected2.textProperty().bind(game.selectionProperty().asString());
@@ -289,7 +288,7 @@ public class GUI extends Application {
 		info.add(selected, 0, i);
 		info.add(selected2, 1, i);
 		i++;
-		
+
 		ConsoleLabel from = new ConsoleLabel("From: ");
 		ConsoleLabel from2 = new ConsoleLabel("");
 		from2.textProperty().bind(game.fromProperty().asString());
@@ -298,7 +297,7 @@ public class GUI extends Application {
 		info.add(from, 0, i);
 		info.add(from2, 1, i);
 		i++;
-		
+
 		ConsoleLabel to = new ConsoleLabel("To: ");
 		ConsoleLabel to2 = new ConsoleLabel("");
 		to2.textProperty().bind(game.toProperty().asString());
@@ -307,12 +306,12 @@ public class GUI extends Application {
 		info.add(to, 0, i);
 		info.add(to2, 1, i);
 		i++;
-		
+
 		ConsoleLabel blank1 = new ConsoleLabel("");
 
 		info.add(blank1, 0, i);
 		i++;
-		
+
 		ConsoleLabel busy = new ConsoleLabel("Busy: ");
 		ConsoleLabel busy2 = new ConsoleLabel(Boolean.toString(false));
 		busy2.textProperty().bind(game.busyProperty().asString());
@@ -321,7 +320,7 @@ public class GUI extends Application {
 		info.add(busy, 0, i);
 		info.add(busy2, 1, i);
 		i++;
-		
+
 		ConsoleLabel progress = new ConsoleLabel("Progress: ");
 		ConsoleLabel progress2 = new ConsoleLabel(Boolean.toString(false));
 		progress2.textProperty().bind(game.progressProperty().asString("%.2f"));
@@ -330,7 +329,7 @@ public class GUI extends Application {
 		info.add(progress, 0, i);
 		info.add(progress2, 1, i);
 		i++;
-		
+
 		ConsoleLabel calcs = new ConsoleLabel("Calculated Moves: ");
 		ConsoleLabel calcs2 = new ConsoleLabel();
 		calcs2.textProperty().bind(game.calculatedMovesProperty().asString());
@@ -339,7 +338,7 @@ public class GUI extends Application {
 		info.add(calcs, 0, i);
 		info.add(calcs2, 1, i);
 		i++;
-		
+
 		ConsoleLabel calcTime = new ConsoleLabel("Calculation Time: ");
 		ConsoleLabel calcTime2 = new ConsoleLabel();
 		calcTime2.textProperty().bind(game.calculationTimeProperty().asString("%d ms"));
@@ -348,51 +347,18 @@ public class GUI extends Application {
 		info.add(calcTime, 0, i);
 		info.add(calcTime2, 1, i);
 		i++;
-		
-//		info.setMaxWidth(120.0);
-//		info.setMinWidth(120.0);
+
 		info.setPadding(new Insets(10.0));
 
 		border.setRight(info);
-		
+
 		ProgressBar progressBar = new ProgressBar();
 		progressBar.progressProperty().bind(game.progressProperty());
 		progressBar.setMaxWidth(Double.MAX_VALUE);
 		border.setBottom(progressBar);
 
-		game.boardProperty().addListener(new ChangeListener<Board>() {
-			@Override
-			public void changed(ObservableValue<? extends Board> observable, Board oldValue, Board newValue) {
-				Platform.runLater(() -> drawBoard());
-			}
-		});
-
-		game.selectionProperty().addListener(new ChangeListener<Position>() {
-			@Override
-			public void changed(ObservableValue<? extends Position> observable, Position oldValue,
-					Position newValue) {
-				Platform.runLater(() -> drawBoard());
-			}
-		});
-		
-		game.fromProperty().addListener(new ChangeListener<Position>() {
-			@Override
-			public void changed(ObservableValue<? extends Position> observable, Position oldValue,
-					Position newValue) {
-				Platform.runLater(() -> drawBoard());
-			}
-		});
-		
-		game.toProperty().addListener(new ChangeListener<Position>() {
-			@Override
-			public void changed(ObservableValue<? extends Position> observable, Position oldValue,
-					Position newValue) {
-				Platform.runLater(() -> drawBoard());
-			}
-		});
-		
 		primaryStage.setScene(new Scene(border));
-		primaryStage.getIcons().add(kingW);
+		primaryStage.getIcons().add(imageMap.get(FigureType.KING_WHITE));
 		primaryStage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
 		primaryStage.show();
 	}
@@ -413,20 +379,30 @@ public class GUI extends Application {
 	 */
 	private void initializeImages() {
 		// @formatter:off
-		pawnB = new Image(getClass().getResource("/pawnb.png").toExternalForm(), imgSize, imgSize, false, false);
-		pawnW = new Image(getClass().getResource("/pawnw.png").toExternalForm(), imgSize, imgSize, false, false);
-		rookB = new Image(getClass().getResource("/rookb.png").toExternalForm(), imgSize, imgSize, false, false);
-		rookW = new Image(getClass().getResource("/rookw.png").toExternalForm(), imgSize, imgSize, false, false);
-		knightB = new Image(getClass().getResource("/knightb.png").toExternalForm(), imgSize, imgSize, false, false);
-		knightW = new Image(getClass().getResource("/knightw.png").toExternalForm(), imgSize, imgSize, false, false);
-		bishopB = new Image(getClass().getResource("/bishopb.png").toExternalForm(), imgSize, imgSize, false,
-				false);
-		bishopW = new Image(getClass().getResource("/bishopw.png").toExternalForm(), imgSize, imgSize, false,
-				false);
-		kingB = new Image(getClass().getResource("/kingb.png").toExternalForm(), imgSize, imgSize, false, false);
-		kingW = new Image(getClass().getResource("/kingw.png").toExternalForm(), imgSize, imgSize, false, false);
-		queenB = new Image(getClass().getResource("/queenb.png").toExternalForm(), imgSize, imgSize, false, false);
-		queenW = new Image(getClass().getResource("/queenw.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image pawnB   = new Image(getClass().getResource(  "/pawnb.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image pawnW   = new Image(getClass().getResource(  "/pawnw.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image rookB   = new Image(getClass().getResource(  "/rookb.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image rookW   = new Image(getClass().getResource(  "/rookw.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image knightB = new Image(getClass().getResource("/knightb.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image knightW = new Image(getClass().getResource("/knightw.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image bishopB = new Image(getClass().getResource("/bishopb.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image bishopW = new Image(getClass().getResource("/bishopw.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image kingB   = new Image(getClass().getResource(  "/kingb.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image kingW   = new Image(getClass().getResource(  "/kingw.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image queenB  = new Image(getClass().getResource( "/queenb.png").toExternalForm(), imgSize, imgSize, false, false);
+		Image queenW  = new Image(getClass().getResource( "/queenw.png").toExternalForm(), imgSize, imgSize, false, false);
+		imageMap.put(FigureType.PAWN_BLACK,     pawnB);
+		imageMap.put(FigureType.PAWN_WHITE,     pawnW);
+		imageMap.put(FigureType.ROOK_BLACK,     rookB);
+		imageMap.put(FigureType.ROOK_WHITE,     rookW);
+		imageMap.put(FigureType.KNIGHT_BLACK, knightB);
+		imageMap.put(FigureType.KNIGHT_WHITE, knightW);
+		imageMap.put(FigureType.BISHOP_BLACK, bishopB);
+		imageMap.put(FigureType.BISHOP_WHITE, bishopW);
+		imageMap.put(FigureType.KING_BLACK,     kingB);
+		imageMap.put(FigureType.KING_WHITE,     kingW);
+		imageMap.put(FigureType.QUEEN_BLACK,   queenB);
+		imageMap.put(FigureType.QUEEN_WHITE,   queenW);
 		// @formatter:on
 	}
 
@@ -440,103 +416,71 @@ public class GUI extends Application {
 			for (int j = 0; j < 8; j++) {
 				panes[i][j] = new StackPane();
 				panes[i][j].setAlignment(Pos.CENTER);
+
 				// label.setMouseTransparent(true);
 				// grid.add(panes[i][j], i, (7 + startBoardY) - j);
 				grid.add(panes[i][j], i, j + 1);
 
-				Rectangle recti = new Rectangle(50, 50);
+				final Rectangle recti = new Rectangle(50, 50);
 				Color color = ((i + j) % 2 == 0) ? Color.BLANCHEDALMOND : Color.GREEN;
 				recti.setFill(color);
 
 				// recti.addEventFilter(MouseEvent.MOUSE_PRESSED,
 				// event -> System.out.println("i clicked it"));
+				{
+					final int x = i;
+					final int y = 7 - j;
+					recti.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+						@Override
+						public void handle(MouseEvent e) {
+							game.select(new Position(x, y)); // TODO platform run later?
+							System.out.println("clicked rectangle at x " + x + " y " + y);
+						}
+					});
+				}
 
-				final int x = i;
-				final int y = 7 - j;
-				recti.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-					@Override
-					public void handle(MouseEvent e) {
-						game.select(new Position(x, y)); // TODO platform run later?
-						System.out.println("clicked rectangle at x " + x + " y " + y);
-					}
-				});
-
+				{
+					final int x = i;
+					final int y = j;
+					final StackPane pane = panes[x][y];
+					game.fieldProperty(new Position(x, 7 - y)).addListener(new ChangeListener<FieldI>() {
+						@Override
+						public void changed(ObservableValue<? extends FieldI> observable, FieldI oldValue,
+								FieldI newValue) {
+							for (Node n : pane.getChildren()) {
+								if (n instanceof ImageView) {
+									((ImageView) n).setImage(null);
+								}
+							}
+							if (newValue.getFigure() != FigureType.NONE) {
+								panes[x][y].getChildren().add(getImageView(imageMap.get(newValue.getFigure())));
+							}
+							switch (newValue.getModifier()) {
+							case FROM:
+								recti.setFill(Color.AQUAMARINE);
+								break;
+							case NONE:
+								Color color = ((x + y) % 2 == 0) ? Color.BLANCHEDALMOND : Color.GREEN;
+								recti.setFill(color);
+								break;
+							case SELECTED:
+								recti.setFill(Color.CYAN);
+								break;
+							case TO:
+								recti.setFill(Color.AQUAMARINE);
+								break;
+							default:
+								throw new InternalError("no such enum");
+							}
+						}
+					});
+				}
 				panes[i][j].getChildren().add(recti);
+				panes[i][j].getChildren()
+						.add(getImageView(imageMap.get(game.fieldProperty(new Position(i, 7 - j)).get().getFigure())));
 
 			}
 		}
-	}
-
-	/**
-	 * Puts a pawn at the given position (<b>chess coordinates</b>).
-	 * 
-	 * @param black true - if the pawn is black, false - if the pawn is white
-	 * @param x     coordinate on the chess board of the pawn
-	 * @param y     coordinate on the chess board of the pawn
-	 */
-	private void putPawn(boolean black, int x, int y) {
-		Image image = (black) ? pawnB : pawnW;
-		panes[x][y].getChildren().add(getImageView(image));
-	}
-
-	/**
-	 * Puts a rook at the given position (<b>chess coordinates</b>).
-	 * 
-	 * @param black true - if the rook is black, false - if the rook is white
-	 * @param x     coordinate on the chess board of the rook
-	 * @param y     coordinate on the chess board of the rook
-	 */
-	private void putRook(boolean black, int x, int y) {
-		Image image = (black) ? rookB : rookW;
-		panes[x][y].getChildren().add(getImageView(image));
-	}
-
-	/**
-	 * Puts a knight at the given position (<b>chess coordinates</b>).
-	 * 
-	 * @param black true - if the knight is black, false - if the knight is white
-	 * @param x     coordinate on the chess board of the knight
-	 * @param y     coordinate on the chess board of the knight
-	 */
-	private void putKnight(boolean black, int x, int y) {
-		Image image = (black) ? knightB : knightW;
-		panes[x][y].getChildren().add(getImageView(image));
-	}
-
-	/**
-	 * Puts a bishop at the given position (<b>chess coordinates</b>).
-	 * 
-	 * @param black true - if the bishop is black, false - if the bishop is white
-	 * @param x     coordinate on the chess board of the bishop
-	 * @param y     coordinate on the chess board of the bishop
-	 */
-	private void putBishop(boolean black, int x, int y) {
-		Image image = (black) ? bishopB : bishopW;
-		panes[x][y].getChildren().add(getImageView(image));
-	}
-
-	/**
-	 * Puts a queen at the given position (<b>chess coordinates</b>).
-	 * 
-	 * @param black true - if the queen is black, false - if the queen is white
-	 * @param x     coordinate on the chess board of the queen
-	 * @param y     coordinate on the chess board of the queen
-	 */
-	private void putQueen(boolean black, int x, int y) {
-		Image image = (black) ? queenB : queenW;
-		panes[x][y].getChildren().add(getImageView(image));
-	}
-
-	/**
-	 * Puts a king at the given position (<b>chess coordinates</b>).
-	 * 
-	 * @param black true - if the king is black, false - if the king is white
-	 * @param x     coordinate on the chess board of the king
-	 * @param y     coordinate on the chess board of the king
-	 */
-	private void putKing(boolean black, int x, int y) {
-		Image image = (black) ? kingB : kingW;
-		panes[x][y].getChildren().add(getImageView(image));
 	}
 
 	/**
@@ -552,134 +496,17 @@ public class GUI extends Application {
 		return view;
 	}
 
-	/**
-	 * Draws the board.
-	 */
-	private void drawBoard() {
-
-		deleteAllPieces();
-		setColors();
-		Position select = game.selectionProperty().get();
-		if (select != null) {
-			((Rectangle)panes[select.getX()][7 - select.getY()].getChildren().get(0)).setFill(Color.CYAN);
-		}
-		Position from = game.fromProperty().get();
-		if (from != null) {
-			((Rectangle)panes[from.getX()][7 - from.getY()].getChildren().get(0)).setFill(Color.AQUAMARINE);
-		}
-		Position to = game.toProperty().get();
-		if (to != null) {
-			((Rectangle)panes[to.getX()][7 - to.getY()].getChildren().get(0)).setFill(Color.AQUAMARINE);
-		}
-
-//		if (select != null) {
-//			int depth = 200; //Setting the uniform variable for the glow width and height
-//			 
-//			DropShadow borderGlow= new DropShadow();
-//			borderGlow.setOffsetY(0f);
-//			borderGlow.setOffsetX(0f);
-//			borderGlow.setColor(Color.CYAN);
-//			borderGlow.setWidth(depth);
-//			borderGlow.setHeight(depth);
-//			 
-//			panes[select.getX()][7 - select.getY()].setEffect(borderGlow);
-//		}
-
-		Board board = game.boardProperty().get();
-		for (int x = 0; x < 8; x++) {
-			for (int y = 0; y < 8; y++) {
-
-				if (board.getFigure(x, y) != null) {
-					switch (board.getFigure(x, y).toString()) {
-
-					// change coords
-					case "WB":
-						putBishop(false, x, 7 - y);
-						break;
-					case "BB":
-						putBishop(true, x, 7 - y);
-						break;
-					case "WK":
-						putKing(false, x, 7 - y);
-						break;
-					case "BK":
-						putKing(true, x, 7 - y);
-						break;
-					case "WN": // knight
-						putKnight(false, x, 7 - y);
-						break;
-					case "BN": // knight
-						putKnight(true, x, 7 - y);
-						break;
-					case "WP":
-						putPawn(false, x, 7 - y);
-						break;
-					case "BP":
-						putPawn(true, x, 7 - y);
-						break;
-					case "WQ":
-						putQueen(false, x, 7 - y);
-						break;
-					case "BQ":
-						putQueen(true, x, 7 - y);
-						break;
-					case "WR":
-						putRook(false, x, 7 - y);
-						break;
-					case "BR":
-						putRook(true, x, 7 - y);
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	private void setColors() {
-		for (int x = 0; x < 8; x++ ) {
-			for (int y = 0; y < 8; y ++) {
-				Color color = ((x + y) % 2 == 0) ? Color.BLANCHEDALMOND : Color.GREEN;
-				((Rectangle)panes[x][y].getChildren().get(0)).setFill(color);
-			}
-		}
-	}
-
-	/**
-	 * Delete the ImageView of the given Piece.
-	 * 
-	 * @param x x-coordinate of the piece
-	 * @param y y-coordinate of the piece
-	 */
-	private void deletePiece(int x, int y) {
-		for (Node n : panes[x][y].getChildren()) {
-			if (n instanceof ImageView) {
-				((ImageView) n).setImage(null);
-			}
-		}
-	}
-
-	/**
-	 * Deletes all pieces.
-	 */
-	private void deleteAllPieces() {
-		for (int x = 0; x < 8; x++) {
-			for (int y = 0; y < 8; y++) {
-				deletePiece(x, y);
-			}
-		}
-	}
-	
 	private void closeWindowEvent(WindowEvent event) {
 		if (game.resetEnabledProperty().get()) {
 			// data could be lost. ask if user really wants to quit
-			Optional<ButtonType> result = new ExitDialog(game, kingW).showAndWait();
+			Optional<ButtonType> result = new ExitDialog(game, imageMap.get(FigureType.KING_WHITE)).showAndWait();
 			if (result.get() == ButtonType.OK) {
 				// user clicked OK
 				// continue
 			} else {
-			    // ... user chose CANCEL or closed the dialog
+				// ... user chose CANCEL or closed the dialog
 				// stop exit
-				 event.consume();
+				event.consume();
 			}
 		} else {
 			// no data could be lost

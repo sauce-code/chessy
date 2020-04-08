@@ -12,7 +12,6 @@ import com.saucecode.chessy.core.FieldI.Modifier;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -28,7 +27,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
-import javafx.geometry.Pos;
 
 /**
  * Represents a chess game.
@@ -98,7 +96,8 @@ public class Game implements GameI {
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
 				Position pos = new Position(x, y);
-				fieldMap.put(pos, new ReadOnlyObjectWrapper<FieldI>());
+				Field field = new Field(FigureType.NONE, Modifier.NONE);
+				fieldMap.put(pos, new ReadOnlyObjectWrapper<FieldI>(field));
 			}
 		}
 
@@ -142,29 +141,47 @@ public class Game implements GameI {
 					currentPlayer.set(board.get().getCurrentPlayer());
 
 					resetEnabled.set(history.size() > 0);
-					
+
 					from.set(board.get().getFrom());
 					to.set(board.get().getTo());
-					
+					if (board.get().getFrom() != null) {
+						int x = board.get().getFrom().getX();
+						int y = board.get().getFrom().getY();
+						FigureType figureType = (board.get().getBoard()[x][y] == null) ? FigureType.NONE
+								: board.get().getBoard()[x][y].getFigureType();
+						fieldMap.get(board.get().getFrom()).set(new Field(figureType, Modifier.FROM));
+					}
+					if (board.get().getTo() != null) {
+						int x = board.get().getTo().getX();
+						int y = board.get().getTo().getY();
+						fieldMap.get(board.get().getTo())
+								.set(new Field(board.get().getBoard()[x][y].getFigureType(), Modifier.TO));
+					}
+
 					for (int x = 0; x < 8; x++) {
 						for (int y = 0; y < 8; y++) {
 							Position pos = new Position(x, y);
 							ReadOnlyObjectWrapper<FieldI> field = fieldMap.get(pos);
-							FigureType figureType = null;
-							Modifier modifier = null;
+							FigureType figureType = FigureType.NONE;
+							Modifier modifier = Modifier.NONE;
 							if (board.get().getBoard()[x][y] != null) {
 								figureType = board.get().getBoard()[x][y].getFigureType();
 							}
-							if (selection.get().equals(pos)) {
+							if (selection.get() != null && selection.get().equals(pos)) {
 								modifier = Modifier.SELECTED;
-							}
-							else if (from.get().equals(pos)) {
+							} else if (from.get() != null && from.get().equals(pos)) {
 								modifier = Modifier.FROM;
-							}
-							else if (to.get().equals(pos)) {
+							} else if (to.get() != null && to.get().equals(pos)) {
 								modifier = Modifier.TO;
 							}
-							field.set(new Field(figureType, modifier));
+							Field newField = new Field(figureType, modifier);
+							if (field.get() == null) {
+								System.out.println("changed: " + newField);
+								field.set(newField);
+							} else if (!field.get().equals(newField)) {
+								System.out.println("changed: " + newField);
+								field.set(newField);
+							}
 						}
 					}
 				});
@@ -181,7 +198,7 @@ public class Game implements GameI {
 				}
 			}
 		});
-		
+
 		busy.addListener(new ChangeListener<Boolean>() {
 
 			@Override
@@ -190,7 +207,7 @@ public class Game implements GameI {
 					Platform.runLater(() -> progressProperty.set(0.0)); // TODO beibelassen?
 				}
 			}
-			
+
 		});
 
 		board.set(new Board());
@@ -286,11 +303,6 @@ public class Game implements GameI {
 	@Override
 	public ReadOnlyIntegerProperty boardValueRawBlackProperty() {
 		return boardValueRawBlack.getReadOnlyProperty();
-	}
-
-	@Override // TODO
-	public ObjectProperty<Board> boardProperty() {
-		return board;
 	}
 
 	@Override
@@ -391,6 +403,8 @@ public class Game implements GameI {
 		// unselect
 		if (position.equals(selection.get())) {
 			selection.set(null);
+			fieldMap.get(position).set(
+					new Field(board.get().getBoard()[position.getX()][position.getY()].getFigureType(), Modifier.NONE));
 		} else {
 			int x = position.getX();
 			int y = position.getY();
@@ -413,9 +427,12 @@ public class Game implements GameI {
 				}
 				selection.set(null);
 			} else {
-				// figure clicked
+				// own figure clicked
 				if (board.get().getFigure(x, y).getOwner() == board.get().getCurrentPlayer()) {
 					selection.set(new Position(x, y));
+					fieldMap.get(position)
+							.set(new Field(board.get().getBoard()[position.getX()][position.getY()].getFigureType(),
+									Modifier.SELECTED));
 				}
 			}
 		}
