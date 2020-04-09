@@ -172,9 +172,14 @@ public abstract class Figure {
 	 * @return figure type
 	 */
 	public abstract FieldI.FigureType getFigureType();
-	
+
+	/**
+	 * Returns the chess code of this figure.
+	 * 
+	 * @return chess code of this figure
+	 */
 	public String getCode() {
-		return (char)(x + 97) + Integer.toString(y);
+		return (char) (x + 97) + Integer.toString(y);
 	}
 
 }
