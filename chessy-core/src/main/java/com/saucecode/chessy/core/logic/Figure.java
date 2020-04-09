@@ -172,5 +172,9 @@ public abstract class Figure {
 	 * @return figure type
 	 */
 	public abstract FieldI.FigureType getFigureType();
+	
+	public String getCode() {
+		return (char)(x + 97) + Integer.toString(y);
+	}
 
 }

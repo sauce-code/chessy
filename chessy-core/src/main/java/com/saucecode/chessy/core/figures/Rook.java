@@ -137,5 +137,10 @@ public class Rook extends Figure {
 			throw new InternalError("no such enum");
 		}
 	}
+	
+	@Override
+	public String getCode() {
+		return "R" + super.getCode();
+	}
 
 }

@@ -245,5 +245,10 @@ public class King extends Figure {
 			throw new InternalError("no such enum");
 		}
 	}
+	
+	@Override
+	public String getCode() {
+		return "K" + super.getCode();
+	}
 
 }

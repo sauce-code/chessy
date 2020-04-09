@@ -175,4 +175,9 @@ public class Pawn extends Figure {
 		}
 	}
 
+	@Override
+	public String getCode() {
+		return "P" + super.getCode();
+	}
+	
 }

@@ -183,10 +183,10 @@ public class Game implements GameI {
 							}
 							Field newField = new Field(figureType, modifier);
 							if (field.get() == null) {
-								logger.debug(Thread.currentThread().getName() + " changed: " + newField);
+								logger.debug("changed: " + newField);
 								field.set(newField);
 							} else if (!field.get().equals(newField)) {
-								logger.debug(Thread.currentThread().getName() + " changed: " + newField);
+								logger.debug("changed: " + newField);
 								field.set(newField);
 							}
 						}
@@ -259,7 +259,7 @@ public class Game implements GameI {
 		final Task<Void> task = new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				logger.debug(Thread.currentThread().getName() + " started");
+				logger.info("started");
 				long timeStart = System.currentTimeMillis();
 				Platform.runLater(() -> busy.set(true)); // TODO sollte nicht sein
 				Board temp = null;
@@ -277,8 +277,7 @@ public class Game implements GameI {
 				Platform.runLater(() -> calculatedMoves.set(count.get()));
 				Platform.runLater(() -> calculationTime.set(timeDiff));
 				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
-				logger.debug(Thread.currentThread().getName() + " finished and calculated a total of " + count
-						+ " possible moves in " + timeDiff + " ms");
+				logger.info("finished, calculated a total of " + count + " possible moves in " + timeDiff + " ms");
 				return null;
 			}
 		};

@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
-import com.saucecode.chessy.core.Game;
 import com.saucecode.chessy.core.Position;
 import com.saucecode.chessy.core.figures.*;
 
@@ -21,7 +20,7 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 public class Board {
 	
-	final static Logger logger = Logger.getLogger(Game.class);
+	final static Logger logger = Logger.getLogger(Board.class);
 
 	/**
 	 * The current state of the game.
@@ -650,7 +649,7 @@ public class Board {
 					final int y = fromY;
 					final double step = 1.0 / threadCount;
 					new Thread(() -> {
-						logger.debug(Thread.currentThread().getName() + " started: " + figures[x][y].getClass().getSimpleName() + " (" +  figures[x][y].x + "," + figures[x][y].y + ")");
+						logger.info(figures[x][y].getCode() + " started");
 						Board temp = null;
 						AtomicInteger countInternal = new AtomicInteger();
 						for (int toX = 0; toX < 8; toX++) {
@@ -674,7 +673,7 @@ public class Board {
 						count.addAndGet(countInternal.get());
 						latch.countDown();
 						Platform.runLater(() -> progress.set(progress.get() + step));
-						logger.debug(Thread.currentThread().getName() + " finished and calculated " + countInternal + " possible moves");
+						logger.info(figures[x][y].getCode() + " finished, calculated " + countInternal + " possible moves");
 					}).start();
 				}
 			}

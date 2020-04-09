@@ -149,5 +149,10 @@ public class Queen extends Figure {
 			throw new InternalError("no such enum");
 		}
 	}
+	
+	@Override
+	public String getCode() {
+		return "Q" + super.getCode();
+	}
 
 }

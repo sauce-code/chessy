@@ -117,5 +117,10 @@ public class Bishop extends Figure {
 			throw new InternalError("no such enum");
 		}
 	}
+	
+	@Override
+	public String getCode() {
+		return "B" + super.getCode();
+	}
 
 }

@@ -81,5 +81,10 @@ public class Knight extends Figure {
 			throw new InternalError("no such enum");
 		}
 	}
+	
+	@Override
+	public String getCode() {
+		return "N" + super.getCode();
+	}
 
 }
