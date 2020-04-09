@@ -8,4 +8,3 @@
 - make a.i. able to find checkmate
 - add a way to interrupt
 - set king value to 0
-- add standalone compile
