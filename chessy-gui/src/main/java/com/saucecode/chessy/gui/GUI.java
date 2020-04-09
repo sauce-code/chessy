@@ -434,7 +434,7 @@ public class GUI extends Application {
 						@Override
 						public void handle(MouseEvent e) {
 							game.select(new Position(x, y)); // TODO platform run later?
-							System.out.println("clicked rectangle at x " + x + " y " + y);
+//							System.out.println("clicked rectangle at x " + x + " y " + y);
 						}
 					});
 				}
