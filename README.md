@@ -7,7 +7,7 @@ Chessy is a simple Chess A.I. using a look-ahead strategy. Its provided as a Mav
 - Maven
 - Java 11
 
-## Install & Run
+## Install
 
 Just run the following commands:
 
@@ -15,8 +15,22 @@ Just run the following commands:
 git clone https://github.com/sauce-code/chessy.git
 cd chessy
 mvn install
+```
+
+## Run
+
+### Maven Runner
+
+```bash
 cd chessy-gui
 mvn javafx:run
+```
+
+### Command Line
+
+```bash
+cd chessy-gui\target
+java --module-path %PATH_TO_FX% --add-modules javafx.base,javafx.graphics,javafx.controls -jar chessy-gui-1.0.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
 ## Changelog
