@@ -5,6 +5,6 @@
 - remove weird en passant bug
 - add move counter
 - add move history?
-- make a.i. able to find checkmate
+- make a.i. able to find checkmate (done, check if still buggy)
 - add a way to interrupt
 - set king value to 0
