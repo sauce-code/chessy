@@ -19,7 +19,7 @@ import javafx.beans.property.SimpleObjectProperty;
  * @author Torben Kr&uuml;ger
  */
 public class Board {
-	
+
 	final static Logger logger = Logger.getLogger(Board.class);
 
 	/**
@@ -43,16 +43,14 @@ public class Board {
 	private Board previous;
 
 	/**
-	 * Saves the x-coordinate of a pawn that was moved 2 squares
-	 * (beginning-move) by white in the last move. This is needed for 'en
-	 * passant'.
+	 * Saves the x-coordinate of a pawn that was moved 2 squares (beginning-move) by
+	 * white in the last move. This is needed for 'en passant'.
 	 */
 	private int markerWhiteX;
 
 	/**
-	 * Saves the x-coordinate of a pawn that was moved 2 squares
-	 * (beginning-move) by black in the last move. This is needed for 'en
-	 * passant'.
+	 * Saves the x-coordinate of a pawn that was moved 2 squares (beginning-move) by
+	 * black in the last move. This is needed for 'en passant'.
 	 */
 	private int markerBlackX;
 
@@ -65,9 +63,9 @@ public class Board {
 	 * Black's value for this board.
 	 */
 	private int valueBlack;
-	
+
 	private Position from;
-	
+
 	private Position to;
 
 	/**
@@ -104,8 +102,10 @@ public class Board {
 		figures[7][6] = new   Pawn(Player.BLACK, this, 7, 6);
 		figures[0][7] = new   Rook(Player.BLACK, this, 0, 7);
 		figures[1][7] = new Knight(Player.BLACK, this, 1, 7);
+//		figures[2][4] = new Bishop(Player.BLACK, this, 2, 4);
 		figures[2][7] = new Bishop(Player.BLACK, this, 2, 7);
 		figures[3][7] = new  Queen(Player.BLACK, this, 3, 7);
+//		figures[5][5] = new  Queen(Player.BLACK, this, 5, 5);
 		figures[4][7] = new   King(Player.BLACK, this, 4, 7);
 		figures[5][7] = new Bishop(Player.BLACK, this, 5, 7);
 		figures[6][7] = new Knight(Player.BLACK, this, 6, 7);
@@ -120,11 +120,9 @@ public class Board {
 	}
 
 	/**
-	 * Returns a clone from a specific board and sets that as its previous
-	 * board.
+	 * Returns a clone from a specific board and sets that as its previous board.
 	 * 
-	 * @param board
-	 *            mother instance, which will be cloned
+	 * @param board mother instance, which will be cloned
 	 */
 	private Board(Board board) {
 		this.state = board.state;
@@ -152,12 +150,10 @@ public class Board {
 	/**
 	 * Returns the figure of a certain tile.
 	 * 
-	 * @param x
-	 *            x coordinate
-	 * @param y
-	 *            y coordinate
+	 * @param x x coordinate
+	 * @param y y coordinate
 	 * @return
-	 * 		<ul>
+	 *         <ul>
 	 *         <li>figure of the selected tile</li>
 	 *         <li>{@code null}, if the tile is empty</li>
 	 *         </ul>
@@ -169,12 +165,9 @@ public class Board {
 	/**
 	 * Sets a figure on the board.
 	 * 
-	 * @param x
-	 *            x coordinate
-	 * @param y
-	 *            y coordinate
-	 * @param figure
-	 *            the figure to be set
+	 * @param x      x coordinate
+	 * @param y      y coordinate
+	 * @param figure the figure to be set
 	 */
 	public void setFigure(int x, int y, Figure figure) {
 		figures[x][y] = figure;
@@ -184,12 +177,10 @@ public class Board {
 	 * Removes a piece.<br>
 	 * If the selected square is empty, nothing happens.
 	 * 
-	 * @param x
-	 *            x-coordinate of the square
-	 * @param y
-	 *            y-coordinate of the square
+	 * @param x x-coordinate of the square
+	 * @param y y-coordinate of the square
 	 * @return
-	 * 		<ul>
+	 *         <ul>
 	 *         <li>the removed piece</li>
 	 *         <li>{@code null}, if the square was empty</li>
 	 *         </ul>
@@ -203,16 +194,12 @@ public class Board {
 	/**
 	 * Moves a figure to a square.
 	 * 
-	 * @param fromX
-	 *            x-coordinate of origin
-	 * @param fromY
-	 *            y-coordinate of origin
-	 * @param toX
-	 *            x-coordinate of destiny
-	 * @param toY
-	 *            y-coordinate of destiny
+	 * @param fromX x-coordinate of origin
+	 * @param fromY y-coordinate of origin
+	 * @param toX   x-coordinate of destiny
+	 * @param toY   y-coordinate of destiny
 	 * @return
-	 * 		<ul>
+	 *         <ul>
 	 *         <li>the resulting board</li>
 	 *         <li>{@code null}, if the move is not valid</li>
 	 *         </ul>
@@ -287,8 +274,7 @@ public class Board {
 	/**
 	 * Returns whether a player is in check or not.
 	 * 
-	 * @param player
-	 *            the player to be tested
+	 * @param player the player to be tested
 	 * @return {@code true}, if the player is in check
 	 */
 	public boolean isInCheck(Player player) {
@@ -310,10 +296,9 @@ public class Board {
 	/**
 	 * Returns the {@link King} of a player.
 	 * 
-	 * @param player
-	 *            owner of the king being searched
+	 * @param player owner of the king being searched
 	 * @return
-	 * 		<ul>
+	 *         <ul>
 	 *         <li>the king of the player</li>
 	 *         <li>{@code null}, if the king doesn't exist</li>
 	 *         </ul>
@@ -333,10 +318,8 @@ public class Board {
 	/**
 	 * Returns a figure of a player
 	 * 
-	 * @param figure
-	 *            the type of piece which shall be searched for
-	 * @param player
-	 *            the owner of the figure
+	 * @param figure the type of piece which shall be searched for
+	 * @param player the owner of the figure
 	 * @return the figure of the player
 	 */
 	public Figure getFigure(Class<?> figure, Player player) {
@@ -361,8 +344,8 @@ public class Board {
 	}
 
 	/**
-	 * Checks the board for {@link Pawn} at the end of the board. If there are
-	 * any, they will be promoted.
+	 * Checks the board for {@link Pawn} at the end of the board. If there are any,
+	 * they will be promoted.
 	 */
 	public void promote() {
 		for (int x = 0; x < 8; x++) {
@@ -380,8 +363,7 @@ public class Board {
 	/**
 	 * Returns the x-marker of a player.
 	 * 
-	 * @param player
-	 *            the player
+	 * @param player the player
 	 * @return the x-marker of the player
 	 */
 	public int getMarker(Player player) {
@@ -398,10 +380,8 @@ public class Board {
 	/**
 	 * Sets the x-marker for a player.
 	 * 
-	 * @param player
-	 *            the player
-	 * @param marker
-	 *            the x-marker for the palyer
+	 * @param player the player
+	 * @param marker the x-marker for the palyer
 	 */
 	public void setMarker(Player player, int marker) {
 		switch (player) {
@@ -476,8 +456,7 @@ public class Board {
 	 * Returns whether a player is in checkmate or not.<br>
 	 * This method expects that <b>the current player is in check</b>.
 	 * 
-	 * @param player
-	 *            the player to be checked
+	 * @param player the player to be checked
 	 * @return {@code true}, if the player is in checkmate
 	 */
 	private boolean isInCheckmate(Player player) {
@@ -503,8 +482,7 @@ public class Board {
 	 * Returns whether a player is in stalemate or not.<br>
 	 * This method expects that <b>the current player is not in check</b>.
 	 * 
-	 * @param player
-	 *            the player to be checked
+	 * @param player the player to be checked
 	 * @return {@code true}, if the player is in stalemate
 	 */
 	private boolean isInStalemate(Player player) {
@@ -539,13 +517,34 @@ public class Board {
 	}
 
 	public int getValue(Player player) {
+		switch (state) {
+		case CHECKMATE_BLACK:
+			if (player == Player.WHITE) {
+				return 100_000;
+			} else {
+				return -100_000;
+			}
+		case CHECKMATE_WHITE:
+			if (player == Player.WHITE) {
+				return -100_000;
+			} else {
+				return 100_000;
+			}
+		case STALEMATE_BLACK:
+			return 0;
+		case STALEMATE_WHITE:
+			return 0;
+		default:
+			// TODO
+			break;
+		}
 		if (player == Player.WHITE) {
 			return valueWhite - valueBlack;
 		} else {
 			return valueBlack - valueWhite;
 		}
 	}
-	
+
 	public int getValueRaw(Player player) {
 		if (player == Player.WHITE) {
 			return valueWhite - 20_000; // TODO
@@ -553,15 +552,19 @@ public class Board {
 			return valueBlack - 20_000; // TODO;
 		}
 	}
-	
+
 	public Board getMax(int ply, DoubleProperty progress, boolean multiThreaded, AtomicInteger count) {
+		if (isGameOVer()) {
+			System.out.println("ggggggggggggggggggggg");
+			return chain(ply);
+		}
 		if (multiThreaded) {
 			return getMaxMultiThreaded(ply, progress, count);
 		} else {
 			int figuresToMove = 0;
-			
+
 			progress.set(0.0); // TODO eventuell verschieben
-			
+
 			for (int fromX = 0; fromX < 8; fromX++) {
 				for (int fromY = 0; fromY < 8; fromY++) {
 					if (figures[fromX][fromY] != null && figures[fromX][fromY].getOwner() == currentPlayer) {
@@ -598,7 +601,21 @@ public class Board {
 		}
 	}
 
+	// funktioniert das so, wie es soll?
+	private Board chain(int ply) {
+		Board ret = clone();
+		while (ply > 1) {
+			ret = ret.clone();
+			ret.nextPlayer();
+			ply--;
+		}
+		return ret;
+	}
+
 	private Board getMaxSingleThreaded(int ply, AtomicInteger count) {
+		if (isGameOVer()) {
+			return chain(ply);
+		}
 		Board max = null;
 		Board temp;
 		for (int fromX = 0; fromX < 8; fromX++) {
@@ -624,14 +641,17 @@ public class Board {
 		}
 		return max;
 	}
-	
+
 	private Board getMaxMultiThreaded(int ply, DoubleProperty progress, AtomicInteger count) {
+		if (isGameOVer()) {
+			return chain(ply);
+		}
 		// TODO
 		final ObjectProperty<Board> max = new SimpleObjectProperty<Board>(null);
 		int threadCount = 0;
-		
+
 		progress.set(0.0); // TODO eventuell verschieben
-		
+
 		for (int fromX = 0; fromX < 8; fromX++) {
 			for (int fromY = 0; fromY < 8; fromY++) {
 				if (figures[fromX][fromY] != null && figures[fromX][fromY].getOwner() == currentPlayer) {
@@ -639,9 +659,9 @@ public class Board {
 				}
 			}
 		}
-		
+
 		final CountDownLatch latch = new CountDownLatch(threadCount);
-		
+
 		for (int fromX = 0; fromX < 8; fromX++) {
 			for (int fromY = 0; fromY < 8; fromY++) {
 				if (figures[fromX][fromY] != null && figures[fromX][fromY].getOwner() == currentPlayer) {
@@ -673,7 +693,8 @@ public class Board {
 						count.addAndGet(countInternal.get());
 						latch.countDown();
 						Platform.runLater(() -> progress.set(progress.get() + step));
-						logger.info(figures[x][y].getCode() + " finished, calculated " + countInternal + " possible moves");
+						logger.info(
+								figures[x][y].getCode() + " finished, calculated " + countInternal + " possible moves");
 					}).start();
 				}
 			}
@@ -688,6 +709,9 @@ public class Board {
 	}
 
 	public Board getMin(int ply, AtomicInteger count) {
+		if (isGameOVer()) {
+			return chain(ply);
+		}
 		Board min = null;
 		Board temp;
 		for (int fromX = 0; fromX < 8; fromX++) {
@@ -727,6 +751,11 @@ public class Board {
 
 	public void setTo(Position to) {
 		this.to = to;
+	}
+
+	private boolean isGameOVer() {
+		return (state == State.CHECKMATE_BLACK) || (state == State.CHECKMATE_WHITE) || (state == State.STALEMATE_BLACK)
+				|| (state == State.STALEMATE_WHITE);
 	}
 
 }
