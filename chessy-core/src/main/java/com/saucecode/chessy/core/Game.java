@@ -47,13 +47,13 @@ public class Game implements GameI {
 	 */
 	private Stack<Board> history;
 
-	private final ReadOnlyIntegerWrapper boardValueWhite = new ReadOnlyIntegerWrapper();
+	private final ReadOnlyIntegerWrapper scoreWhite = new ReadOnlyIntegerWrapper();
 
-	private final ReadOnlyIntegerWrapper boardValueBlack = new ReadOnlyIntegerWrapper();
+	private final ReadOnlyIntegerWrapper scoreBlack = new ReadOnlyIntegerWrapper();
 
-	private final ReadOnlyIntegerWrapper boardValueRawWhite = new ReadOnlyIntegerWrapper();
+	private final ReadOnlyIntegerWrapper scoreWhiteTotal = new ReadOnlyIntegerWrapper();
 
-	private final ReadOnlyIntegerWrapper boardValueRawBlack = new ReadOnlyIntegerWrapper();
+	private final ReadOnlyIntegerWrapper scoreBlackTotal = new ReadOnlyIntegerWrapper();
 
 	private final SimpleObjectProperty<Board> board = new SimpleObjectProperty<>(); // TODO
 
@@ -113,10 +113,10 @@ public class Game implements GameI {
 			@Override
 			public void changed(ObservableValue<? extends Board> observable, Board oldValue, Board newValue) {
 				Platform.runLater(() -> {
-					boardValueWhite.set(board.get().getValue(Player.WHITE));
-					boardValueBlack.set(board.get().getValue(Player.BLACK));
-					boardValueRawWhite.set(board.get().getValueRaw(Player.WHITE));
-					boardValueRawBlack.set(board.get().getValueRaw(Player.BLACK));
+					scoreWhite.set(board.get().getScore(Player.WHITE));
+					scoreBlack.set(board.get().getScore(Player.BLACK));
+					scoreWhiteTotal.set(board.get().getScoreTotal(Player.WHITE));
+					scoreBlackTotal.set(board.get().getScoreTotal(Player.BLACK));
 					switch (board.get().getCurrentState()) {
 					case CHECK_BLACK:
 						inCheck.set(Player.BLACK);
@@ -291,23 +291,23 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public ReadOnlyIntegerProperty boardValueWhiteProperty() {
-		return boardValueWhite.getReadOnlyProperty();
+	public ReadOnlyIntegerProperty scoreWhiteProperty() {
+		return scoreWhite.getReadOnlyProperty();
 	}
 
 	@Override
-	public ReadOnlyIntegerProperty boardValueBlackProperty() {
-		return boardValueBlack.getReadOnlyProperty();
+	public ReadOnlyIntegerProperty scoreBlackProperty() {
+		return scoreBlack.getReadOnlyProperty();
 	}
 
 	@Override
-	public ReadOnlyIntegerProperty boardValueRawWhiteProperty() {
-		return boardValueRawWhite.getReadOnlyProperty();
+	public ReadOnlyIntegerProperty scoreWhiteTotalProperty() {
+		return scoreWhiteTotal.getReadOnlyProperty();
 	}
 
 	@Override
-	public ReadOnlyIntegerProperty boardValueRawBlackProperty() {
-		return boardValueRawBlack.getReadOnlyProperty();
+	public ReadOnlyIntegerProperty scoreBlackTotalProperty() {
+		return scoreBlackTotal.getReadOnlyProperty();
 	}
 
 	@Override

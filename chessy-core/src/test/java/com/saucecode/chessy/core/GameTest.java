@@ -69,7 +69,7 @@ class GameTest {
 	@Test
 	void test2() {
 		Game game = new Game();
-		assertEquals(0, game.boardValueWhiteProperty().get());
+		assertEquals(0, game.scoreWhiteProperty().get());
 	}
 	
 	@Test

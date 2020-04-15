@@ -57,14 +57,14 @@ public class Board {
 	private int markerBlackX;
 
 	/**
-	 * White's value for this board.
+	 * White's score for this board.
 	 */
-	private int valueWhite;
+	private int scoreWhiteTotal;
 
 	/**
-	 * Black's value for this board.
+	 * Black's score for this board.
 	 */
-	private int valueBlack;
+	private int scoreBlackTotal;
 
 	private Position from;
 
@@ -416,17 +416,17 @@ public class Board {
 	 * Evaluates the board for both players and stores these values.
 	 */
 	public void evaluate() {
-		valueWhite = 0;
-		valueBlack = 0;
+		scoreWhiteTotal = 0;
+		scoreBlackTotal = 0;
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
 				if (figures[x][y] != null) {
 					switch (figures[x][y].getOwner()) {
 					case WHITE:
-						valueWhite += figures[x][y].getValue();
+						scoreWhiteTotal += figures[x][y].getValue();
 						break;
 					case BLACK:
-						valueBlack += figures[x][y].getValue();
+						scoreBlackTotal += figures[x][y].getValue();
 						break;
 					default:
 						throw new IllegalArgumentException();
@@ -508,15 +508,11 @@ public class Board {
 	 * 
 	 * @return value for the current palyer
 	 */
-	public int getValue() {
-		if (currentPlayer == Player.WHITE) {
-			return valueWhite - valueBlack;
-		} else {
-			return valueBlack - valueWhite;
-		}
+	public int getScore() {
+		return getScore(currentPlayer);
 	}
 
-	public int getValue(Player player) {
+	public int getScore(Player player) {
 		switch (state) {
 		case CHECKMATE_BLACK:
 			if (player == Player.WHITE) {
@@ -539,17 +535,17 @@ public class Board {
 			break;
 		}
 		if (player == Player.WHITE) {
-			return valueWhite - valueBlack;
+			return scoreWhiteTotal - scoreBlackTotal;
 		} else {
-			return valueBlack - valueWhite;
+			return scoreBlackTotal - scoreWhiteTotal;
 		}
 	}
 
-	public int getValueRaw(Player player) {
+	public int getScoreTotal(Player player) {
 		if (player == Player.WHITE) {
-			return valueWhite;
+			return scoreWhiteTotal;
 		} else {
-			return valueBlack;
+			return scoreBlackTotal;
 		}
 	}
 
@@ -587,7 +583,7 @@ public class Board {
 									temp = temp.getMaxSingleThreaded(ply - 1, count);
 								}
 								if ((max == null) || ((temp != null)
-										&& (temp.getValue(currentPlayer) > max.getValue(currentPlayer)))) {
+										&& (temp.getScore(currentPlayer) > max.getScore(currentPlayer)))) {
 									max = temp;
 								}
 							}
@@ -630,7 +626,7 @@ public class Board {
 								temp = temp.getMaxSingleThreaded(ply - 1, count);
 							}
 							if ((max == null) || ((temp != null)
-									&& (temp.getValue(currentPlayer) > max.getValue(currentPlayer)))) {
+									&& (temp.getScore(currentPlayer) > max.getScore(currentPlayer)))) {
 								max = temp;
 							}
 						}
@@ -684,7 +680,7 @@ public class Board {
 									temp = b;
 								}
 								if ((max.get() == null) || ((temp != null)
-										&& (temp.getValue(currentPlayer) > max.get().getValue(currentPlayer)))) {
+										&& (temp.getScore(currentPlayer) > max.get().getScore(currentPlayer)))) {
 									max.set(temp);
 								}
 							}
@@ -727,7 +723,7 @@ public class Board {
 							if ((temp != null) && (ply > 1)) {
 								temp = temp.getMaxSingleThreaded(ply - 1, count);
 							}
-							if ((min == null) || ((temp != null) && (temp.getValue() < min.getValue()))) {
+							if ((min == null) || ((temp != null) && (temp.getScore() < min.getScore()))) {
 								min = temp;
 							}
 						}
@@ -771,8 +767,8 @@ public class Board {
 		result = prime * result + ((previous == null) ? 0 : previous.hashCode());
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		result = prime * result + ((to == null) ? 0 : to.hashCode());
-		result = prime * result + valueBlack;
-		result = prime * result + valueWhite;
+		result = prime * result + scoreBlackTotal;
+		result = prime * result + scoreWhiteTotal;
 		return result;
 	}
 
@@ -810,9 +806,9 @@ public class Board {
 				return false;
 		} else if (!to.equals(other.to))
 			return false;
-		if (valueBlack != other.valueBlack)
+		if (scoreBlackTotal != other.scoreBlackTotal)
 			return false;
-		if (valueWhite != other.valueWhite)
+		if (scoreWhiteTotal != other.scoreWhiteTotal)
 			return false;
 		return true;
 	}

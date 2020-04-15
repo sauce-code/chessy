@@ -60,7 +60,7 @@ public interface GameI {
 	 * 
 	 * @since 1.0.0
 	 */
-	public ReadOnlyIntegerProperty boardValueWhiteProperty();
+	public ReadOnlyIntegerProperty scoreWhiteProperty();
 
 	/**
 	 * Returns the read-only board value black property.
@@ -69,7 +69,7 @@ public interface GameI {
 	 * 
 	 * @since 1.0.0
 	 */
-	public ReadOnlyIntegerProperty boardValueBlackProperty();
+	public ReadOnlyIntegerProperty scoreBlackProperty();
 
 	/**
 	 * Returns the read-only board value raw white property.
@@ -78,7 +78,7 @@ public interface GameI {
 	 * 
 	 * @since 1.0.0
 	 */
-	public ReadOnlyIntegerProperty boardValueRawWhiteProperty();
+	public ReadOnlyIntegerProperty scoreWhiteTotalProperty();
 
 	/**
 	 * Returns the read-only board value raw black property.
@@ -87,7 +87,7 @@ public interface GameI {
 	 * 
 	 * @since 1.0.0
 	 */
-	public ReadOnlyIntegerProperty boardValueRawBlackProperty();
+	public ReadOnlyIntegerProperty scoreBlackTotalProperty();
 
 	/**
 	 * Returns the read-only busy property.

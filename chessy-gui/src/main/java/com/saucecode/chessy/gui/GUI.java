@@ -184,7 +184,6 @@ public class GUI extends Application {
 
 		initializeImages();
 		initializeStackPanes();
-//		drawBoard();
 
 		final BorderPane border = new BorderPane(grid);
 		border.setTop(initMenuBar());
@@ -198,7 +197,7 @@ public class GUI extends Application {
 
 		ConsoleLabel scoreWhite = new ConsoleLabel("Score White: ");
 		ConsoleLabel scoreWhite2 = new ConsoleLabel("");
-		scoreWhite2.textProperty().bind(game.boardValueWhiteProperty().asString("%,d"));
+		scoreWhite2.textProperty().bind(game.scoreWhiteProperty().asString("%,d"));
 		scoreWhite2.setMaxWidth(Double.MAX_VALUE);
 		scoreWhite2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(scoreWhite, 0, i);
@@ -207,25 +206,25 @@ public class GUI extends Application {
 
 		ConsoleLabel scoreBlack = new ConsoleLabel("Score Black: ");
 		ConsoleLabel scoreBlack2 = new ConsoleLabel("");
-		scoreBlack2.textProperty().bind(game.boardValueBlackProperty().asString("%,d"));
+		scoreBlack2.textProperty().bind(game.scoreBlackProperty().asString("%,d"));
 		scoreBlack2.setMaxWidth(Double.MAX_VALUE);
 		scoreBlack2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(scoreBlack, 0, i);
 		info.add(scoreBlack2, 1, i);
 		i++;
 
-		ConsoleLabel scoreWhiteRaw = new ConsoleLabel("Score White Raw: ");
+		ConsoleLabel scoreWhiteRaw = new ConsoleLabel("Score White Total: ");
 		ConsoleLabel scoreWhiteRaw2 = new ConsoleLabel("");
-		scoreWhiteRaw2.textProperty().bind(game.boardValueRawWhiteProperty().asString("%,d"));
+		scoreWhiteRaw2.textProperty().bind(game.scoreWhiteTotalProperty().asString("%,d"));
 		scoreWhiteRaw2.setMaxWidth(Double.MAX_VALUE);
 		scoreWhiteRaw2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(scoreWhiteRaw, 0, i);
 		info.add(scoreWhiteRaw2, 1, i);
 		i++;
 
-		ConsoleLabel scoreBlackRaw = new ConsoleLabel("Score Black Raw: ");
+		ConsoleLabel scoreBlackRaw = new ConsoleLabel("Score Black Total: ");
 		ConsoleLabel scoreBlackRaw2 = new ConsoleLabel("");
-		scoreBlackRaw2.textProperty().bind(game.boardValueRawBlackProperty().asString("%,d"));
+		scoreBlackRaw2.textProperty().bind(game.scoreBlackTotalProperty().asString("%,d"));
 		scoreBlackRaw2.setMaxWidth(Double.MAX_VALUE);
 		scoreBlackRaw2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(scoreBlackRaw, 0, i);
