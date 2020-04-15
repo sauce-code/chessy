@@ -1,7 +1,5 @@
 package com.saucecode.chessy.core;
 
-import com.saucecode.chessy.core.logic.Player;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -298,5 +296,36 @@ public interface GameI {
 	 * @since 1.0.0
 	 */
 	public void select(Position position);
+	
+	/**
+	 * The Players.
+	 * 
+	 * @since 1.0.0
+	 */
+	public enum Player { // TODO MOVE TO INTERFACE
+
+		/**
+		 * White.
+		 */
+		WHITE,
+
+		/**
+		 * Black.
+		 */
+		BLACK;
+
+		@Override
+		public String toString() {
+			switch (this) {
+			case WHITE:
+				return "W";
+			case BLACK:
+				return "B";
+			default:
+				throw new IllegalArgumentException();
+			}
+		}
+
+	}
 
 }

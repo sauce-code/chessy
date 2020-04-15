@@ -1,6 +1,7 @@
 package com.saucecode.chessy.core.logic;
 
 import com.saucecode.chessy.core.FieldI;
+import com.saucecode.chessy.core.GameI.Player;
 import com.saucecode.chessy.core.Position;
 
 /**

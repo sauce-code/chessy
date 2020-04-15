@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
+import com.saucecode.chessy.core.GameI.Player;
 import com.saucecode.chessy.core.Position;
 import com.saucecode.chessy.core.figures.*;
 
