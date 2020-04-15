@@ -57,7 +57,7 @@ public class Game implements GameI {
 
 	private final SimpleObjectProperty<Board> board = new SimpleObjectProperty<>(); // TODO
 
-	private final ReadOnlyBooleanWrapper busy = new ReadOnlyBooleanWrapper();
+	private final ReadOnlyBooleanWrapper busy = new ReadOnlyBooleanWrapper(true);
 
 	private final ReadOnlyObjectWrapper<Position> selection = new ReadOnlyObjectWrapper<>();
 
@@ -189,6 +189,7 @@ public class Game implements GameI {
 							}
 						}
 					}
+					busy.set(false);
 				});
 			}
 

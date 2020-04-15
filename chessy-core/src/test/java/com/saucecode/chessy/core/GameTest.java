@@ -33,14 +33,36 @@ class GameTest {
 	void testClone() throws InterruptedException {
 		Game game1 = new Game();
 		Game game2 = new Game();
-		Thread.sleep(1_000L); // TODO nicht so
+		while(game1.busyProperty().get()) {
+			Thread.sleep(1L);
+		}
+		while(game2.busyProperty().get()) {
+			Thread.sleep(1L);
+		}
 		assertEquals(game1, game2);
 	}
 	
 	@Test
 	void testABC() throws InterruptedException {
 		Game game = new Game();
-		Thread.sleep(1_000L);
+		while(game.busyProperty().get()) {
+			Thread.sleep(1L);
+		}
+		assertEquals(Player.WHITE, game.currentPlayerProperty().get());
+	}
+	
+	// TODO
+	void testABCD() throws InterruptedException {
+		Game game = new Game();
+		while(game.busyProperty().get()) {
+			Thread.sleep(1L);
+		}
+		assertEquals(Player.WHITE, game.currentPlayerProperty().get());
+		game.select(new Position(0, 1));
+		game.select(new Position(0, 2));
+		while(game.busyProperty().get()) {
+			Thread.sleep(1L);
+		}
 		assertEquals(Player.WHITE, game.currentPlayerProperty().get());
 	}
 	
