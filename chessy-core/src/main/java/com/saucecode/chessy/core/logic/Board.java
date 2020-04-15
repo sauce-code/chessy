@@ -670,7 +670,7 @@ public class Board {
 					final int x = fromX;
 					final int y = fromY;
 					final double step = 1.0 / threadCount;
-					new Thread(() -> {
+					Thread thread = new Thread(() -> {
 						logger.info(figures[x][y].getCode() + " started");
 						Board temp = null;
 						AtomicInteger countInternal = new AtomicInteger();
@@ -697,7 +697,9 @@ public class Board {
 						Platform.runLater(() -> progress.set(progress.get() + step));
 						logger.info(
 								figures[x][y].getCode() + " finished, calculated " + countInternal + " possible moves");
-					}).start();
+					});
+					thread.setDaemon(true);
+					thread.start();
 				}
 			}
 		}

@@ -280,6 +280,7 @@ public class Game implements GameI {
 			}
 		};
 		Thread thread = new Thread(task);
+		thread.setDaemon(true);
 		thread.start();
 	}
 
