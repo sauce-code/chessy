@@ -191,7 +191,7 @@ public class GUI extends Application {
 
 		GridPane info = new GridPane();
 
-		ConsoleLabel placeholder = new ConsoleLabel("         ");
+		ConsoleLabel placeholder = new ConsoleLabel("          ");
 		info.add(placeholder, 1, 0);
 
 		int i = 0;
@@ -341,7 +341,7 @@ public class GUI extends Application {
 
 		ConsoleLabel calcTime = new ConsoleLabel("Calculation Time: ");
 		ConsoleLabel calcTime2 = new ConsoleLabel();
-		calcTime2.textProperty().bind(game.calculationTimeProperty().asString("%d ms"));
+		calcTime2.textProperty().bind(game.calculationTimeProperty().asString("%,d ms"));
 		calcTime2.setMaxWidth(Double.MAX_VALUE);
 		calcTime2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(calcTime, 0, i);
