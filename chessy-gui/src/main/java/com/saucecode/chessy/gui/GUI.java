@@ -323,7 +323,7 @@ public class GUI extends Application {
 
 		ConsoleLabel progress = new ConsoleLabel("Progress: ");
 		ConsoleLabel progress2 = new ConsoleLabel(Boolean.toString(false));
-		progress2.textProperty().bind(game.progressProperty().asString("%.2f"));
+		progress2.textProperty().bind(game.progressProperty().multiply(100.0).asString("%.0f %%"));
 		progress2.setMaxWidth(Double.MAX_VALUE);
 		progress2.setAlignment(Pos.CENTER_RIGHT);
 		info.add(progress, 0, i);
