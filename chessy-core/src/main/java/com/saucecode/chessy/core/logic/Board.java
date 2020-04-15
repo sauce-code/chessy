@@ -522,15 +522,15 @@ public class Board {
 		switch (state) {
 		case CHECKMATE_BLACK:
 			if (player == Player.WHITE) {
-				return 100_000;
+				return Integer.MAX_VALUE;
 			} else {
-				return -100_000;
+				return Integer.MIN_VALUE;
 			}
 		case CHECKMATE_WHITE:
 			if (player == Player.WHITE) {
-				return -100_000;
+				return Integer.MIN_VALUE;
 			} else {
-				return 100_000;
+				return Integer.MAX_VALUE;
 			}
 		case STALEMATE_BLACK:
 			return 0;
@@ -549,15 +549,14 @@ public class Board {
 
 	public int getValueRaw(Player player) {
 		if (player == Player.WHITE) {
-			return valueWhite - 20_000; // TODO
+			return valueWhite;
 		} else {
-			return valueBlack - 20_000; // TODO;
+			return valueBlack;
 		}
 	}
 
 	public Board getMax(int ply, DoubleProperty progress, boolean multiThreaded, AtomicInteger count) {
 		if (isGameOVer()) {
-			System.out.println("ggggggggggggggggggggg");
 			return chain(ply);
 		}
 		if (multiThreaded) {

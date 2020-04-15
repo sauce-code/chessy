@@ -206,8 +206,7 @@ public abstract class Figure {
 		if (board == null) {
 			if (other.board != null)
 				return false;
-		} else if (!board.equals(other.board))
-			return false;
+		}
 		if (owner != other.owner)
 			return false;
 		if (x != other.x)
