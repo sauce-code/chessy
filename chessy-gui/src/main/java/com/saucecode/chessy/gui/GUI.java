@@ -166,6 +166,171 @@ public class GUI extends Application {
 		menuBar.setUseSystemMenuBar(true);
 		return menuBar;
 	}
+	
+	private GridPane initConsole() {
+		GridPane console = new GridPane();
+
+		ConsoleLabel placeholder = new ConsoleLabel("          ");
+		console.add(placeholder, 1, 0);
+
+		int i = 0;
+
+		ConsoleLabel scoreWhite = new ConsoleLabel("Score White: ");
+		ConsoleLabel scoreWhite2 = new ConsoleLabel("");
+		scoreWhite2.textProperty().bind(game.scoreWhiteProperty().asString("%,d"));
+		scoreWhite2.setMaxWidth(Double.MAX_VALUE);
+		scoreWhite2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(scoreWhite, 0, i);
+		console.add(scoreWhite2, 1, i);
+		i++;
+
+		ConsoleLabel scoreBlack = new ConsoleLabel("Score Black: ");
+		ConsoleLabel scoreBlack2 = new ConsoleLabel("");
+		scoreBlack2.textProperty().bind(game.scoreBlackProperty().asString("%,d"));
+		scoreBlack2.setMaxWidth(Double.MAX_VALUE);
+		scoreBlack2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(scoreBlack, 0, i);
+		console.add(scoreBlack2, 1, i);
+		i++;
+
+		ConsoleLabel scoreWhiteRaw = new ConsoleLabel("Score White Total: ");
+		ConsoleLabel scoreWhiteRaw2 = new ConsoleLabel("");
+		scoreWhiteRaw2.textProperty().bind(game.scoreWhiteTotalProperty().asString("%,d"));
+		scoreWhiteRaw2.setMaxWidth(Double.MAX_VALUE);
+		scoreWhiteRaw2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(scoreWhiteRaw, 0, i);
+		console.add(scoreWhiteRaw2, 1, i);
+		i++;
+
+		ConsoleLabel scoreBlackRaw = new ConsoleLabel("Score Black Total: ");
+		ConsoleLabel scoreBlackRaw2 = new ConsoleLabel("");
+		scoreBlackRaw2.textProperty().bind(game.scoreBlackTotalProperty().asString("%,d"));
+		scoreBlackRaw2.setMaxWidth(Double.MAX_VALUE);
+		scoreBlackRaw2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(scoreBlackRaw, 0, i);
+		console.add(scoreBlackRaw2, 1, i);
+		i++;
+
+		{
+			ConsoleLabel blank = new ConsoleLabel("");
+			console.add(blank, 0, i);
+			i++;
+		}
+
+		ConsoleLabel ckeck = new ConsoleLabel("In Check: ");
+		ConsoleLabel check2 = new ConsoleLabel("");
+		check2.textProperty().bind(game.inCheckProperty().asString());
+		check2.setMaxWidth(Double.MAX_VALUE);
+		check2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(ckeck, 0, i);
+		console.add(check2, 1, i);
+		i++;
+
+		ConsoleLabel stalemate = new ConsoleLabel("In Stalemate: ");
+		ConsoleLabel stalemate2 = new ConsoleLabel("");
+		stalemate2.textProperty().bind(game.inStalemateProperty().asString());
+		stalemate2.setMaxWidth(Double.MAX_VALUE);
+		stalemate2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(stalemate, 0, i);
+		console.add(stalemate2, 1, i);
+		i++;
+
+		ConsoleLabel checkmate = new ConsoleLabel("In Checkmate: ");
+		ConsoleLabel checkmate2 = new ConsoleLabel("");
+		checkmate2.textProperty().bind(game.inCheckmateProperty().asString());
+		checkmate2.setMaxWidth(Double.MAX_VALUE);
+		checkmate2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(checkmate, 0, i);
+		console.add(checkmate2, 1, i);
+		i++;
+
+		ConsoleLabel currentPlayer = new ConsoleLabel("Current Player: ");
+		ConsoleLabel currentPlayer2 = new ConsoleLabel(game.currentPlayerProperty().get().toString());
+		game.currentPlayerProperty().addListener(e -> Platform.runLater(() -> {
+			currentPlayer2.setText(game.currentPlayerProperty().get().toString());
+		}));
+		currentPlayer2.setMaxWidth(Double.MAX_VALUE);
+		currentPlayer2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(currentPlayer, 0, i);
+		console.add(currentPlayer2, 1, i);
+		i++;
+
+		ConsoleLabel blank0 = new ConsoleLabel("");
+		console.add(blank0, 0, i);
+		i++;
+
+		ConsoleLabel selected = new ConsoleLabel("Selected: ");
+		ConsoleLabel selected2 = new ConsoleLabel("");
+		selected2.textProperty().bind(game.selectionProperty().asString());
+		selected2.setMaxWidth(Double.MAX_VALUE);
+		selected2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(selected, 0, i);
+		console.add(selected2, 1, i);
+		i++;
+
+		ConsoleLabel from = new ConsoleLabel("From: ");
+		ConsoleLabel from2 = new ConsoleLabel("");
+		from2.textProperty().bind(game.fromProperty().asString());
+		from2.setMaxWidth(Double.MAX_VALUE);
+		from2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(from, 0, i);
+		console.add(from2, 1, i);
+		i++;
+
+		ConsoleLabel to = new ConsoleLabel("To: ");
+		ConsoleLabel to2 = new ConsoleLabel("");
+		to2.textProperty().bind(game.toProperty().asString());
+		to2.setMaxWidth(Double.MAX_VALUE);
+		to2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(to, 0, i);
+		console.add(to2, 1, i);
+		i++;
+
+		ConsoleLabel blank1 = new ConsoleLabel("");
+
+		console.add(blank1, 0, i);
+		i++;
+
+		ConsoleLabel busy = new ConsoleLabel("Busy: ");
+		ConsoleLabel busy2 = new ConsoleLabel(Boolean.toString(false));
+		busy2.textProperty().bind(game.busyProperty().asString());
+		busy2.setMaxWidth(Double.MAX_VALUE);
+		busy2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(busy, 0, i);
+		console.add(busy2, 1, i);
+		i++;
+
+		ConsoleLabel progress = new ConsoleLabel("Progress: ");
+		ConsoleLabel progress2 = new ConsoleLabel(Boolean.toString(false));
+		progress2.textProperty().bind(game.progressProperty().multiply(100.0).asString("%.0f %%"));
+		progress2.setMaxWidth(Double.MAX_VALUE);
+		progress2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(progress, 0, i);
+		console.add(progress2, 1, i);
+		i++;
+
+		ConsoleLabel calcs = new ConsoleLabel("Calculated Moves: ");
+		ConsoleLabel calcs2 = new ConsoleLabel();
+		calcs2.textProperty().bind(game.calculatedMovesProperty().asString("%,d"));
+		calcs2.setMaxWidth(Double.MAX_VALUE);
+		calcs2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(calcs, 0, i);
+		console.add(calcs2, 1, i);
+		i++;
+
+		ConsoleLabel calcTime = new ConsoleLabel("Calculation Time: ");
+		ConsoleLabel calcTime2 = new ConsoleLabel();
+		calcTime2.textProperty().bind(game.calculationTimeProperty().asString("%,d ms"));
+		calcTime2.setMaxWidth(Double.MAX_VALUE);
+		calcTime2.setAlignment(Pos.CENTER_RIGHT);
+		console.add(calcTime, 0, i);
+		console.add(calcTime2, 1, i);
+		i++;
+
+		console.setPadding(new Insets(10.0));
+
+		return console;
+	}
 
 	/**
 	 * Launch the application.
@@ -188,168 +353,8 @@ public class GUI extends Application {
 		final BorderPane border = new BorderPane(grid);
 		border.setTop(initMenuBar());
 
-		GridPane info = new GridPane();
-
-		ConsoleLabel placeholder = new ConsoleLabel("          ");
-		info.add(placeholder, 1, 0);
-
-		int i = 0;
-
-		ConsoleLabel scoreWhite = new ConsoleLabel("Score White: ");
-		ConsoleLabel scoreWhite2 = new ConsoleLabel("");
-		scoreWhite2.textProperty().bind(game.scoreWhiteProperty().asString("%,d"));
-		scoreWhite2.setMaxWidth(Double.MAX_VALUE);
-		scoreWhite2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(scoreWhite, 0, i);
-		info.add(scoreWhite2, 1, i);
-		i++;
-
-		ConsoleLabel scoreBlack = new ConsoleLabel("Score Black: ");
-		ConsoleLabel scoreBlack2 = new ConsoleLabel("");
-		scoreBlack2.textProperty().bind(game.scoreBlackProperty().asString("%,d"));
-		scoreBlack2.setMaxWidth(Double.MAX_VALUE);
-		scoreBlack2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(scoreBlack, 0, i);
-		info.add(scoreBlack2, 1, i);
-		i++;
-
-		ConsoleLabel scoreWhiteRaw = new ConsoleLabel("Score White Total: ");
-		ConsoleLabel scoreWhiteRaw2 = new ConsoleLabel("");
-		scoreWhiteRaw2.textProperty().bind(game.scoreWhiteTotalProperty().asString("%,d"));
-		scoreWhiteRaw2.setMaxWidth(Double.MAX_VALUE);
-		scoreWhiteRaw2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(scoreWhiteRaw, 0, i);
-		info.add(scoreWhiteRaw2, 1, i);
-		i++;
-
-		ConsoleLabel scoreBlackRaw = new ConsoleLabel("Score Black Total: ");
-		ConsoleLabel scoreBlackRaw2 = new ConsoleLabel("");
-		scoreBlackRaw2.textProperty().bind(game.scoreBlackTotalProperty().asString("%,d"));
-		scoreBlackRaw2.setMaxWidth(Double.MAX_VALUE);
-		scoreBlackRaw2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(scoreBlackRaw, 0, i);
-		info.add(scoreBlackRaw2, 1, i);
-		i++;
-
-		{
-			ConsoleLabel blank = new ConsoleLabel("");
-			info.add(blank, 0, i);
-			i++;
-		}
-
-		ConsoleLabel ckeck = new ConsoleLabel("In Check: ");
-		ConsoleLabel check2 = new ConsoleLabel("");
-		check2.textProperty().bind(game.inCheckProperty().asString());
-		check2.setMaxWidth(Double.MAX_VALUE);
-		check2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(ckeck, 0, i);
-		info.add(check2, 1, i);
-		i++;
-
-		ConsoleLabel stalemate = new ConsoleLabel("In Stalemate: ");
-		ConsoleLabel stalemate2 = new ConsoleLabel("");
-		stalemate2.textProperty().bind(game.inStalemateProperty().asString());
-		stalemate2.setMaxWidth(Double.MAX_VALUE);
-		stalemate2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(stalemate, 0, i);
-		info.add(stalemate2, 1, i);
-		i++;
-
-		ConsoleLabel checkmate = new ConsoleLabel("In Checkmate: ");
-		ConsoleLabel checkmate2 = new ConsoleLabel("");
-		checkmate2.textProperty().bind(game.inCheckmateProperty().asString());
-		checkmate2.setMaxWidth(Double.MAX_VALUE);
-		checkmate2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(checkmate, 0, i);
-		info.add(checkmate2, 1, i);
-		i++;
-
-		ConsoleLabel currentPlayer = new ConsoleLabel("Current Player: ");
-		ConsoleLabel currentPlayer2 = new ConsoleLabel(game.currentPlayerProperty().get().toString());
-		game.currentPlayerProperty().addListener(e -> Platform.runLater(() -> {
-			currentPlayer2.setText(game.currentPlayerProperty().get().toString());
-		}));
-		currentPlayer2.setMaxWidth(Double.MAX_VALUE);
-		currentPlayer2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(currentPlayer, 0, i);
-		info.add(currentPlayer2, 1, i);
-		i++;
-
-		ConsoleLabel blank0 = new ConsoleLabel("");
-		info.add(blank0, 0, i);
-		i++;
-
-		ConsoleLabel selected = new ConsoleLabel("Selected: ");
-		ConsoleLabel selected2 = new ConsoleLabel("");
-		selected2.textProperty().bind(game.selectionProperty().asString());
-		selected2.setMaxWidth(Double.MAX_VALUE);
-		selected2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(selected, 0, i);
-		info.add(selected2, 1, i);
-		i++;
-
-		ConsoleLabel from = new ConsoleLabel("From: ");
-		ConsoleLabel from2 = new ConsoleLabel("");
-		from2.textProperty().bind(game.fromProperty().asString());
-		from2.setMaxWidth(Double.MAX_VALUE);
-		from2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(from, 0, i);
-		info.add(from2, 1, i);
-		i++;
-
-		ConsoleLabel to = new ConsoleLabel("To: ");
-		ConsoleLabel to2 = new ConsoleLabel("");
-		to2.textProperty().bind(game.toProperty().asString());
-		to2.setMaxWidth(Double.MAX_VALUE);
-		to2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(to, 0, i);
-		info.add(to2, 1, i);
-		i++;
-
-		ConsoleLabel blank1 = new ConsoleLabel("");
-
-		info.add(blank1, 0, i);
-		i++;
-
-		ConsoleLabel busy = new ConsoleLabel("Busy: ");
-		ConsoleLabel busy2 = new ConsoleLabel(Boolean.toString(false));
-		busy2.textProperty().bind(game.busyProperty().asString());
-		busy2.setMaxWidth(Double.MAX_VALUE);
-		busy2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(busy, 0, i);
-		info.add(busy2, 1, i);
-		i++;
-
-		ConsoleLabel progress = new ConsoleLabel("Progress: ");
-		ConsoleLabel progress2 = new ConsoleLabel(Boolean.toString(false));
-		progress2.textProperty().bind(game.progressProperty().multiply(100.0).asString("%.0f %%"));
-		progress2.setMaxWidth(Double.MAX_VALUE);
-		progress2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(progress, 0, i);
-		info.add(progress2, 1, i);
-		i++;
-
-		ConsoleLabel calcs = new ConsoleLabel("Calculated Moves: ");
-		ConsoleLabel calcs2 = new ConsoleLabel();
-		calcs2.textProperty().bind(game.calculatedMovesProperty().asString("%,d"));
-		calcs2.setMaxWidth(Double.MAX_VALUE);
-		calcs2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(calcs, 0, i);
-		info.add(calcs2, 1, i);
-		i++;
-
-		ConsoleLabel calcTime = new ConsoleLabel("Calculation Time: ");
-		ConsoleLabel calcTime2 = new ConsoleLabel();
-		calcTime2.textProperty().bind(game.calculationTimeProperty().asString("%,d ms"));
-		calcTime2.setMaxWidth(Double.MAX_VALUE);
-		calcTime2.setAlignment(Pos.CENTER_RIGHT);
-		info.add(calcTime, 0, i);
-		info.add(calcTime2, 1, i);
-		i++;
-
-		info.setPadding(new Insets(10.0));
-
-		border.setRight(info);
+		
+		border.setRight(initConsole());
 
 		ProgressBar progressBar = new ProgressBar();
 		progressBar.progressProperty().bind(game.progressProperty());
