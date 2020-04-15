@@ -258,7 +258,7 @@ public class Game implements GameI {
 		final Task<Void> task = new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				logger.info("started");
+				logger.debug("started");
 				long timeStart = System.currentTimeMillis();
 				Platform.runLater(() -> busy.set(true)); // TODO sollte nicht sein
 				Board temp = null;
@@ -276,7 +276,7 @@ public class Game implements GameI {
 				Platform.runLater(() -> calculatedMoves.set(count.get()));
 				Platform.runLater(() -> calculationTime.set(timeDiff));
 				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
-				logger.info("finished, calculated a total of " + count + " possible moves in " + timeDiff + " ms");
+				logger.debug("finished, calculated a total of " + count + " possible moves in " + timeDiff + " ms");
 				return null;
 			}
 		};
