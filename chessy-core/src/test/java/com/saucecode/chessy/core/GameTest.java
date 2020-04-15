@@ -33,7 +33,7 @@ class GameTest {
 	void testClone() throws InterruptedException {
 		Game game1 = new Game();
 		Game game2 = new Game();
-		Thread.sleep(1_000L);
+		Thread.sleep(1_000L); // TODO nicht so
 		assertEquals(game1, game2);
 	}
 	
