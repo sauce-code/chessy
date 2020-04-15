@@ -116,8 +116,6 @@ public class Board {
 		previous = null;
 		markerWhiteX = -1;
 		markerBlackX = -1;
-		valueWhite = Integer.MIN_VALUE; // TODO remove
-		valueBlack = Integer.MIN_VALUE; // TODO remove
 		evaluate();
 	}
 
@@ -522,15 +520,15 @@ public class Board {
 		switch (state) {
 		case CHECKMATE_BLACK:
 			if (player == Player.WHITE) {
-				return Integer.MAX_VALUE;
+				return 100_000;
 			} else {
-				return Integer.MIN_VALUE;
+				return -100_000;
 			}
 		case CHECKMATE_WHITE:
 			if (player == Player.WHITE) {
-				return Integer.MIN_VALUE;
+				return -100_000;
 			} else {
-				return Integer.MAX_VALUE;
+				return 100_000;
 			}
 		case STALEMATE_BLACK:
 			return 0;
