@@ -405,21 +405,20 @@ public class Game implements GameI {
 	public void select(Position position) {
 		Objects.requireNonNull(position, "position must not be null");
 
-		// unselect
+		// clicked selected field => unselect
 		if (position.equals(selection.get())) {
-			selection.set(null);
-			fieldMap.get(position).set(
-					new Field(board.get().getBoard()[position.getX()][position.getY()].getFigureType(), Modifier.NONE));
+			unselect();
+			
 		} else {
 			int x = position.getX();
 			int y = position.getY();
 
+			// empty space clicked or enemy figure clicked 
 			if (board.get().getFigure(x, y) == null
 					|| board.get().getFigure(x, y).getOwner() != board.get().getCurrentPlayer()) {
-				// empty space clicked or enemy figure clicked
 
+				// means a figure was clicked in previous click
 				if (selection.get() != null) {
-					// means a figure was clicked in previous click
 
 					if (move(selection.get().getX(), selection.get().getY(), x, y)) {
 
@@ -430,10 +429,15 @@ public class Game implements GameI {
 						}
 					}
 				}
-				selection.set(null);
+				unselect();
 			} else {
 				// own figure clicked
 				if (board.get().getFigure(x, y).getOwner() == board.get().getCurrentPlayer()) {
+					if (selection.get() != null) {
+						fieldMap.get(selection.get()).set(new Field(
+								board.get().getBoard()[selection.get().getX()][selection.get().getY()].getFigureType(),
+								Modifier.NONE));
+					}
 					selection.set(new Position(x, y));
 					fieldMap.get(position)
 							.set(new Field(board.get().getBoard()[position.getX()][position.getY()].getFigureType(),
@@ -442,6 +446,18 @@ public class Game implements GameI {
 			}
 		}
 
+	}
+
+	private void unselect() {
+		int x = selection.get().getX();
+		int y = selection.get().getY();
+		FigureType ft = FigureType.NONE;
+		if (board.get().getBoard()[x][y] != null) {
+			ft = board.get().getBoard()[x][y].getFigureType();
+		}
+		Field field = new Field(ft, Modifier.NONE);
+		fieldMap.get(selection.get()).set(field);
+		selection.set(null);
 	}
 
 	@Override
