@@ -103,7 +103,7 @@ public abstract class Figure {
 
 	@Override
 	public String toString() {
-		return owner.toString();
+		return Character.toString(owner.toChar());
 	}
 
 	/**

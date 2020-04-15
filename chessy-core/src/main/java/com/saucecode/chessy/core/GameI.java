@@ -314,15 +314,14 @@ public interface GameI {
 		 */
 		BLACK;
 
-		@Override
-		public String toString() {
+		public char toChar() {
 			switch (this) {
 			case WHITE:
-				return "W";
+				return 'W';
 			case BLACK:
-				return "B";
+				return 'B';
 			default:
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("no such enum");
 			}
 		}
 
