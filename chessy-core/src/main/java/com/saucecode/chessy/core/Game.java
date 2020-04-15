@@ -1,7 +1,6 @@
 package com.saucecode.chessy.core;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -87,7 +86,7 @@ public class Game implements GameI {
 
 	private final ReadOnlyLongWrapper calculationTime = new ReadOnlyLongWrapper();
 
-	private final Map<Position, ReadOnlyObjectWrapper<FieldI>> fieldMap = new HashMap<>();
+	private final HashMap<Position, ReadOnlyObjectWrapper<FieldI>> fieldMap = new HashMap<>();
 
 	private final SimpleBooleanProperty multiThreaded = new SimpleBooleanProperty(MULTI_THREADED_STD);
 
@@ -408,12 +407,12 @@ public class Game implements GameI {
 		// clicked selected field => unselect
 		if (position.equals(selection.get())) {
 			unselect();
-			
+
 		} else {
 			int x = position.getX();
 			int y = position.getY();
 
-			// empty space clicked or enemy figure clicked 
+			// empty space clicked or enemy figure clicked
 			if (board.get().getFigure(x, y) == null
 					|| board.get().getFigure(x, y).getOwner() != board.get().getCurrentPlayer()) {
 
@@ -449,15 +448,17 @@ public class Game implements GameI {
 	}
 
 	private void unselect() {
-		int x = selection.get().getX();
-		int y = selection.get().getY();
-		FigureType ft = FigureType.NONE;
-		if (board.get().getBoard()[x][y] != null) {
-			ft = board.get().getBoard()[x][y].getFigureType();
+		if (selection.get() != null) {
+			int x = selection.get().getX();
+			int y = selection.get().getY();
+			FigureType ft = FigureType.NONE;
+			if (board.get().getBoard()[x][y] != null) {
+				ft = board.get().getBoard()[x][y].getFigureType();
+			}
+			Field field = new Field(ft, Modifier.NONE);
+			fieldMap.get(selection.get()).set(field);
+			selection.set(null);
 		}
-		Field field = new Field(ft, Modifier.NONE);
-		fieldMap.get(selection.get()).set(field);
-		selection.set(null);
 	}
 
 	@Override
@@ -470,9 +471,35 @@ public class Game implements GameI {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((history == null) ? 0 : history.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Game other = (Game) obj;
+		if (history == null) {
+			if (other.history != null)
+				return false;
+		} else if (!history.equals(other.history))
+			return false;
+		return true;
+	}
+
+	@Override
 	public void undo() {
 		// TODO check if busy
 		if (history.size() > 0) {
+			unselect();
 			board.set(history.pop());
 		}
 	}

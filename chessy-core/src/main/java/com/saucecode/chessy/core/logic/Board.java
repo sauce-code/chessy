@@ -1,5 +1,6 @@
 package com.saucecode.chessy.core.logic;
 
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -756,6 +757,64 @@ public class Board {
 	private boolean isGameOVer() {
 		return (state == State.CHECKMATE_BLACK) || (state == State.CHECKMATE_WHITE) || (state == State.STALEMATE_BLACK)
 				|| (state == State.STALEMATE_WHITE);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((currentPlayer == null) ? 0 : currentPlayer.hashCode());
+		result = prime * result + Arrays.deepHashCode(figures);
+		result = prime * result + ((from == null) ? 0 : from.hashCode());
+		result = prime * result + markerBlackX;
+		result = prime * result + markerWhiteX;
+		result = prime * result + ((previous == null) ? 0 : previous.hashCode());
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		result = prime * result + ((to == null) ? 0 : to.hashCode());
+		result = prime * result + valueBlack;
+		result = prime * result + valueWhite;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Board other = (Board) obj;
+		if (currentPlayer != other.currentPlayer)
+			return false;
+		if (!Arrays.deepEquals(figures, other.figures))
+			return false;
+		if (from == null) {
+			if (other.from != null)
+				return false;
+		} else if (!from.equals(other.from))
+			return false;
+		if (markerBlackX != other.markerBlackX)
+			return false;
+		if (markerWhiteX != other.markerWhiteX)
+			return false;
+		if (previous == null) {
+			if (other.previous != null)
+				return false;
+		} else if (!previous.equals(other.previous))
+			return false;
+		if (state != other.state)
+			return false;
+		if (to == null) {
+			if (other.to != null)
+				return false;
+		} else if (!to.equals(other.to))
+			return false;
+		if (valueBlack != other.valueBlack)
+			return false;
+		if (valueWhite != other.valueWhite)
+			return false;
+		return true;
 	}
 
 }

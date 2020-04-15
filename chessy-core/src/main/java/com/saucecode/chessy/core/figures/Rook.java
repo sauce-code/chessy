@@ -143,4 +143,26 @@ public class Rook extends Figure {
 		return "R" + super.getCode();
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + (hasBeenMoved ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Rook other = (Rook) obj;
+		if (hasBeenMoved != other.hasBeenMoved)
+			return false;
+		return true;
+	}
+
 }

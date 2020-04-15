@@ -5,7 +5,7 @@ package com.saucecode.chessy.core.logic;
  * 
  * @author Torben Kr&uuml;ger
  */
-public enum Player {
+public enum Player { // TODO MOVE TO INTERFACE
 
 	/**
 	 * White.
