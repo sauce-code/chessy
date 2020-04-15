@@ -14,13 +14,6 @@
 			<artifactId>chessy-core</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx</artifactId>
-			<version>11.0.2</version>
-			<type>pom</type>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
