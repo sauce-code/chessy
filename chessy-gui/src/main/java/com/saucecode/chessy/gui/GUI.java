@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.saucecode.chessy.core.FieldI;
-import com.saucecode.chessy.core.FieldI.FigureType;
+import com.saucecode.chessy.core.FigureType;
 import com.saucecode.chessy.core.Game;
 import com.saucecode.chessy.core.GameI;
 import com.saucecode.chessy.core.Position;
@@ -68,7 +68,7 @@ public class GUI extends Application {
 	 */
 	private final StackPane panes[][] = new StackPane[8][8];
 
-	private final Map<FieldI.FigureType, Image> imageMap = new HashMap<>();
+	private final Map<FigureType, Image> imageMap = new HashMap<>();
 
 	private Menu initMenuHelp() {
 		final MenuItem about = new MenuItem("A_bout");

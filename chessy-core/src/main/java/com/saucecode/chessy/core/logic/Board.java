@@ -6,9 +6,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
-import com.saucecode.chessy.core.GameI.Player;
+import com.saucecode.chessy.core.Player;
 import com.saucecode.chessy.core.Position;
-import com.saucecode.chessy.core.figures.*;
+import com.saucecode.chessy.core.figures.Bishop;
+import com.saucecode.chessy.core.figures.King;
+import com.saucecode.chessy.core.figures.Knight;
+import com.saucecode.chessy.core.figures.Pawn;
+import com.saucecode.chessy.core.figures.Queen;
+import com.saucecode.chessy.core.figures.Rook;
 
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;

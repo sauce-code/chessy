@@ -1,7 +1,7 @@
 package com.saucecode.chessy.core.figures;
 
-import com.saucecode.chessy.core.FieldI;
-import com.saucecode.chessy.core.GameI.Player;
+import com.saucecode.chessy.core.FigureType;
+import com.saucecode.chessy.core.Player;
 import com.saucecode.chessy.core.logic.Board;
 import com.saucecode.chessy.core.logic.Figure;
 
@@ -87,12 +87,12 @@ public class Knight extends Figure {
 	}
 
 	@Override
-	public com.saucecode.chessy.core.FieldI.FigureType getFigureType() {
+	public com.saucecode.chessy.core.FigureType getFigureType() {
 		switch (owner) {
 		case WHITE:
-			return FieldI.FigureType.KNIGHT_WHITE;
+			return FigureType.KNIGHT_WHITE;
 		case BLACK:
-			return FieldI.FigureType.KNIGHT_BLACK;
+			return FigureType.KNIGHT_BLACK;
 		default:
 			throw new InternalError("no such enum");
 		}

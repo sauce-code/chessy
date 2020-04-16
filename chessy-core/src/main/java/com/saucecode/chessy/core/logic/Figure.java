@@ -1,7 +1,7 @@
 package com.saucecode.chessy.core.logic;
 
-import com.saucecode.chessy.core.FieldI;
-import com.saucecode.chessy.core.GameI.Player;
+import com.saucecode.chessy.core.FigureType;
+import com.saucecode.chessy.core.Player;
 import com.saucecode.chessy.core.Position;
 
 /**
@@ -103,7 +103,14 @@ public abstract class Figure {
 
 	@Override
 	public String toString() {
-		return Character.toString(owner.toChar());
+		switch (owner) {
+		case BLACK:
+			return "B";
+		case WHITE:
+			return "W";
+		default:
+			throw new InternalError("no such enum");
+		}
 	}
 
 	/**
@@ -172,7 +179,7 @@ public abstract class Figure {
 	 * 
 	 * @return figure type
 	 */
-	public abstract FieldI.FigureType getFigureType();
+	public abstract FigureType getFigureType();
 
 	/**
 	 * Returns the chess code of this figure.

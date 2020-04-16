@@ -1,7 +1,7 @@
 package com.saucecode.chessy.core.figures;
 
-import com.saucecode.chessy.core.FieldI;
-import com.saucecode.chessy.core.GameI.Player;
+import com.saucecode.chessy.core.FigureType;
+import com.saucecode.chessy.core.Player;
 import com.saucecode.chessy.core.logic.Board;
 import com.saucecode.chessy.core.logic.Figure;
 
@@ -127,12 +127,12 @@ public class Rook extends Figure {
 	}
 	
 	@Override
-	public com.saucecode.chessy.core.FieldI.FigureType getFigureType() {
+	public com.saucecode.chessy.core.FigureType getFigureType() {
 		switch (owner) {
 		case WHITE:
-			return FieldI.FigureType.ROOK_WHITE;
+			return FigureType.ROOK_WHITE;
 		case BLACK:
-			return FieldI.FigureType.ROOK_BLACK;
+			return FigureType.ROOK_BLACK;
 		default:
 			throw new InternalError("no such enum");
 		}

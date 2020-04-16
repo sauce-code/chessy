@@ -8,8 +8,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.saucecode.chessy.core.GameI.Player;
-
 class GameTest {
 
 	@BeforeAll

@@ -7,8 +7,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 
-import com.saucecode.chessy.core.FieldI.FigureType;
-import com.saucecode.chessy.core.FieldI.Modifier;
 import com.saucecode.chessy.core.logic.Board;
 import com.saucecode.chessy.core.util.BoundedIntegerProperty;
 

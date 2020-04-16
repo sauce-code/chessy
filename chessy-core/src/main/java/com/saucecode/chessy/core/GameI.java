@@ -296,35 +296,5 @@ public interface GameI {
 	 * @since 1.0.0
 	 */
 	public void select(Position position);
-	
-	/**
-	 * The Players.
-	 * 
-	 * @since 1.0.0
-	 */
-	public enum Player { // TODO MOVE TO INTERFACE
-
-		/**
-		 * White.
-		 */
-		WHITE,
-
-		/**
-		 * Black.
-		 */
-		BLACK;
-
-		public char toChar() {
-			switch (this) {
-			case WHITE:
-				return 'W';
-			case BLACK:
-				return 'B';
-			default:
-				throw new IllegalArgumentException("no such enum");
-			}
-		}
-
-	}
 
 }

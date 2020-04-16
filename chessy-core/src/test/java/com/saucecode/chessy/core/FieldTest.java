@@ -8,9 +8,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.saucecode.chessy.core.FieldI.FigureType;
-import com.saucecode.chessy.core.FieldI.Modifier;
-
 class FieldTest {
 
 	@BeforeAll
