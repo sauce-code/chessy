@@ -406,20 +406,22 @@ public class GUI extends Application {
 	/**
 	 * Loads the Images.
 	 */
-	private void initializeImages() { // TODO make static
+	// TODO make static
+	// TODO seperate img path
+	private void initializeImages() {
 		// @formatter:off
-		final Image pawnB   = new Image(getClass().getResource(  "/pawnb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image pawnW   = new Image(getClass().getResource(  "/pawnw.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image rookB   = new Image(getClass().getResource(  "/rookb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image rookW   = new Image(getClass().getResource(  "/rookw.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image knightB = new Image(getClass().getResource("/knightb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image knightW = new Image(getClass().getResource("/knightw.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image bishopB = new Image(getClass().getResource("/bishopb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image bishopW = new Image(getClass().getResource("/bishopw.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image kingB   = new Image(getClass().getResource(  "/kingb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image kingW   = new Image(getClass().getResource(  "/kingw.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image queenB  = new Image(getClass().getResource( "/queenb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image queenW  = new Image(getClass().getResource( "/queenw.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image pawnB   = new Image(getClass().getResource(  "/img/pawnb.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image pawnW   = new Image(getClass().getResource(  "/img/pawnw.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image rookB   = new Image(getClass().getResource(  "/img/rookb.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image rookW   = new Image(getClass().getResource(  "/img/rookw.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image knightB = new Image(getClass().getResource("/img/knightb.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image knightW = new Image(getClass().getResource("/img/knightw.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image bishopB = new Image(getClass().getResource("/img/bishopb.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image bishopW = new Image(getClass().getResource("/img/bishopw.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image kingB   = new Image(getClass().getResource(  "/img/kingb.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image kingW   = new Image(getClass().getResource(  "/img/kingw.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image queenB  = new Image(getClass().getResource( "/img/queenb.png").toExternalForm(), imgSize, imgSize, false, false);
+		final Image queenW  = new Image(getClass().getResource( "/img/queenw.png").toExternalForm(), imgSize, imgSize, false, false);
 		imageMap.put(FigureType.PAWN_BLACK,     pawnB);
 		imageMap.put(FigureType.PAWN_WHITE,     pawnW);
 		imageMap.put(FigureType.ROOK_BLACK,     rookB);
