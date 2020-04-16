@@ -3,12 +3,11 @@ package com.saucecode.chessy.core.util;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
- * A subclass of {@link SimpleIntegerProperty}, which checks given values
- * implicitly, if they are within in a certain range, given by
- * {@link #lowerInclusive} and {@link #upperInclusive}.
- * 
+ * A subclass of {@link SimpleIntegerProperty}, which checks given values implicitly, if they are within in a certain
+ * range, given by {@link #lowerInclusive} and {@link #upperInclusive}.
+ *
  * @see SimpleIntegerProperty
- * 
+ *
  * @author Torben Kr&uumlger
  */
 public class BoundedIntegerProperty extends SimpleIntegerProperty {
@@ -25,12 +24,11 @@ public class BoundedIntegerProperty extends SimpleIntegerProperty {
 
 	/**
 	 * Creates a new {@link BoundedIntegerProperty}.
-	 * 
+	 *
 	 * @param initialValue   initialValue
 	 * @param lowerInclusive lower border, inclusive
 	 * @param upperInclusive upper border, inclusive
-	 * @throws IllegalArgumentException if {@code lowerInclusive} is greater than
-	 *                                  {@code upperInclusive}
+	 * @throws IllegalArgumentException if {@code lowerInclusive} is greater than {@code upperInclusive}
 	 */
 	public BoundedIntegerProperty(int initialValue, int lowerInclusive, int upperInclusive) {
 		super(initialValue);
@@ -43,11 +41,9 @@ public class BoundedIntegerProperty extends SimpleIntegerProperty {
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @throws IllegalArgumentException if {@code newValue} is smaller than
-	 *                                  {@link #lowerInclusive}
-	 * @throws IllegalArgumentException if {@code newValue} is greater than
-	 *                                  {@link #upperInclusive}
+	 *
+	 * @throws IllegalArgumentException if {@code newValue} is smaller than {@link #lowerInclusive}
+	 * @throws IllegalArgumentException if {@code newValue} is greater than {@link #upperInclusive}
 	 */
 	@Override
 	public void set(int newValue) {

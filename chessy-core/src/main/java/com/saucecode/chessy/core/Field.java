@@ -4,7 +4,7 @@ import java.util.Objects;
 
 /**
  * In implementation of {@link FieldI}.
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class Field implements FieldI {
@@ -21,7 +21,7 @@ public class Field implements FieldI {
 
 	/**
 	 * Creates a new Field with given values.
-	 * 
+	 *
 	 * @param figureType figure type
 	 * @param modifier   modifier
 	 */
@@ -58,17 +58,22 @@ public class Field implements FieldI {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		Field other = (Field) obj;
-		if (figureType != other.figureType)
+		}
+		final Field other = (Field) obj;
+		if (figureType != other.figureType) {
 			return false;
-		if (modifier != other.modifier)
+		}
+		if (modifier != other.modifier) {
 			return false;
+		}
 		return true;
 	}
 

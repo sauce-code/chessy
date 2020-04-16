@@ -2,7 +2,7 @@ package com.saucecode.chessy.core.logic;
 
 /**
  * All possible states for a chess game.
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public enum State {
@@ -36,7 +36,7 @@ public enum State {
 	 * Player black is checkmated. Player white won.
 	 */
 	CHECKMATE_BLACK,
-	
+
 	/**
 	 * No special event occured.
 	 */

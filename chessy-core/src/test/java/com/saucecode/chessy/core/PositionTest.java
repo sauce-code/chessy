@@ -1,6 +1,7 @@
 package com.saucecode.chessy.core;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -28,27 +29,27 @@ class PositionTest {
 
 	@Test
 	void testGetX() {
-		Position pos = new Position(1, 2);
+		final Position pos = new Position(1, 2);
 		assertEquals(1, pos.getX());
 	}
 
 	@Test
 	void testGetY() {
-		Position pos = new Position(4, 7);
+		final Position pos = new Position(4, 7);
 		assertEquals(7, pos.getY());
 	}
 
 	@Test
 	void testEquals() {
-		Position pos1 = new Position(6, 3);
-		Position pos2 = new Position(6, 3);
+		final Position pos1 = new Position(6, 3);
+		final Position pos2 = new Position(6, 3);
 		assertEquals(pos1, pos2);
 	}
 
 	@Test
 	void testHashEquals() {
-		Position pos1 = new Position(0, 5);
-		Position pos2 = new Position(0, 5);
+		final Position pos1 = new Position(0, 5);
+		final Position pos2 = new Position(0, 5);
 		assertEquals(pos1.hashCode(), pos2.hashCode());
 	}
 

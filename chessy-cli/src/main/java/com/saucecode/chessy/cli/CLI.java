@@ -6,8 +6,8 @@ public class CLI {
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		Game game = new Game();
-		Terminal terminal = new Terminal();
+		final Game game = new Game();
+		final Terminal terminal = new Terminal();
 		int fromX, fromY, toX, toY;
 		while (true) {
 			System.out.println(game);

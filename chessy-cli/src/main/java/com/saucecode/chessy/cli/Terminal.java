@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 /**
  * Provides methods for reading data from the console.
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class Terminal {
@@ -14,7 +14,7 @@ public class Terminal {
 	/**
 	 * The reader for receiving data.
 	 */
-	private BufferedReader console;
+	private final BufferedReader console;
 
 	/**
 	 * Creates a new Terminal, which is ready for use.
@@ -25,21 +25,21 @@ public class Terminal {
 
 	/**
 	 * Returns the next line from the console as a String.
-	 * 
+	 *
 	 * @return String read from the console
 	 */
 	public String readLine() {
 		try {
 			return console.readLine();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			return "\n";
 		}
 	}
 
 	/**
-	 * Returns the next line from the console interpreted as an int. Only the
-	 * first digits including a sign will be read.
-	 * 
+	 * Returns the next line from the console interpreted as an int. Only the first digits including a sign will be
+	 * read.
+	 *
 	 * @return int read from the console
 	 */
 	public int readInt() {
@@ -48,11 +48,10 @@ public class Terminal {
 
 	/**
 	 * Parses a String to an int.
-	 * 
-	 * @param string
-	 *            the String to be parsed
+	 *
+	 * @param string the String to be parsed
 	 * @return
-	 * 		<ul>
+	 *         <ul>
 	 *         <li>the parsed int</li>
 	 *         <li>{@code -1}, if an error occurred</li>
 	 *         </ul>
@@ -60,7 +59,7 @@ public class Terminal {
 	private int parseInt(String string) {
 		try {
 			return Integer.parseInt(string);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			return -1;
 		}
 	}

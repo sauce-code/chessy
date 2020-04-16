@@ -47,7 +47,7 @@ public class Queen extends Figure {
 
 		// like the bishop
 		// check if the to-Position is on a diagonal
-		int distanceX = Math.abs(toX - x);
+		final int distanceX = Math.abs(toX - x);
 
 		// check if the to-Position is on a diagonal
 		if (distanceX == Math.abs(toY - y)) {
@@ -90,10 +90,10 @@ public class Queen extends Figure {
 
 			// check if there are figures in between
 			int i = (toY > y) ? y : toY;
-			int toI = (toY > y) ? toY : y;
+			final int toI = (toY > y) ? toY : y;
 
 			for (i = i + 1; i < toI; i++) {
-				if (this.board.getFigure(x, i) != null) {
+				if (board.getFigure(x, i) != null) {
 					return false;
 				}
 			}
@@ -104,10 +104,10 @@ public class Queen extends Figure {
 
 			// check if there are figures in between
 			int i = (toX > x) ? x : toX;
-			int toI = (toX > x) ? toX : x;
+			final int toI = (toX > x) ? toX : x;
 
 			for (i = i + 1; i < toI; i++) {
-				if (this.board.getFigure(i, y) != null) {
+				if (board.getFigure(i, y) != null) {
 					return false;
 				}
 			}
@@ -119,7 +119,7 @@ public class Queen extends Figure {
 
 	@Override
 	protected Figure clone(Board board) {
-		return new Queen(this.owner, board, this.x, this.y);
+		return new Queen(owner, board, x, y);
 	}
 
 	@Override
@@ -137,7 +137,7 @@ public class Queen extends Figure {
 		}
 		return value;
 	}
-	
+
 	@Override
 	public com.saucecode.chessy.core.FigureType getFigureType() {
 		switch (owner) {
@@ -149,7 +149,7 @@ public class Queen extends Figure {
 			throw new InternalError("no such enum");
 		}
 	}
-	
+
 	@Override
 	public String getCode() {
 		return "Q" + super.getCode();
@@ -162,12 +162,15 @@ public class Queen extends Figure {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		return true;
 	}
 

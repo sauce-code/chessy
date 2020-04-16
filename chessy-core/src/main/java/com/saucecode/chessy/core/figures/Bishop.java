@@ -44,7 +44,7 @@ public class Bishop extends Figure {
 			return false;
 		}
 
-		int distanceX = Math.abs(toX - x);
+		final int distanceX = Math.abs(toX - x);
 
 		// check if the to-Position is on a diagonal
 		if (distanceX == Math.abs(toY - y)) {
@@ -87,7 +87,7 @@ public class Bishop extends Figure {
 
 	@Override
 	protected Figure clone(Board board) {
-		return new Bishop(this.owner, board, this.x, this.y);
+		return new Bishop(owner, board, x, y);
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class Bishop extends Figure {
 			throw new InternalError("no such enum");
 		}
 	}
-	
+
 	@Override
 	public String getCode() {
 		return "B" + super.getCode();
@@ -130,12 +130,15 @@ public class Bishop extends Figure {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		return true;
 	}
 

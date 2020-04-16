@@ -44,14 +44,14 @@ public class Knight extends Figure {
 			return false;
 		}
 
-		int absDistX = Math.abs(toX - x);
-		int absDistY = Math.abs(toY - y);
+		final int absDistX = Math.abs(toX - x);
+		final int absDistY = Math.abs(toY - y);
 		return (absDistX == 2 && absDistY == 1) || (absDistX == 1 && absDistY == 2);
 	}
 
 	@Override
 	protected Figure clone(Board board) {
-		return new Knight(this.owner, board, this.x, this.y);
+		return new Knight(owner, board, x, y);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class Knight extends Figure {
 		}
 		return value;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return super.hashCode();
@@ -77,12 +77,15 @@ public class Knight extends Figure {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		return true;
 	}
 
@@ -97,7 +100,7 @@ public class Knight extends Figure {
 			throw new InternalError("no such enum");
 		}
 	}
-	
+
 	@Override
 	public String getCode() {
 		return "N" + super.getCode();

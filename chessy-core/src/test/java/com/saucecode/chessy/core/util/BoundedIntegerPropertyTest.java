@@ -1,6 +1,6 @@
 package com.saucecode.chessy.core.util;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -38,13 +38,13 @@ class BoundedIntegerPropertyTest {
 
 	@Test
 	void test3() {
-		BoundedIntegerProperty bip = new BoundedIntegerProperty(0, -2, 4);
+		final BoundedIntegerProperty bip = new BoundedIntegerProperty(0, -2, 4);
 		assertThrows(IllegalArgumentException.class, () -> bip.set(-4));
 	}
 
 	@Test
 	void test4() {
-		BoundedIntegerProperty bip = new BoundedIntegerProperty(0, -5, 7);
+		final BoundedIntegerProperty bip = new BoundedIntegerProperty(0, -5, 7);
 		System.out.println(bip);
 		assertThrows(IllegalArgumentException.class, () -> bip.set(8));
 	}

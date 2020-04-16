@@ -1,6 +1,7 @@
 package com.saucecode.chessy.core;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -28,22 +29,22 @@ class FieldTest {
 
 	@Test
 	void testGetter() {
-		Field field = new Field(FigureType.BISHOP_BLACK, Modifier.FROM);
+		final Field field = new Field(FigureType.BISHOP_BLACK, Modifier.FROM);
 		assertEquals(FigureType.BISHOP_BLACK, field.getFigure());
 		assertEquals(Modifier.FROM, field.getModifier());
 	}
 
 	@Test
 	void testEquals() {
-		Field field1 = new Field(FigureType.PAWN_WHITE, Modifier.TO);
-		Field field2 = new Field(FigureType.PAWN_WHITE, Modifier.TO);
+		final Field field1 = new Field(FigureType.PAWN_WHITE, Modifier.TO);
+		final Field field2 = new Field(FigureType.PAWN_WHITE, Modifier.TO);
 		assertEquals(field1, field2);
 	}
 
 	@Test
 	void testHashEquals() {
-		Field field1 = new Field(FigureType.ROOK_BLACK, Modifier.SELECTED);
-		Field field2 = new Field(FigureType.ROOK_BLACK, Modifier.SELECTED);
+		final Field field1 = new Field(FigureType.ROOK_BLACK, Modifier.SELECTED);
+		final Field field2 = new Field(FigureType.ROOK_BLACK, Modifier.SELECTED);
 		assertEquals(field1.hashCode(), field2.hashCode());
 	}
 

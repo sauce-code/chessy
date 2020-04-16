@@ -94,7 +94,7 @@ public class King extends Figure {
 
 	public King(Player owner, Board board, int x, int y) {
 		super(owner, board, x, y);
-		this.hasBeenMoved = false;
+		hasBeenMoved = false;
 	}
 
 	public King(Player owner, Board board, int x, int y, boolean hasBeenMoved) {
@@ -122,7 +122,7 @@ public class King extends Figure {
 				&& !hasBeenMoved && (toX == 6) && (toY == y) && (board.getFigure(7, toY) != null)
 				&& (board.getFigure(7, toY) instanceof Rook) && (!((Rook) board.getFigure(7, toY)).isHasBeenMoved())
 				&& (board.getFigure(5, toY) == null) && (board.getFigure(6, toY) == null)) {
-			Board temp = board.clone();
+			final Board temp = board.clone();
 			temp.setFigure(5, y, temp.removeFigure(4, y));
 			temp.getFigure(5, y).setX(5);
 			if (!temp.isInCheck(temp.getCurrentPlayer())) {
@@ -130,13 +130,13 @@ public class King extends Figure {
 			}
 		}
 
-		// castling rule to the left 
+		// castling rule to the left
 		if (board.getCurrentState() != State.CHECK_BLACK && board.getCurrentState() != State.CHECK_WHITE
 				&& !hasBeenMoved && (toX == 2) && (toY == y) && (board.getFigure(0, toY) != null)
 				&& (board.getFigure(0, toY) instanceof Rook) && (!((Rook) board.getFigure(0, toY)).isHasBeenMoved())
 				&& (board.getFigure(3, toY) == null) && (board.getFigure(2, toY) == null)
 				&& (board.getFigure(1, toY) == null)) {
-			Board temp = board.clone();
+			final Board temp = board.clone();
 			temp.setFigure(3, y, temp.removeFigure(4, y));
 			temp.getFigure(3, y).setX(3);
 			if (!temp.isInCheck(temp.getCurrentPlayer())) {
@@ -155,7 +155,7 @@ public class King extends Figure {
 
 	@Override
 	protected Figure clone(Board board) {
-		return new King(this.owner, board, this.x, this.y, this.hasBeenMoved);
+		return new King(owner, board, x, y, hasBeenMoved);
 	}
 
 	@Override
@@ -166,7 +166,7 @@ public class King extends Figure {
 			ret.resetMarker();
 			ret.setFrom(new Position(x, y));
 			ret.setTo(new Position(toX, toY));
-			((King)ret.getFigure(x, y)).hasBeenMoved = true; // TODO stimmt das so?
+			((King) ret.getFigure(x, y)).hasBeenMoved = true; // TODO stimmt das so?
 			ret.setFigure(toX, toY, ret.removeFigure(x, y));
 			ret.getFigure(toX, toY).setX(toX);
 			ret.getFigure(toX, toY).setY(toY);
@@ -193,21 +193,20 @@ public class King extends Figure {
 	}
 
 	/**
-	 * Calculates if the Game is close to the end. The game is close to the end
-	 * if
+	 * Calculates if the Game is close to the end. The game is close to the end if
 	 * <ul>
 	 * <li>Both sides have no queen.</li>
-	 * <li>Not yet implemented: Every side which has a queen has additionally no
-	 * other pieces or one minorpiece (B, N) maximum.</li>
+	 * <li>Not yet implemented: Every side which has a queen has additionally no other pieces or one minorpiece (B, N)
+	 * maximum.</li>
 	 * </ul>
-	 * 
+	 *
 	 * @return true - if the game is close to the end <br/>
 	 *         false - if the game is not close to the end
 	 */
 	private boolean isLateGame() {
 		// TODO implement second condition
-		return (this.board.getFigure(Queen.class, Player.BLACK) == null
-				&& this.board.getFigure(Queen.class, Player.WHITE) == null);
+		return (board.getFigure(Queen.class, Player.BLACK) == null
+				&& board.getFigure(Queen.class, Player.WHITE) == null);
 	}
 
 	@Override
@@ -233,7 +232,7 @@ public class King extends Figure {
 		}
 		return value;
 	}
-	
+
 	@Override
 	public com.saucecode.chessy.core.FigureType getFigureType() {
 		switch (owner) {
@@ -245,7 +244,7 @@ public class King extends Figure {
 			throw new InternalError("no such enum");
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -256,15 +255,19 @@ public class King extends Figure {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		King other = (King) obj;
-		if (hasBeenMoved != other.hasBeenMoved)
+		}
+		final King other = (King) obj;
+		if (hasBeenMoved != other.hasBeenMoved) {
 			return false;
+		}
 		return true;
 	}
 

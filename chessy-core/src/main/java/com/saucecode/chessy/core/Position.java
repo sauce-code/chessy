@@ -2,33 +2,32 @@ package com.saucecode.chessy.core;
 
 /**
  * An implementation of {@link PositionI}.
- * 
+ *
  * @see PositionI
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class Position implements PositionI {
 
 	/**
-	 * X-position. This value is always is range of {@link PositionI#MIN}
-	 * (inclusive) and {@link PositionI#MAX} (inclusive).
+	 * X-position. This value is always is range of {@link PositionI#MIN} (inclusive) and {@link PositionI#MAX}
+	 * (inclusive).
 	 */
 	private final int x;
 
 	/**
-	 * Y-position. This value is always is range of {@link PositionI#MIN}
-	 * (inclusive) and {@link PositionI#MAX} (inclusive).
+	 * Y-position. This value is always is range of {@link PositionI#MIN} (inclusive) and {@link PositionI#MAX}
+	 * (inclusive).
 	 */
 	private final int y;
 
 	/**
 	 * Creates a new {@link Position}.
-	 * 
+	 *
 	 * @param x x-position
 	 * @param y y-position
-	 * @throws IllegalArgumentException if {@code x} or {@code y} are not in range
-	 *                                  of {@link PositionI#MIN} (inclusive) and
-	 *                                  {@link PositionI#MAX} (inclusive)
+	 * @throws IllegalArgumentException if {@code x} or {@code y} are not in range of {@link PositionI#MIN} (inclusive)
+	 *                                  and {@link PositionI#MAX} (inclusive)
 	 */
 	public Position(int x, int y) {
 		if (x < MIN || y < MIN || x > MAX || y > MAX) {
@@ -64,17 +63,22 @@ public class Position implements PositionI {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		Position other = (Position) obj;
-		if (x != other.x)
+		}
+		final Position other = (Position) obj;
+		if (x != other.x) {
 			return false;
-		if (y != other.y)
+		}
+		if (y != other.y) {
 			return false;
+		}
 		return true;
 	}
 

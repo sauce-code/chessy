@@ -7,7 +7,9 @@ import javafx.scene.text.Font;
 public class ConsoleLabel extends Label {
 
 	static {
-		Font.loadFonts(ConsoleLabel.class.getResource("/JetBrainsMono-1.0.3/ttf/JetBrainsMono-Regular.ttf").toExternalForm(), 12.0);
+		Font.loadFonts(
+				ConsoleLabel.class.getResource("/JetBrainsMono-1.0.3/ttf/JetBrainsMono-Regular.ttf").toExternalForm(),
+				12.0);
 	}
 
 	public static final Font font = Font.font("JetBrains Mono");

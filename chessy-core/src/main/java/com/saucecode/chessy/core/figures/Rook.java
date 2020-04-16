@@ -8,8 +8,7 @@ import com.saucecode.chessy.core.logic.Figure;
 public class Rook extends Figure {
 
 	/**
-	 * true if the piece has already been moved in this game false if the piece
-	 * has not been moved in this game so far
+	 * true if the piece has already been moved in this game false if the piece has not been moved in this game so far
 	 */
 	private boolean hasBeenMoved;
 
@@ -64,50 +63,50 @@ public class Rook extends Figure {
 
 			// check if there are figures in between
 			int i = Math.min(y, toY);
-			int toI = Math.max(y, toY);
+			final int toI = Math.max(y, toY);
 
 			for (i = i + 1; i < toI; i++) {
-				if (this.board.getFigure(x, i) != null) {
+				if (board.getFigure(x, i) != null) {
 					return false;
 				}
 			}
 
-			//hasBeenMoved = true;
+			// hasBeenMoved = true;
 			return true;
 
 		} else if (toY == y) { // move on x-axis
 
 			// check if there are figures in between
 			int i = Math.min(x, toX);
-			int toI = Math.max(x, toX);
+			final int toI = Math.max(x, toX);
 
 			for (i = i + 1; i < toI; i++) {
-				if (this.board.getFigure(i, y) != null) {
+				if (board.getFigure(i, y) != null) {
 					return false;
 				}
 			}
-			//hasBeenMoved = true;
+			// hasBeenMoved = true;
 			return true;
 		}
 
 		return false;
 	}
 
-	@Override 
+	@Override
 	public Board move(int toX, int toY) {
-		Board temp = super.move(toX, toY);
-		if (temp != null && temp.getFigure(toX, toY) != null ) {
-			((Rook)temp.getFigure(toX, toY)).hasBeenMoved = true;	
+		final Board temp = super.move(toX, toY);
+		if (temp != null && temp.getFigure(toX, toY) != null) {
+			((Rook) temp.getFigure(toX, toY)).hasBeenMoved = true;
 			temp.updateStatus();
 			temp.evaluate();
 		}
-		
+
 		return temp;
 	}
-	
+
 	@Override
 	protected Figure clone(Board board) {
-		return new Rook(this.owner, board, this.x, this.y, this.hasBeenMoved);
+		return new Rook(owner, board, x, y, hasBeenMoved);
 	}
 
 	@Override
@@ -125,7 +124,7 @@ public class Rook extends Figure {
 		}
 		return value;
 	}
-	
+
 	@Override
 	public com.saucecode.chessy.core.FigureType getFigureType() {
 		switch (owner) {
@@ -137,7 +136,7 @@ public class Rook extends Figure {
 			throw new InternalError("no such enum");
 		}
 	}
-	
+
 	@Override
 	public String getCode() {
 		return "R" + super.getCode();
@@ -153,15 +152,19 @@ public class Rook extends Figure {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		Rook other = (Rook) obj;
-		if (hasBeenMoved != other.hasBeenMoved)
+		}
+		final Rook other = (Rook) obj;
+		if (hasBeenMoved != other.hasBeenMoved) {
 			return false;
+		}
 		return true;
 	}
 

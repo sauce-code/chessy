@@ -22,7 +22,7 @@ import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * Represents a board of a chess game.
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class Board {
@@ -42,22 +42,22 @@ public class Board {
 	/**
 	 * Stores the figures.
 	 */
-	private Figure[][] figures;
+	private final Figure[][] figures;
 
 	/**
 	 * The previous board.
 	 */
-	private Board previous;
+	private final Board previous;
 
 	/**
-	 * Saves the x-coordinate of a pawn that was moved 2 squares (beginning-move) by
-	 * white in the last move. This is needed for 'en passant'.
+	 * Saves the x-coordinate of a pawn that was moved 2 squares (beginning-move) by white in the last move. This is
+	 * needed for 'en passant'.
 	 */
 	private int markerWhiteX;
 
 	/**
-	 * Saves the x-coordinate of a pawn that was moved 2 squares (beginning-move) by
-	 * black in the last move. This is needed for 'en passant'.
+	 * Saves the x-coordinate of a pawn that was moved 2 squares (beginning-move) by black in the last move. This is
+	 * needed for 'en passant'.
 	 */
 	private int markerBlackX;
 
@@ -126,26 +126,26 @@ public class Board {
 
 	/**
 	 * Returns a clone from a specific board and sets that as its previous board.
-	 * 
+	 *
 	 * @param board mother instance, which will be cloned
 	 */
 	private Board(Board board) {
-		this.state = board.state;
-		this.currentPlayer = board.currentPlayer;
-		this.figures = new Figure[8][8];
+		state = board.state;
+		currentPlayer = board.currentPlayer;
+		figures = new Figure[8][8];
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
 				if (board.figures[x][y] != null) {
-					this.figures[x][y] = board.figures[x][y].clone(this);
+					figures[x][y] = board.figures[x][y].clone(this);
 				}
 			}
 		}
-		this.previous = board;
+		previous = board;
 	}
 
 	/**
 	 * Returns the board.
-	 * 
+	 *
 	 * @return the board
 	 */
 	public Figure[][] getBoard() {
@@ -154,7 +154,7 @@ public class Board {
 
 	/**
 	 * Returns the figure of a certain tile.
-	 * 
+	 *
 	 * @param x x coordinate
 	 * @param y y coordinate
 	 * @return
@@ -169,7 +169,7 @@ public class Board {
 
 	/**
 	 * Sets a figure on the board.
-	 * 
+	 *
 	 * @param x      x coordinate
 	 * @param y      y coordinate
 	 * @param figure the figure to be set
@@ -181,7 +181,7 @@ public class Board {
 	/**
 	 * Removes a piece.<br>
 	 * If the selected square is empty, nothing happens.
-	 * 
+	 *
 	 * @param x x-coordinate of the square
 	 * @param y y-coordinate of the square
 	 * @return
@@ -191,14 +191,14 @@ public class Board {
 	 *         </ul>
 	 */
 	public Figure removeFigure(int x, int y) {
-		Figure ret = figures[x][y];
+		final Figure ret = figures[x][y];
 		figures[x][y] = null;
 		return ret;
 	}
 
 	/**
 	 * Moves a figure to a square.
-	 * 
+	 *
 	 * @param fromX x-coordinate of origin
 	 * @param fromY y-coordinate of origin
 	 * @param toX   x-coordinate of destiny
@@ -219,7 +219,7 @@ public class Board {
 
 	/**
 	 * Returns the current player.
-	 * 
+	 *
 	 * @return the current player
 	 */
 	public Player getCurrentPlayer() {
@@ -228,7 +228,7 @@ public class Board {
 
 	/**
 	 * Returns the current state.
-	 * 
+	 *
 	 * @return current state
 	 */
 	public State getCurrentState() {
@@ -249,7 +249,7 @@ public class Board {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append("current player: ");
 		sb.append(currentPlayer);
 		sb.append('\n');
@@ -278,13 +278,13 @@ public class Board {
 
 	/**
 	 * Returns whether a player is in check or not.
-	 * 
+	 *
 	 * @param player the player to be tested
 	 * @return {@code true}, if the player is in check
 	 */
 	public boolean isInCheck(Player player) {
 		// TODO remove parameter player - unused
-		Figure king = getFigure(King.class, player);
+		final Figure king = getFigure(King.class, player);
 		if (king != null) {
 			for (int x = 0; x < 8; x++) {
 				for (int y = 0; y < 8; y++) {
@@ -300,7 +300,7 @@ public class Board {
 
 	/**
 	 * Returns the {@link King} of a player.
-	 * 
+	 *
 	 * @param player owner of the king being searched
 	 * @return
 	 *         <ul>
@@ -322,7 +322,7 @@ public class Board {
 
 	/**
 	 * Returns a figure of a player
-	 * 
+	 *
 	 * @param figure the type of piece which shall be searched for
 	 * @param player the owner of the figure
 	 * @return the figure of the player
@@ -341,7 +341,7 @@ public class Board {
 
 	/**
 	 * Returns the previous Board.
-	 * 
+	 *
 	 * @return the previous board
 	 */
 	public Board getPrevious() {
@@ -349,8 +349,7 @@ public class Board {
 	}
 
 	/**
-	 * Checks the board for {@link Pawn} at the end of the board. If there are any,
-	 * they will be promoted.
+	 * Checks the board for {@link Pawn} at the end of the board. If there are any, they will be promoted.
 	 */
 	public void promote() {
 		for (int x = 0; x < 8; x++) {
@@ -367,7 +366,7 @@ public class Board {
 
 	/**
 	 * Returns the x-marker of a player.
-	 * 
+	 *
 	 * @param player the player
 	 * @return the x-marker of the player
 	 */
@@ -384,7 +383,7 @@ public class Board {
 
 	/**
 	 * Sets the x-marker for a player.
-	 * 
+	 *
 	 * @param player the player
 	 * @param marker the x-marker for the palyer
 	 */
@@ -460,7 +459,7 @@ public class Board {
 	/**
 	 * Returns whether a player is in checkmate or not.<br>
 	 * This method expects that <b>the current player is in check</b>.
-	 * 
+	 *
 	 * @param player the player to be checked
 	 * @return {@code true}, if the player is in checkmate
 	 */
@@ -471,7 +470,7 @@ public class Board {
 				if (figures[fromX][fromY] != null && figures[fromX][fromY].getOwner() == currentPlayer) {
 					for (int toX = 0; toX < 8; toX++) {
 						for (int toY = 0; toY < 8; toY++) {
-							Board temp = figures[fromX][fromY].move(toX, toY);
+							final Board temp = figures[fromX][fromY].move(toX, toY);
 							if (temp != null && !temp.isInCheck(currentPlayer)) {
 								return false;
 							}
@@ -486,7 +485,7 @@ public class Board {
 	/**
 	 * Returns whether a player is in stalemate or not.<br>
 	 * This method expects that <b>the current player is not in check</b>.
-	 * 
+	 *
 	 * @param player the player to be checked
 	 * @return {@code true}, if the player is in stalemate
 	 */
@@ -510,7 +509,7 @@ public class Board {
 
 	/**
 	 * Returns the value for the current player.
-	 * 
+	 *
 	 * @return value for the current palyer
 	 */
 	public int getScore() {
@@ -647,7 +646,7 @@ public class Board {
 			return chain(ply);
 		}
 		// TODO
-		final ObjectProperty<Board> max = new SimpleObjectProperty<Board>(null);
+		final ObjectProperty<Board> max = new SimpleObjectProperty<>(null);
 		int threadCount = 0;
 
 		progress.set(0.0); // TODO eventuell verschieben
@@ -668,10 +667,10 @@ public class Board {
 					final int x = fromX;
 					final int y = fromY;
 					final double step = 1.0 / threadCount;
-					Thread thread = new Thread(() -> {
+					final Thread thread = new Thread(() -> {
 						logger.debug(figures[x][y].getCode() + " started");
 						Board temp = null;
-						AtomicInteger countInternal = new AtomicInteger();
+						final AtomicInteger countInternal = new AtomicInteger();
 						for (int toX = 0; toX < 8; toX++) {
 							for (int toY = 0; toY < 8; toY++) {
 								temp = figures[x][y].move(toX, toY);
@@ -680,8 +679,8 @@ public class Board {
 								}
 								if ((temp != null) && (ply > 1)) {
 									// TODO DEBUG
-									Board a = temp;
-									Board b = a.getMaxSingleThreaded(ply - 1, countInternal);
+									final Board a = temp;
+									final Board b = a.getMaxSingleThreaded(ply - 1, countInternal);
 									temp = b;
 								}
 								if ((max.get() == null) || ((temp != null)
@@ -703,7 +702,7 @@ public class Board {
 		}
 		try {
 			latch.await();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -779,42 +778,58 @@ public class Board {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		Board other = (Board) obj;
-		if (currentPlayer != other.currentPlayer)
+		}
+		final Board other = (Board) obj;
+		if (currentPlayer != other.currentPlayer) {
 			return false;
-		if (!Arrays.deepEquals(figures, other.figures))
+		}
+		if (!Arrays.deepEquals(figures, other.figures)) {
 			return false;
+		}
 		if (from == null) {
-			if (other.from != null)
+			if (other.from != null) {
 				return false;
-		} else if (!from.equals(other.from))
+			}
+		} else if (!from.equals(other.from)) {
 			return false;
-		if (markerBlackX != other.markerBlackX)
+		}
+		if (markerBlackX != other.markerBlackX) {
 			return false;
-		if (markerWhiteX != other.markerWhiteX)
+		}
+		if (markerWhiteX != other.markerWhiteX) {
 			return false;
+		}
 		if (previous == null) {
-			if (other.previous != null)
+			if (other.previous != null) {
 				return false;
-		} else if (!previous.equals(other.previous))
+			}
+		} else if (!previous.equals(other.previous)) {
 			return false;
-		if (state != other.state)
+		}
+		if (state != other.state) {
 			return false;
+		}
 		if (to == null) {
-			if (other.to != null)
+			if (other.to != null) {
 				return false;
-		} else if (!to.equals(other.to))
+			}
+		} else if (!to.equals(other.to)) {
 			return false;
-		if (scoreBlackTotal != other.scoreBlackTotal)
+		}
+		if (scoreBlackTotal != other.scoreBlackTotal) {
 			return false;
-		if (scoreWhiteTotal != other.scoreWhiteTotal)
+		}
+		if (scoreWhiteTotal != other.scoreWhiteTotal) {
 			return false;
+		}
 		return true;
 	}
 

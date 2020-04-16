@@ -30,8 +30,7 @@ public class Pawn extends Figure {
 	};
 
 	/**
-	 * -1, if the current move hasn't been a en passant. Takes the x-value of
-	 * the captured piece.
+	 * -1, if the current move hasn't been a en passant. Takes the x-value of the captured piece.
 	 */
 	private int enPassant;
 
@@ -59,40 +58,38 @@ public class Pawn extends Figure {
 		}
 
 		// walking straight forward
-		if (toX == this.x && board.getFigure(toX, toY) == null) {
+		if (toX == x && board.getFigure(toX, toY) == null) {
 
 			// if on start position, one and two in y is allowed
-			if ((this.owner == Player.WHITE && y == 1) || (this.owner == Player.BLACK && y == 6)) {
+			if ((owner == Player.WHITE && y == 1) || (owner == Player.BLACK && y == 6)) {
 
-				if ((this.owner == Player.WHITE && toY - 2 == this.y && this.board.getFigure(toX, toY - 1) == null) // wenn
-																													// feld
-																													// dazwischen
-																													// frei
-																													// ist
-						|| (this.owner == Player.BLACK && toY + 2 == this.y
-								&& this.board.getFigure(toX, toY + 1) == null)) {
-					this.startMove = x;
+				if ((owner == Player.WHITE && toY - 2 == y && board.getFigure(toX, toY - 1) == null) // wenn
+																										// feld
+																										// dazwischen
+																										// frei
+																										// ist
+						|| (owner == Player.BLACK && toY + 2 == y && board.getFigure(toX, toY + 1) == null)) {
+					startMove = x;
 					return true;
 				}
 
-				this.startMove = -1;
+				startMove = -1;
 			}
 
 			// if not on start position, one is allowed
-			if ((this.owner == Player.WHITE && toY - 1 == this.y)
-					|| (this.owner == Player.BLACK && toY + 1 == this.y)) {
+			if ((owner == Player.WHITE && toY - 1 == y) || (owner == Player.BLACK && toY + 1 == y)) {
 				return true;
 			}
 		}
 
 		// capture an opponents piece
-		if (this.owner == Player.WHITE) {
-			if (Math.abs(this.x - toX) == 1 && this.y + 1 == toY
+		if (owner == Player.WHITE) {
+			if (Math.abs(x - toX) == 1 && y + 1 == toY
 					&& (board.getFigure(toX, toY) != null && board.getFigure(toX, toY).getOwner() == Player.BLACK)) {
 				return true;
 			}
 		} else {
-			if (Math.abs(this.x - toX) == 1 && this.y - 1 == toY
+			if (Math.abs(x - toX) == 1 && y - 1 == toY
 					&& (board.getFigure(toX, toY) != null && board.getFigure(toX, toY).getOwner() == Player.WHITE)) {
 				return true;
 			}
@@ -101,12 +98,12 @@ public class Pawn extends Figure {
 		// en passant
 		if (board.getCurrentPlayer() == Player.BLACK) {
 
-			if (board.getMarker(Player.WHITE) == toX && y == 3 && this.owner == Player.BLACK) {
+			if (board.getMarker(Player.WHITE) == toX && y == 3 && owner == Player.BLACK) {
 				enPassant = toX;
 				return true;
 			}
 		} else {
-			if (board.getMarker(Player.BLACK) == toX && y == 4 && this.owner == Player.WHITE) {
+			if (board.getMarker(Player.BLACK) == toX && y == 4 && owner == Player.WHITE) {
 				enPassant = toX;
 				return true;
 			}
@@ -116,7 +113,7 @@ public class Pawn extends Figure {
 
 	@Override
 	protected Figure clone(Board board) {
-		return new Pawn(this.owner, board, this.x, this.y);
+		return new Pawn(owner, board, x, y);
 	}
 
 	@Override
@@ -162,7 +159,7 @@ public class Pawn extends Figure {
 		}
 		return value;
 	}
-	
+
 	@Override
 	public com.saucecode.chessy.core.FigureType getFigureType() {
 		switch (owner) {
@@ -191,18 +188,23 @@ public class Pawn extends Figure {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		Pawn other = (Pawn) obj;
-		if (enPassant != other.enPassant)
+		}
+		final Pawn other = (Pawn) obj;
+		if (enPassant != other.enPassant) {
 			return false;
-		if (startMove != other.startMove)
+		}
+		if (startMove != other.startMove) {
 			return false;
+		}
 		return true;
 	}
-	
+
 }

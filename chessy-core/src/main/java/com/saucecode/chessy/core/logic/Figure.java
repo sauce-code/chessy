@@ -6,7 +6,7 @@ import com.saucecode.chessy.core.Position;
 
 /**
  * Represents a figure.
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public abstract class Figure {
@@ -33,7 +33,7 @@ public abstract class Figure {
 
 	/**
 	 * Creates a new figure.
-	 * 
+	 *
 	 * @param owner owner
 	 * @param board board
 	 * @param x     y-position
@@ -48,7 +48,7 @@ public abstract class Figure {
 
 	/**
 	 * Returns the owner.
-	 * 
+	 *
 	 * @return the owner
 	 */
 	public Player getOwner() {
@@ -57,7 +57,7 @@ public abstract class Figure {
 
 	/**
 	 * Moves this figure to a desired location
-	 * 
+	 *
 	 * @param toX x-coordinate of target location
 	 * @param toY y-coordinate of target location
 	 * @return
@@ -90,15 +90,15 @@ public abstract class Figure {
 
 	/**
 	 * Returns whether a square is reachable or not. <br>
-	 * A square is not reachable if it contains a piece from the same owner or if it
-	 * is not reachable according to the the chess rules.
-	 * 
+	 * A square is not reachable if it contains a piece from the same owner or if it is not reachable according to the
+	 * the chess rules.
+	 *
 	 * @param toX x-coordinate of target location
 	 * @param toY y-coordinate of target location
 	 * @return {@code true}, if the move is valid
 	 */
 	protected boolean isSquareReachable(int x, int y) {
-		return !this.hasSameOwner(x, y);
+		return !hasSameOwner(x, y);
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public abstract class Figure {
 
 	/**
 	 * Creates a clone of this figure, on a given board.
-	 * 
+	 *
 	 * @param board given board
 	 * @return clone of this figure
 	 */
@@ -123,7 +123,7 @@ public abstract class Figure {
 
 	/**
 	 * Returns the x-coordinate.
-	 * 
+	 *
 	 * @return the x-coordinate
 	 */
 	public int getX() {
@@ -132,7 +132,7 @@ public abstract class Figure {
 
 	/**
 	 * Sets the x-coordinate.
-	 * 
+	 *
 	 * @param x x-coordinate
 	 */
 	public void setX(int x) {
@@ -141,7 +141,7 @@ public abstract class Figure {
 
 	/**
 	 * Returns the y-coordinate.
-	 * 
+	 *
 	 * @return the y-coordinate
 	 */
 	public int getY() {
@@ -150,7 +150,7 @@ public abstract class Figure {
 
 	/**
 	 * Sets the y-coordinate.
-	 * 
+	 *
 	 * @param y y-coordinate
 	 */
 	public void setY(int y) {
@@ -158,9 +158,8 @@ public abstract class Figure {
 	}
 
 	/**
-	 * Returns if the piece has the same owner as the piece on the transfered
-	 * coordinates
-	 * 
+	 * Returns if the piece has the same owner as the piece on the transfered coordinates
+	 *
 	 * @param pieceX x-coordinate
 	 * @param pieceY y-coordinate
 	 * @return {@code true}, if both have the same owner
@@ -176,14 +175,14 @@ public abstract class Figure {
 
 	/**
 	 * Returns the figure type.
-	 * 
+	 *
 	 * @return figure type
 	 */
 	public abstract FigureType getFigureType();
 
 	/**
 	 * Returns the chess code of this figure.
-	 * 
+	 *
 	 * @return chess code of this figure
 	 */
 	public String getCode() {
@@ -203,23 +202,30 @@ public abstract class Figure {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Figure other = (Figure) obj;
-		if (board == null) {
-			if (other.board != null)
-				return false;
 		}
-		if (owner != other.owner)
+		if (obj == null) {
 			return false;
-		if (x != other.x)
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		if (y != other.y)
+		}
+		final Figure other = (Figure) obj;
+		if (board == null) {
+			if (other.board != null) {
+				return false;
+			}
+		}
+		if (owner != other.owner) {
 			return false;
+		}
+		if (x != other.x) {
+			return false;
+		}
+		if (y != other.y) {
+			return false;
+		}
 		return true;
 	}
 

@@ -16,8 +16,7 @@ public class AboutAlert extends Alert {
 	/**
 	 * Creates a new About Alert.
 	 *
-	 * @param logo
-	 *            the icon, which shall be used
+	 * @param logo the icon, which shall be used
 	 */
 	public AboutAlert(Image logo) {
 		super(AlertType.INFORMATION);

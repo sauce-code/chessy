@@ -26,14 +26,12 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 
 /**
  * Represents a chess game.
- * 
- * @see <a href="https://en.wikipedia.org/wiki/Chess">https://en.wikipedia.org/
- *      wiki/Chess</a>
+ *
+ * @see <a href="https://en.wikipedia.org/wiki/Chess">https://en.wikipedia.org/ wiki/Chess</a>
  * @author Torben Kr&uuml;ger
  */
 public class Game implements GameI {
@@ -43,7 +41,7 @@ public class Game implements GameI {
 	/**
 	 * Saves all previous boards.
 	 */
-	private Stack<Board> history;
+	private final Stack<Board> history;
 
 	private final ReadOnlyIntegerWrapper scoreWhite = new ReadOnlyIntegerWrapper();
 
@@ -95,123 +93,107 @@ public class Game implements GameI {
 	 * Creates a new game.
 	 */
 	public Game() {
-		this.history = new Stack<Board>();
+		history = new Stack<>();
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
-				Position pos = new Position(x, y);
-				Field field = new Field(FigureType.NONE, Modifier.NONE);
+				final Position pos = new Position(x, y);
+				final Field field = new Field(FigureType.NONE, Modifier.NONE);
 				fieldMap.put(pos, new ReadOnlyObjectWrapper<FieldI>(field));
 			}
 		}
 
 		undoEnabled.bind(resetEnabled);
 
-		board.addListener(new ChangeListener<Board>() {
+		board.addListener((ChangeListener<Board>) (observable, oldValue, newValue) -> Platform.runLater(() -> {
+			scoreWhite.set(board.get().getScore(Player.WHITE));
+			scoreBlack.set(board.get().getScore(Player.BLACK));
+			scoreWhiteTotal.set(board.get().getScoreTotal(Player.WHITE));
+			scoreBlackTotal.set(board.get().getScoreTotal(Player.BLACK));
+			switch (board.get().getCurrentState()) {
+			case CHECK_BLACK:
+				inCheck.set(Player.BLACK);
+				break;
+			case CHECK_WHITE:
+				inCheck.set(Player.WHITE);
+				break;
+			case CHECKMATE_BLACK:
+				inCheckmate.set(Player.BLACK);
+				break;
+			case CHECKMATE_WHITE:
+				inCheckmate.set(Player.WHITE);
+				break;
+			case STALEMATE_BLACK:
+				inStalemate.set(Player.BLACK);
+				break;
+			case STALEMATE_WHITE:
+				inStalemate.set(Player.WHITE);
+				break;
+			case NONE:
+				inCheck.set(null);
+				inStalemate.set(null);
+				break;
+			default:
+				throw new IllegalStateException("no such state");
+			}
+			currentPlayer.set(board.get().getCurrentPlayer());
 
-			@Override
-			public void changed(ObservableValue<? extends Board> observable, Board oldValue, Board newValue) {
-				Platform.runLater(() -> {
-					scoreWhite.set(board.get().getScore(Player.WHITE));
-					scoreBlack.set(board.get().getScore(Player.BLACK));
-					scoreWhiteTotal.set(board.get().getScoreTotal(Player.WHITE));
-					scoreBlackTotal.set(board.get().getScoreTotal(Player.BLACK));
-					switch (board.get().getCurrentState()) {
-					case CHECK_BLACK:
-						inCheck.set(Player.BLACK);
-						break;
-					case CHECK_WHITE:
-						inCheck.set(Player.WHITE);
-						break;
-					case CHECKMATE_BLACK:
-						inCheckmate.set(Player.BLACK);
-						break;
-					case CHECKMATE_WHITE:
-						inCheckmate.set(Player.WHITE);
-						break;
-					case STALEMATE_BLACK:
-						inStalemate.set(Player.BLACK);
-						break;
-					case STALEMATE_WHITE:
-						inStalemate.set(Player.WHITE);
-						break;
-					case NONE:
-						inCheck.set(null);
-						inStalemate.set(null);
-						break;
-					default:
-						throw new IllegalStateException("no such state");
-					}
-					currentPlayer.set(board.get().getCurrentPlayer());
+			resetEnabled.set(history.size() > 0);
 
-					resetEnabled.set(history.size() > 0);
-
-					from.set(board.get().getFrom());
-					to.set(board.get().getTo());
-					if (board.get().getFrom() != null) {
-						int x = board.get().getFrom().getX();
-						int y = board.get().getFrom().getY();
-						FigureType figureType = (board.get().getBoard()[x][y] == null) ? FigureType.NONE
-								: board.get().getBoard()[x][y].getFigureType();
-						fieldMap.get(board.get().getFrom()).set(new Field(figureType, Modifier.FROM));
-					}
-					if (board.get().getTo() != null) {
-						int x = board.get().getTo().getX();
-						int y = board.get().getTo().getY();
-						fieldMap.get(board.get().getTo())
-								.set(new Field(board.get().getBoard()[x][y].getFigureType(), Modifier.TO));
-					}
-
-					for (int x = 0; x < 8; x++) {
-						for (int y = 0; y < 8; y++) {
-							Position pos = new Position(x, y);
-							ReadOnlyObjectWrapper<FieldI> field = fieldMap.get(pos);
-							FigureType figureType = FigureType.NONE;
-							Modifier modifier = Modifier.NONE;
-							if (board.get().getBoard()[x][y] != null) {
-								figureType = board.get().getBoard()[x][y].getFigureType();
-							}
-							if (selection.get() != null && selection.get().equals(pos)) {
-								modifier = Modifier.SELECTED;
-							} else if (from.get() != null && from.get().equals(pos)) {
-								modifier = Modifier.FROM;
-							} else if (to.get() != null && to.get().equals(pos)) {
-								modifier = Modifier.TO;
-							}
-							Field newField = new Field(figureType, modifier);
-							if (field.get() == null) {
-								logger.debug("changed: " + newField);
-								field.set(newField);
-							} else if (!field.get().equals(newField)) {
-								logger.debug("changed: " + newField);
-								field.set(newField);
-							}
-						}
-					}
-					busy.set(false);
-				});
+			from.set(board.get().getFrom());
+			to.set(board.get().getTo());
+			if (board.get().getFrom() != null) {
+				final int x1 = board.get().getFrom().getX();
+				final int y1 = board.get().getFrom().getY();
+				final FigureType figureType1 = (board.get().getBoard()[x1][y1] == null) ? FigureType.NONE
+						: board.get().getBoard()[x1][y1].getFigureType();
+				fieldMap.get(board.get().getFrom()).set(new Field(figureType1, Modifier.FROM));
+			}
+			if (board.get().getTo() != null) {
+				final int x2 = board.get().getTo().getX();
+				final int y2 = board.get().getTo().getY();
+				fieldMap.get(board.get().getTo())
+						.set(new Field(board.get().getBoard()[x2][y2].getFigureType(), Modifier.TO));
 			}
 
-		});
-
-		blackAI.addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				if (board.get().getCurrentPlayer() == Player.BLACK) {
-					move(ply.get());
+			for (int x3 = 0; x3 < 8; x3++) {
+				for (int y3 = 0; y3 < 8; y3++) {
+					final Position pos = new Position(x3, y3);
+					final ReadOnlyObjectWrapper<FieldI> field = fieldMap.get(pos);
+					FigureType figureType2 = FigureType.NONE;
+					Modifier modifier = Modifier.NONE;
+					if (board.get().getBoard()[x3][y3] != null) {
+						figureType2 = board.get().getBoard()[x3][y3].getFigureType();
+					}
+					if (selection.get() != null && selection.get().equals(pos)) {
+						modifier = Modifier.SELECTED;
+					} else if (from.get() != null && from.get().equals(pos)) {
+						modifier = Modifier.FROM;
+					} else if (to.get() != null && to.get().equals(pos)) {
+						modifier = Modifier.TO;
+					}
+					final Field newField = new Field(figureType2, modifier);
+					if (field.get() == null) {
+						logger.debug("changed: " + newField);
+						field.set(newField);
+					} else if (!field.get().equals(newField)) {
+						logger.debug("changed: " + newField);
+						field.set(newField);
+					}
 				}
+			}
+			busy.set(false);
+		}));
+
+		blackAI.addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+			if (board.get().getCurrentPlayer() == Player.BLACK) {
+				move(ply.get());
 			}
 		});
 
-		busy.addListener(new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				if (!newValue) {
-					Platform.runLater(() -> progressProperty.set(0.0)); // TODO beibelassen?
-				}
+		busy.addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+			if (!newValue) {
+				Platform.runLater(() -> progressProperty.set(0.0)); // TODO beibelassen?
 			}
-
 		});
 
 		board.set(new Board());
@@ -219,9 +201,8 @@ public class Game implements GameI {
 
 	/**
 	 * Moves a piece from one square to another square.
-	 * 
-	 * @throws IllegalArgumentException if at least one of the arguments doesn't fit
-	 *                                  the dimension of a chess game
+	 *
+	 * @throws IllegalArgumentException if at least one of the arguments doesn't fit the dimension of a chess game
 	 * @param fromX x origin
 	 * @param fromY y origin
 	 * @param toX   x destiny
@@ -229,7 +210,7 @@ public class Game implements GameI {
 	 * @return {@code true}, if move was valid
 	 */
 	private boolean move(int fromX, int fromY, int toX, int toY) {
-		Board temp = board.get().move(fromX, fromY, toX, toY);
+		final Board temp = board.get().move(fromX, fromY, toX, toY);
 		if (temp != null) {
 			history.push(board.get());
 			board.set(temp);
@@ -241,7 +222,7 @@ public class Game implements GameI {
 
 	/**
 	 * Makes a move on the current board, using an AI.
-	 * 
+	 *
 	 * @param ply number of plies the A.I shall look ahead
 	 * @return
 	 *         <ul>
@@ -253,14 +234,14 @@ public class Game implements GameI {
 	 *         </ul>
 	 */
 	private void move(int ply) {
-		final Task<Void> task = new Task<Void>() {
+		final Task<Void> task = new Task<>() {
 			@Override
 			protected Void call() throws Exception {
 				logger.debug("started");
-				long timeStart = System.currentTimeMillis();
+				final long timeStart = System.currentTimeMillis();
 				Platform.runLater(() -> busy.set(true)); // TODO sollte nicht sein
 				Board temp = null;
-				AtomicInteger count = new AtomicInteger();
+				final AtomicInteger count = new AtomicInteger();
 				temp = board.get().getMax(ply, progressProperty, multiThreaded.get(), count);
 				if (temp != null) {
 					for (int i = 0; i < ply - 1; i++) {
@@ -269,8 +250,8 @@ public class Game implements GameI {
 					history.push(board.get());
 					board.set(temp);
 				}
-				long timeEnd = System.currentTimeMillis();
-				long timeDiff = timeEnd - timeStart;
+				final long timeEnd = System.currentTimeMillis();
+				final long timeDiff = timeEnd - timeStart;
 				Platform.runLater(() -> calculatedMoves.set(count.get()));
 				Platform.runLater(() -> calculationTime.set(timeDiff));
 				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
@@ -278,7 +259,7 @@ public class Game implements GameI {
 				return null;
 			}
 		};
-		Thread thread = new Thread(task);
+		final Thread thread = new Thread(task);
 		thread.setDaemon(true);
 		thread.start();
 	}
@@ -408,8 +389,8 @@ public class Game implements GameI {
 			unselect();
 
 		} else {
-			int x = position.getX();
-			int y = position.getY();
+			final int x = position.getX();
+			final int y = position.getY();
 
 			// empty space clicked or enemy figure clicked
 			if (board.get().getFigure(x, y) == null
@@ -448,13 +429,13 @@ public class Game implements GameI {
 
 	private void unselect() {
 		if (selection.get() != null) {
-			int x = selection.get().getX();
-			int y = selection.get().getY();
+			final int x = selection.get().getX();
+			final int y = selection.get().getY();
 			FigureType ft = FigureType.NONE;
 			if (board.get().getBoard()[x][y] != null) {
 				ft = board.get().getBoard()[x][y].getFigureType();
 			}
-			Field field = new Field(ft, Modifier.NONE);
+			final Field field = new Field(ft, Modifier.NONE);
 			fieldMap.get(selection.get()).set(field);
 			selection.set(null);
 		}
@@ -479,18 +460,23 @@ public class Game implements GameI {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		Game other = (Game) obj;
+		}
+		final Game other = (Game) obj;
 		if (history == null) {
-			if (other.history != null)
+			if (other.history != null) {
 				return false;
-		} else if (!history.equals(other.history))
+			}
+		} else if (!history.equals(other.history)) {
 			return false;
+		}
 		return true;
 	}
 
