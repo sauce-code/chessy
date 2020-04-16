@@ -9,7 +9,6 @@ import javafx.stage.StageStyle;
  * A about info alert box.
  *
  * @author Torben Kr&uuml;ger
- *
  */
 public class AboutAlert extends Alert {
 
