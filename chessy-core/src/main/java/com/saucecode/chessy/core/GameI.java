@@ -215,7 +215,7 @@ public interface GameI {
 	ReadOnlyLongProperty calculationTimeProperty();
 
 	/**
-	 * Returns the ply property.
+	 * Returns the ply property. Changing this during an A.I. operation has no effect.
 	 *
 	 * @return ply property
 	 *

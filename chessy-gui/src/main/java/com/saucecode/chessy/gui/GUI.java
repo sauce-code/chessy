@@ -98,6 +98,7 @@ public class GUI extends Application {
 		final RadioMenuItem[] items = new RadioMenuItem[GameI.PLY_MAX];
 		for (int i = 0; i < GameI.PLY_MAX; i++) {
 			items[i] = new RadioMenuItem(Integer.toString(i + 1));
+			items[i].disableProperty().bind(game.busyProperty());
 			items[i].setToggleGroup(groupPly);
 			menuPly.getItems().add(items[i]);
 		}

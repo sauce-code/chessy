@@ -26,7 +26,13 @@ public class AboutAlert extends Alert {
 		initStyle(StageStyle.UTILITY);
 		setTitle("About");
 		setHeaderText("Chessy " + AboutAlert.class.getPackage().getImplementationVersion());
-		setContentText("Written by Torben Krüger");
+		StringBuilder ct = new StringBuilder();
+		ct.append("https://github.com/sauce-code/chessy\n");
+		ct.append('\n');
+		ct.append("Coded by Torben Kr\u00fcger\n");
+		ct.append("Images by Igor Krizanovskij\n");
+		ct.append("Font JetBrains Mono by JetBrains\n");
+		setContentText(ct.toString());
 	}
 
 }

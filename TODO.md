@@ -7,4 +7,6 @@
 - add move history?
 - make a.i. able to find checkmate (done, check if still buggy)
 - add a way to interrupt
-- set king value to 0
+- change position representation
+- add numbers and characters to board
+- fix window sizes
