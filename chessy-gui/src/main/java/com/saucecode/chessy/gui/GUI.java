@@ -66,8 +66,16 @@ public class GUI extends Application {
 	 */
 	private final StackPane panes[][] = new StackPane[8][8];
 
+	/**
+	 * Stores all images.
+	 */
 	private final Map<FigureType, Image> imageMap = new HashMap<>();
 
+	/**
+	 * Initializes the help menu.
+	 * 
+	 * @return the help menu
+	 */
 	private Menu initMenuHelp() {
 		final MenuItem about = new MenuItem("A_bout");
 		about.setOnAction(e -> new AboutAlert(imageMap.get(FigureType.KING_WHITE)).showAndWait());
@@ -75,6 +83,11 @@ public class GUI extends Application {
 		return new Menu("_Help", null, about);
 	}
 
+	/**
+	 * Initializes the settings menu.
+	 * 
+	 * @return the settings menu
+	 */
 	private Menu initMenuSettings() {
 		final CheckMenuItem ai = new CheckMenuItem("_Black Player A.I.");
 		ai.selectedProperty().set(game.blackAIProperty().get());
@@ -104,6 +117,11 @@ public class GUI extends Application {
 		return new Menu("_Settings", null, ai, multiThreaded, menuPly);
 	}
 
+	/**
+	 * Initializes the edit menu.
+	 * 
+	 * @return the edit menu
+	 */
 	private Menu initMenuEdit() {
 		final MenuItem undo = new MenuItem("_Undo");
 		undo.disableProperty().bind(game.undoEnabledPropoerty().not());
@@ -118,6 +136,11 @@ public class GUI extends Application {
 		return new Menu("_Edit", null, undo);
 	}
 
+	/**
+	 * Initializes the file menu.
+	 * 
+	 * @return the file menu
+	 */
 	private Menu initMenuFile() {
 		final MenuItem restart = new MenuItem("_Restart");
 		restart.disableProperty().bind(game.resetEnabledProperty().not());
@@ -165,6 +188,11 @@ public class GUI extends Application {
 		return menuBar;
 	}
 
+	/**
+	 * Initializes the console.
+	 * 
+	 * @return the console
+	 */
 	private GridPane initConsole() {
 		final GridPane console = new GridPane();
 
@@ -378,7 +406,7 @@ public class GUI extends Application {
 	/**
 	 * Loads the Images.
 	 */
-	private void initializeImages() {
+	private void initializeImages() { // TODO make static
 		// @formatter:off
 		final Image pawnB   = new Image(getClass().getResource(  "/pawnb.png").toExternalForm(), imgSize, imgSize, false, false);
 		final Image pawnW   = new Image(getClass().getResource(  "/pawnw.png").toExternalForm(), imgSize, imgSize, false, false);
@@ -488,6 +516,12 @@ public class GUI extends Application {
 		return view;
 	}
 
+	/**
+	 * Checks if the application can be closed or if the user should be asked for permission, because data could be
+	 * lost. This should be called, whenever the application is about to be closed.
+	 * 
+	 * @param event window close request
+	 */
 	private void closeWindowEvent(WindowEvent event) {
 		if (game.resetEnabledProperty().get()) {
 			// data could be lost. ask if user really wants to quit
