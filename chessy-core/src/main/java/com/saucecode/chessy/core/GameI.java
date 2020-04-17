@@ -18,7 +18,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 public interface GameI {
 
 	/**
-	 * Standard value for {@link #plyProperty()}.
+	 * Default value for {@link #plyProperty()}.
 	 *
 	 * @since 1.0.0
 	 */
@@ -215,15 +215,6 @@ public interface GameI {
 	ReadOnlyLongProperty calculationTimeProperty();
 
 	/**
-	 * Returns the ply property. Changing this during an A.I. operation has no effect.
-	 *
-	 * @return ply property
-	 *
-	 * @since 1.0.0
-	 */
-	IntegerProperty plyProperty();
-
-	/**
 	 * Returns the read-only in field property for a given position.
 	 *
 	 * @param position position
@@ -237,6 +228,15 @@ public interface GameI {
 	ReadOnlyObjectProperty<FieldI> fieldProperty(Position position);
 
 	/**
+	 * Returns the ply property. Changing this during an A.I. operation has no effect.
+	 *
+	 * @return ply property
+	 *
+	 * @since 1.0.0
+	 */
+	IntegerProperty plyProperty();
+
+	/**
 	 * Returns the read-only black a.i. property.
 	 *
 	 * @return read-only black a.i. property
@@ -245,26 +245,35 @@ public interface GameI {
 	 */
 	BooleanProperty blackAIProperty();
 
+	/**
+	 * Returns the read-only multi threaded property.
+	 *
+	 * @return read-only multi threaded property
+	 *
+	 * @since 1.0.0
+	 */
 	BooleanProperty multiThreadedProperty();
 
 	/**
 	 * Performs an undo.
 	 *
 	 * To have any effect, the value of {@link GameI#resetEnabledProperty()} has to be {@code true}.
+	 * 
+	 * @throws IllegalStateException if this method has been invoked at an illegal or inappropriate time
 	 *
 	 * @since 1.0.0
 	 */
-	// TODO throw exception if not possible?
 	void undo();
 
 	/**
 	 * Performs a reset. Afterwards it will be set to the same state like after calling the standard constructor.
 	 *
 	 * To have any effect, the value of {@link GameI#resetEnabledProperty()} has to be {@code true}.
+	 * 
+	 * @throws IllegalStateException if this method has been invoked at an illegal or inappropriate time
 	 *
 	 * @since 1.0.0
 	 */
-	// TODO throw exception if not possible?
 	void reset();
 
 	/**
@@ -285,7 +294,8 @@ public interface GameI {
 	 *
 	 * @param position target position
 	 *
-	 * @throws NullPointerException if {@code position} is {@code null}
+	 * @throws NullPointerException  if {@code position} is {@code null}
+	 * @throws IllegalStateException if this method has been invoked at an illegal or inappropriate time
 	 *
 	 * @since 1.0.0
 	 */
