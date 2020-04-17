@@ -50,12 +50,12 @@ public class Pawn extends Figure {
 	 * Creates a new {@link Bishop}.
 	 * 
 	 * @param owner owner
-	 * @param game  game, to which this figure belongs
+	 * @param board board, to which this figure belongs
 	 * @param x     x-position
 	 * @param y     y-position
 	 */
-	public Pawn(Player owner, Board game, int x, int y) {
-		super(owner, game, x, y);
+	public Pawn(Player owner, Board board, int x, int y) {
+		super(owner, board, x, y);
 		enPassant = -1;
 		startMove = -1;
 	}

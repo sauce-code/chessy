@@ -37,6 +37,9 @@ import javafx.concurrent.Task;
  */
 public class Game implements GameI {
 
+	/**
+	 * Static {@link Logger} instance for the class {@link Game}.
+	 */
 	final static Logger logger = Logger.getLogger(Game.class);
 
 	/**
@@ -226,14 +229,6 @@ public class Game implements GameI {
 	 * Makes a move on the current board, using an AI.
 	 *
 	 * @param ply number of plies the A.I shall look ahead
-	 * @return
-	 *         <ul>
-	 *         <li>{@code true}, if the move was successful</li>
-	 *         <li>{@code false}, if the current player is
-	 *         <a href="https://en.wikipedia.org/wiki/Checkmate">checkmated</a></li>
-	 *         <li>{@code false}, if the current player is
-	 *         <a href="https://en.wikipedia.org/wiki/Stalemate">stalemated</a></li>
-	 *         </ul>
 	 */
 	private void move(int ply) {
 		final Task<Void> task = new Task<>() {

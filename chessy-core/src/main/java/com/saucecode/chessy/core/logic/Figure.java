@@ -93,8 +93,8 @@ public abstract class Figure {
 	 * A square is not reachable if it contains a piece from the same owner or if it is not reachable according to the
 	 * the chess rules.
 	 *
-	 * @param toX x-coordinate of target location
-	 * @param toY y-coordinate of target location
+	 * @param x x-coordinate of target location
+	 * @param y y-coordinate of target location
 	 * @return {@code true}, if the move is valid
 	 */
 	protected boolean isSquareReachable(int x, int y) {
@@ -169,7 +169,9 @@ public abstract class Figure {
 	}
 
 	/**
-	 * Returns the value of this piece for a player.
+	 * Returns the value of this piece for its owner.
+	 * 
+	 * @return value of this piece for its owner
 	 */
 	public abstract int getValue();
 

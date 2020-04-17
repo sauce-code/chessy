@@ -39,12 +39,12 @@ public class Knight extends Figure {
 	 * Creates a new {@link Bishop}.
 	 * 
 	 * @param owner owner
-	 * @param game  game, to which this figure belongs
+	 * @param board board, to which this figure belongs
 	 * @param x     x-position
 	 * @param y     y-position
 	 */
-	public Knight(Player owner, Board game, int x, int y) {
-		super(owner, game, x, y);
+	public Knight(Player owner, Board board, int x, int y) {
+		super(owner, board, x, y);
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  *
  * @see SimpleIntegerProperty
  *
- * @author Torben Kr&uumlger
+ * @author Torben Kr&uuml;ger
  */
 public class BoundedIntegerProperty extends SimpleIntegerProperty {
 

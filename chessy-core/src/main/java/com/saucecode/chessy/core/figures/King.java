@@ -94,8 +94,7 @@ public class King extends Figure {
 	// { -50, -40, -30, -20, -20, -30, -40, -50 } };
 
 	/**
-	 * true - if the king has already been moved in the game. <br/>
-	 * false - if the king has not already been moved in the game.
+	 * Is {@code true}, if the king has already been moved in the game.
 	 */
 	private boolean hasBeenMoved;
 
@@ -103,7 +102,7 @@ public class King extends Figure {
 	 * Creates a new {@link King}.
 	 * 
 	 * @param owner owner
-	 * @param game  game, to which this figure belongs
+	 * @param board board, to which this figure belongs
 	 * @param x     x-position
 	 * @param y     y-position
 	 */
@@ -116,7 +115,7 @@ public class King extends Figure {
 	 * Creates a new {@link King}.
 	 * 
 	 * @param owner        owner
-	 * @param game         game, to which this figure belongs
+	 * @param board        board, to which this figure belongs
 	 * @param x            x-position
 	 * @param y            y-position
 	 * @param hasBeenMoved {@code true}, if this figure has been moved earlier
@@ -229,8 +228,7 @@ public class King extends Figure {
 	 * maximum.</li>
 	 * </ul>
 	 *
-	 * @return true - if the game is close to the end <br/>
-	 *         false - if the game is not close to the end
+	 * @return {@code true}, if the game is close to the end
 	 */
 	private boolean isLateGame() {
 		// TODO implement second condition

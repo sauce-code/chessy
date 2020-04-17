@@ -45,12 +45,12 @@ public class Rook extends Figure {
 	 * Creates a new {@link Bishop}.
 	 * 
 	 * @param owner owner
-	 * @param game  game, to which this figure belongs
+	 * @param board board, to which this figure belongs
 	 * @param x     x-position
 	 * @param y     y-position
 	 */
-	public Rook(Player owner, Board game, int x, int y) {
-		super(owner, game, x, y);
+	public Rook(Player owner, Board board, int x, int y) {
+		super(owner, board, x, y);
 		hasBeenMoved = false;
 	}
 
@@ -58,13 +58,13 @@ public class Rook extends Figure {
 	 * Creates a new {@link Bishop}.
 	 * 
 	 * @param owner        owner
-	 * @param game         game, to which this figure belongs
+	 * @param board        board, to which this figure belongs
 	 * @param x            x-position
 	 * @param y            y-position
 	 * @param hasBeenMoved {@code true}, if this figure has been moved earlier
 	 */
-	private Rook(Player owner, Board game, int x, int y, boolean hasBeenMoved) {
-		super(owner, game, x, y);
+	private Rook(Player owner, Board board, int x, int y, boolean hasBeenMoved) {
+		super(owner, board, x, y);
 		this.hasBeenMoved = hasBeenMoved;
 	}
 

@@ -27,6 +27,9 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 public class Board {
 
+	/**
+	 * Static {@link Logger} instance for the class {@link Board}.
+	 */
 	final static Logger logger = Logger.getLogger(Board.class);
 
 	/**
@@ -71,8 +74,14 @@ public class Board {
 	 */
 	private int scoreBlackTotal;
 
+	/**
+	 * From position.
+	 */
 	private Position from;
 
+	/**
+	 * To position.
+	 */
 	private Position to;
 
 	/**
@@ -516,6 +525,12 @@ public class Board {
 		return getScore(currentPlayer);
 	}
 
+	/**
+	 * Returns the score of a player.
+	 * 
+	 * @param player player, which's score shall be calculated
+	 * @return score of a player
+	 */
 	public int getScore(Player player) {
 		switch (state) {
 		case CHECKMATE_BLACK:
@@ -545,6 +560,12 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Returns the total score of a player.
+	 * 
+	 * @param player player, which's score shall be calculated
+	 * @return total score of a player
+	 */
 	public int getScoreTotal(Player player) {
 		if (player == Player.WHITE) {
 			return scoreWhiteTotal;
@@ -738,22 +759,53 @@ public class Board {
 		return min;
 	}
 
+	/**
+	 * Returns from position.
+	 * 
+	 * @return from from position
+	 */
 	public Position getFrom() {
 		return from;
 	}
 
+	/**
+	 * Sets from position.
+	 * 
+	 * @param from from position
+	 */
 	public void setFrom(Position from) {
 		this.from = from;
 	}
 
+	/**
+	 * Returns to position.
+	 * 
+	 * @return to to position
+	 */
 	public Position getTo() {
 		return to;
 	}
 
+	/**
+	 * Sets to position.
+	 * 
+	 * @param to to position
+	 */
 	public void setTo(Position to) {
 		this.to = to;
 	}
 
+	/**
+	 * Tells whether the game is over.
+	 * 
+	 * @return {@code true}, if the game is over, which is the case if:
+	 *         <ul>
+	 *         <li>black is checkmated</li>
+	 *         <li>white is checkmated</li>
+	 *         <li>black is stalemated</li>
+	 *         <li>white is stalemated</li>
+	 *         </ul>
+	 */
 	private boolean isGameOVer() {
 		return (state == State.CHECKMATE_BLACK) || (state == State.CHECKMATE_WHITE) || (state == State.STALEMATE_BLACK)
 				|| (state == State.STALEMATE_WHITE);
