@@ -10,3 +10,4 @@
 - change position representation
 - add numbers and characters to board
 - fix window sizes
+- undo needs to update checkmate/stalemate/...
