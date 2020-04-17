@@ -6,9 +6,9 @@ import javafx.scene.text.Font;
 
 /**
  * Simple subclass of {@link Label}.
- * 
+ *
  * @see Label
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class ConsoleLabel extends Label {
@@ -35,7 +35,7 @@ public class ConsoleLabel extends Label {
 
 	/**
 	 * Creates a new {@link ConsoleLabel} with given initial text.
-	 * 
+	 *
 	 * @param text initial text
 	 */
 	public ConsoleLabel(String text) {
@@ -45,7 +45,7 @@ public class ConsoleLabel extends Label {
 
 	/**
 	 * Creates a new {@link ConsoleLabel} with given initial text and initial graphic.
-	 * 
+	 *
 	 * @param text    initial text
 	 * @param graphic initial graphic
 	 */

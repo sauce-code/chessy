@@ -258,7 +258,7 @@ public interface GameI {
 	 * Performs an undo.
 	 *
 	 * To have any effect, the value of {@link GameI#resetEnabledProperty()} has to be {@code true}.
-	 * 
+	 *
 	 * @throws IllegalStateException if this method has been invoked at an illegal or inappropriate time
 	 *
 	 * @since 1.0.0
@@ -269,7 +269,7 @@ public interface GameI {
 	 * Performs a reset. Afterwards it will be set to the same state like after calling the standard constructor.
 	 *
 	 * To have any effect, the value of {@link GameI#resetEnabledProperty()} has to be {@code true}.
-	 * 
+	 *
 	 * @throws IllegalStateException if this method has been invoked at an illegal or inappropriate time
 	 *
 	 * @since 1.0.0

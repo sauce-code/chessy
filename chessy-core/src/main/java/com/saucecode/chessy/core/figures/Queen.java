@@ -7,9 +7,9 @@ import com.saucecode.chessy.core.logic.Figure;
 
 /**
  * Represents a Queen.
- * 
+ *
  * @see Figure
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class Queen extends Figure {
@@ -37,7 +37,7 @@ public class Queen extends Figure {
 
 	/**
 	 * Creates a new {@link Bishop}.
-	 * 
+	 *
 	 * @param owner owner
 	 * @param board board, to which this figure belongs
 	 * @param x     x-position

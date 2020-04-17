@@ -7,9 +7,9 @@ import com.saucecode.chessy.core.logic.Figure;
 
 /**
  * Represents a Knight.
- * 
+ *
  * @see Figure
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class Knight extends Figure {
@@ -37,7 +37,7 @@ public class Knight extends Figure {
 
 	/**
 	 * Creates a new {@link Bishop}.
-	 * 
+	 *
 	 * @param owner owner
 	 * @param board board, to which this figure belongs
 	 * @param x     x-position

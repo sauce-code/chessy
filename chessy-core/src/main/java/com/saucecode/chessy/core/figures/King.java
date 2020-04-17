@@ -9,9 +9,9 @@ import com.saucecode.chessy.core.logic.State;
 
 /**
  * Represents a King.
- * 
+ *
  * @see Figure
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class King extends Figure {
@@ -100,7 +100,7 @@ public class King extends Figure {
 
 	/**
 	 * Creates a new {@link King}.
-	 * 
+	 *
 	 * @param owner owner
 	 * @param board board, to which this figure belongs
 	 * @param x     x-position
@@ -113,7 +113,7 @@ public class King extends Figure {
 
 	/**
 	 * Creates a new {@link King}.
-	 * 
+	 *
 	 * @param owner        owner
 	 * @param board        board, to which this figure belongs
 	 * @param x            x-position
@@ -127,7 +127,7 @@ public class King extends Figure {
 
 	/**
 	 * Returns whether this figure has been moved.
-	 * 
+	 *
 	 * @return {@code true}, if this figure has been moved
 	 */
 	public boolean isHasBeenMoved() {

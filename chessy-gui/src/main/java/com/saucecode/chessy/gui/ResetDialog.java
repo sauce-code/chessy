@@ -8,16 +8,16 @@ import javafx.stage.Stage;
 
 /**
  * A subclass of {@link Alert}, which can be used to ask users for permission to reset.
- * 
+ *
  * @see Alert
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class ResetDialog extends Alert {
 
 	/**
 	 * Creates a new {@link ResetDialog}.
-	 * 
+	 *
 	 * @param game instance of the game, which is about to be reset
 	 * @param icon icon used for this dialog
 	 */

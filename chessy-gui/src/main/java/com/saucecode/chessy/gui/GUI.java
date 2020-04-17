@@ -73,7 +73,7 @@ public class GUI extends Application {
 
 	/**
 	 * Initializes the help menu.
-	 * 
+	 *
 	 * @return the help menu
 	 */
 	private Menu initMenuHelp() {
@@ -85,7 +85,7 @@ public class GUI extends Application {
 
 	/**
 	 * Initializes the settings menu.
-	 * 
+	 *
 	 * @return the settings menu
 	 */
 	private Menu initMenuSettings() {
@@ -120,7 +120,7 @@ public class GUI extends Application {
 
 	/**
 	 * Initializes the edit menu.
-	 * 
+	 *
 	 * @return the edit menu
 	 */
 	private Menu initMenuEdit() {
@@ -139,7 +139,7 @@ public class GUI extends Application {
 
 	/**
 	 * Initializes the file menu.
-	 * 
+	 *
 	 * @return the file menu
 	 */
 	private Menu initMenuFile() {
@@ -191,7 +191,7 @@ public class GUI extends Application {
 
 	/**
 	 * Initializes the console.
-	 * 
+	 *
 	 * @return the console
 	 */
 	private GridPane initConsole() {
@@ -522,7 +522,7 @@ public class GUI extends Application {
 	/**
 	 * Checks if the application can be closed or if the user should be asked for permission, because data could be
 	 * lost. This should be called, whenever the application is about to be closed.
-	 * 
+	 *
 	 * @param event window close request
 	 */
 	private void closeWindowEvent(WindowEvent event) {

@@ -8,9 +8,9 @@ import com.saucecode.chessy.core.logic.Figure;
 
 /**
  * Represents a Pawn.
- * 
+ *
  * @see Figure
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class Pawn extends Figure {
@@ -48,7 +48,7 @@ public class Pawn extends Figure {
 
 	/**
 	 * Creates a new {@link Bishop}.
-	 * 
+	 *
 	 * @param owner owner
 	 * @param board board, to which this figure belongs
 	 * @param x     x-position

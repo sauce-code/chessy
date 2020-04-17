@@ -170,7 +170,7 @@ public abstract class Figure {
 
 	/**
 	 * Returns the value of this piece for its owner.
-	 * 
+	 *
 	 * @return value of this piece for its owner
 	 */
 	public abstract int getValue();

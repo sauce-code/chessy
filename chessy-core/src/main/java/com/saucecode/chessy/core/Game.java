@@ -32,7 +32,7 @@ import javafx.concurrent.Task;
  * Represents a chess game.
  *
  * @see <a href="https://en.wikipedia.org/wiki/Chess">https://en.wikipedia.org/ wiki/Chess</a>
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class Game implements GameI {

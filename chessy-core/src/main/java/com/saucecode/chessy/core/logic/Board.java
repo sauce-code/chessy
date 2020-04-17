@@ -527,7 +527,7 @@ public class Board {
 
 	/**
 	 * Returns the score of a player.
-	 * 
+	 *
 	 * @param player player, which's score shall be calculated
 	 * @return score of a player
 	 */
@@ -562,7 +562,7 @@ public class Board {
 
 	/**
 	 * Returns the total score of a player.
-	 * 
+	 *
 	 * @param player player, which's score shall be calculated
 	 * @return total score of a player
 	 */
@@ -761,7 +761,7 @@ public class Board {
 
 	/**
 	 * Returns from position.
-	 * 
+	 *
 	 * @return from from position
 	 */
 	public Position getFrom() {
@@ -770,7 +770,7 @@ public class Board {
 
 	/**
 	 * Sets from position.
-	 * 
+	 *
 	 * @param from from position
 	 */
 	public void setFrom(Position from) {
@@ -779,7 +779,7 @@ public class Board {
 
 	/**
 	 * Returns to position.
-	 * 
+	 *
 	 * @return to to position
 	 */
 	public Position getTo() {
@@ -788,7 +788,7 @@ public class Board {
 
 	/**
 	 * Sets to position.
-	 * 
+	 *
 	 * @param to to position
 	 */
 	public void setTo(Position to) {
@@ -797,7 +797,7 @@ public class Board {
 
 	/**
 	 * Tells whether the game is over.
-	 * 
+	 *
 	 * @return {@code true}, if the game is over, which is the case if:
 	 *         <ul>
 	 *         <li>black is checkmated</li>

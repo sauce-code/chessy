@@ -7,9 +7,9 @@ import com.saucecode.chessy.core.logic.Figure;
 
 /**
  * Represents a Rook.
- * 
+ *
  * @see Figure
- * 
+ *
  * @author Torben Kr&uuml;ger
  */
 public class Rook extends Figure {
@@ -43,7 +43,7 @@ public class Rook extends Figure {
 
 	/**
 	 * Creates a new {@link Bishop}.
-	 * 
+	 *
 	 * @param owner owner
 	 * @param board board, to which this figure belongs
 	 * @param x     x-position
@@ -56,7 +56,7 @@ public class Rook extends Figure {
 
 	/**
 	 * Creates a new {@link Bishop}.
-	 * 
+	 *
 	 * @param owner        owner
 	 * @param board        board, to which this figure belongs
 	 * @param x            x-position
@@ -70,7 +70,7 @@ public class Rook extends Figure {
 
 	/**
 	 * Returns whether this figure has been moved.
-	 * 
+	 *
 	 * @return {@code true}, if this figure has been moved
 	 */
 	public boolean isHasBeenMoved() {
