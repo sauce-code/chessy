@@ -7,6 +7,13 @@ import com.saucecode.chessy.core.logic.Board;
 import com.saucecode.chessy.core.logic.Figure;
 import com.saucecode.chessy.core.logic.State;
 
+/**
+ * Represents a King.
+ * 
+ * @see Figure
+ * 
+ * @author Torben Kr&uuml;ger
+ */
 public class King extends Figure {
 
 	/**
@@ -92,16 +99,38 @@ public class King extends Figure {
 	 */
 	private boolean hasBeenMoved;
 
+	/**
+	 * Creates a new {@link King}.
+	 * 
+	 * @param owner owner
+	 * @param game  game, to which this figure belongs
+	 * @param x     x-position
+	 * @param y     y-position
+	 */
 	public King(Player owner, Board board, int x, int y) {
 		super(owner, board, x, y);
 		hasBeenMoved = false;
 	}
 
+	/**
+	 * Creates a new {@link King}.
+	 * 
+	 * @param owner        owner
+	 * @param game         game, to which this figure belongs
+	 * @param x            x-position
+	 * @param y            y-position
+	 * @param hasBeenMoved {@code true}, if this figure has been moved earlier
+	 */
 	public King(Player owner, Board board, int x, int y, boolean hasBeenMoved) {
 		super(owner, board, x, y);
 		this.hasBeenMoved = hasBeenMoved;
 	}
 
+	/**
+	 * Returns whether this figure has been moved.
+	 * 
+	 * @return {@code true}, if this figure has been moved
+	 */
 	public boolean isHasBeenMoved() {
 		return hasBeenMoved;
 	}

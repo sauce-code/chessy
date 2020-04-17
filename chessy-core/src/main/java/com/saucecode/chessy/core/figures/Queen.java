@@ -5,6 +5,13 @@ import com.saucecode.chessy.core.Player;
 import com.saucecode.chessy.core.logic.Board;
 import com.saucecode.chessy.core.logic.Figure;
 
+/**
+ * Represents a Queen.
+ * 
+ * @see Figure
+ * 
+ * @author Torben Kr&uuml;ger
+ */
 public class Queen extends Figure {
 
 	/**
@@ -28,6 +35,14 @@ public class Queen extends Figure {
 			// @formatter:on
 	};
 
+	/**
+	 * Creates a new {@link Bishop}.
+	 * 
+	 * @param owner owner
+	 * @param game  game, to which this figure belongs
+	 * @param x     x-position
+	 * @param y     y-position
+	 */
 	public Queen(Player owner, Board game, int x, int y) {
 		super(owner, game, x, y);
 	}

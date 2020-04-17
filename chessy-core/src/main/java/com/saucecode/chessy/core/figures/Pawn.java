@@ -6,6 +6,13 @@ import com.saucecode.chessy.core.Position;
 import com.saucecode.chessy.core.logic.Board;
 import com.saucecode.chessy.core.logic.Figure;
 
+/**
+ * Represents a Pawn.
+ * 
+ * @see Figure
+ * 
+ * @author Torben Kr&uuml;ger
+ */
 public class Pawn extends Figure {
 
 	/**
@@ -39,6 +46,14 @@ public class Pawn extends Figure {
 	 */
 	private int startMove;
 
+	/**
+	 * Creates a new {@link Bishop}.
+	 * 
+	 * @param owner owner
+	 * @param game  game, to which this figure belongs
+	 * @param x     x-position
+	 * @param y     y-position
+	 */
 	public Pawn(Player owner, Board game, int x, int y) {
 		super(owner, game, x, y);
 		enPassant = -1;

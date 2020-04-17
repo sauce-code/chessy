@@ -5,10 +5,18 @@ import com.saucecode.chessy.core.Player;
 import com.saucecode.chessy.core.logic.Board;
 import com.saucecode.chessy.core.logic.Figure;
 
+/**
+ * Represents a Rook.
+ * 
+ * @see Figure
+ * 
+ * @author Torben Kr&uuml;ger
+ */
 public class Rook extends Figure {
 
 	/**
-	 * true if the piece has already been moved in this game false if the piece has not been moved in this game so far
+	 * {@code true}, if the piece has already been moved in this game false if the piece has not been moved in this game
+	 * so far.
 	 */
 	private boolean hasBeenMoved;
 
@@ -33,16 +41,38 @@ public class Rook extends Figure {
 			// @formatter:on
 	};
 
+	/**
+	 * Creates a new {@link Bishop}.
+	 * 
+	 * @param owner owner
+	 * @param game  game, to which this figure belongs
+	 * @param x     x-position
+	 * @param y     y-position
+	 */
 	public Rook(Player owner, Board game, int x, int y) {
 		super(owner, game, x, y);
 		hasBeenMoved = false;
 	}
 
+	/**
+	 * Creates a new {@link Bishop}.
+	 * 
+	 * @param owner        owner
+	 * @param game         game, to which this figure belongs
+	 * @param x            x-position
+	 * @param y            y-position
+	 * @param hasBeenMoved {@code true}, if this figure has been moved earlier
+	 */
 	private Rook(Player owner, Board game, int x, int y, boolean hasBeenMoved) {
 		super(owner, game, x, y);
 		this.hasBeenMoved = hasBeenMoved;
 	}
 
+	/**
+	 * Returns whether this figure has been moved.
+	 * 
+	 * @return {@code true}, if this figure has been moved
+	 */
 	public boolean isHasBeenMoved() {
 		return hasBeenMoved;
 	}
