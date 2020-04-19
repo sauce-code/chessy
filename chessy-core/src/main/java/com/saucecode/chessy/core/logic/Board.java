@@ -1,5 +1,6 @@
 package com.saucecode.chessy.core.logic;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -711,10 +712,11 @@ public class Board {
 							}
 						}
 						count.addAndGet(countInternal.get());
+						String countInternalString = new DecimalFormat().format(countInternal.get()).toString();
 						latch.countDown();
 						Platform.runLater(() -> progress.set(progress.get() + step));
-						logger.debug(
-								figures[x][y].getCode() + " finished, calculated " + countInternal + " possible moves");
+						logger.debug(figures[x][y].getCode() + " finished, calculated " + countInternalString
+								+ " possible moves");
 					});
 					thread.setDaemon(true);
 					thread.start();

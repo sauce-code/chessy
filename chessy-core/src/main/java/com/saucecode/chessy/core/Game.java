@@ -1,5 +1,6 @@
 package com.saucecode.chessy.core;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Stack;
@@ -252,7 +253,8 @@ public class Game implements GameI {
 				Platform.runLater(() -> calculatedMoves.set(count.get()));
 				Platform.runLater(() -> calculationTime.set(timeDiff));
 				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
-				logger.debug("finished, calculated a total of " + count + " possible moves in " + timeDiff + " ms");
+				String countString = new DecimalFormat().format(count).toString();
+				logger.debug("finished, calculated a total of " + countString + " possible moves in " + timeDiff + " ms");
 				return null;
 			}
 		};
