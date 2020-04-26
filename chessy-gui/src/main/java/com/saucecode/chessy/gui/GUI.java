@@ -1,7 +1,5 @@
 package com.saucecode.chessy.gui;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import com.saucecode.chessy.core.FieldI;
@@ -57,11 +55,6 @@ public class GUI extends Application {
 	private final GridPane grid = new GridPane();
 
 	/**
-	 * The Size of each image.
-	 */
-	private final int imgSize = 40;
-
-	/**
 	 * The StackPanes - one for each rectangle of the chess game.
 	 */
 	private final StackPane panes[][] = new StackPane[8][8];
@@ -69,7 +62,7 @@ public class GUI extends Application {
 	/**
 	 * Stores all images.
 	 */
-	private final Map<FigureType, Image> imageMap = new HashMap<>();
+	private final ImageMap imageMap = new ImageMap();
 
 	/**
 	 * Initializes the help menu.
@@ -90,10 +83,10 @@ public class GUI extends Application {
 	 */
 	private Menu initMenuSettings() {
 		final CheckMenuItem ai = new CheckMenuItem("_Black Player A.I.");
-		ai.selectedProperty().set(game.blackAIProperty().get());
-		game.blackAIProperty().bind(ai.selectedProperty());
+		ai.selectedProperty().set(game.aiBlackActiveProperty().get());
+		game.aiBlackActiveProperty().bind(ai.selectedProperty());
 
-		final Menu menuPly = new Menu("Ply");
+		final Menu menuPly = new Menu("_Ply");
 		final ToggleGroup groupPly = new ToggleGroup();
 		final RadioMenuItem[] items = new RadioMenuItem[GameI.PLY_MAX];
 		for (int i = 0; i < GameI.PLY_MAX; i++) {
@@ -105,11 +98,11 @@ public class GUI extends Application {
 		groupPly.selectedToggleProperty().addListener((ChangeListener<Toggle>) (ov, oldToggle, newToggle) -> {
 			for (int i = 0; i < GameI.PLY_MAX; i++) {
 				if (newToggle == items[i]) {
-					game.plyProperty().set(i + 1);
+					game.aiBlackPlyProperty().set(i + 1);
 				}
 			}
 		});
-		items[game.plyProperty().get() - 1].setSelected(true);
+		items[game.aiBlackPlyProperty().get() - 1].setSelected(true);
 
 		final CheckMenuItem multiThreaded = new CheckMenuItem("_Multi-Threading");
 		multiThreaded.selectedProperty().set(game.multiThreadedProperty().get());
@@ -128,7 +121,7 @@ public class GUI extends Application {
 		undo.disableProperty().bind(game.undoEnabledPropoerty().not());
 		undo.setAccelerator(KeyCombination.keyCombination("Ctrl + Z"));
 		undo.setOnAction(e -> {
-			if (game.blackAIProperty().get()) {
+			if (game.aiBlackActiveProperty().get()) {
 				game.undo();
 			}
 			game.undo();
@@ -374,7 +367,6 @@ public class GUI extends Application {
 
 		initializeGrid();
 
-		initializeImages();
 		initializeStackPanes();
 
 		final BorderPane border = new BorderPane(grid);
@@ -402,40 +394,6 @@ public class GUI extends Application {
 //		grid.setPadding(new Insets(10, 10, 10, 10));
 		grid.setGridLinesVisible(true);
 		grid.setAlignment(Pos.CENTER);
-	}
-
-	/**
-	 * Loads the Images.
-	 */
-	// TODO make static
-	// TODO seperate img path
-	private void initializeImages() {
-		// @formatter:off
-		final Image pawnB   = new Image(getClass().getResource(  "/img/pawnb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image pawnW   = new Image(getClass().getResource(  "/img/pawnw.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image rookB   = new Image(getClass().getResource(  "/img/rookb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image rookW   = new Image(getClass().getResource(  "/img/rookw.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image knightB = new Image(getClass().getResource("/img/knightb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image knightW = new Image(getClass().getResource("/img/knightw.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image bishopB = new Image(getClass().getResource("/img/bishopb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image bishopW = new Image(getClass().getResource("/img/bishopw.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image kingB   = new Image(getClass().getResource(  "/img/kingb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image kingW   = new Image(getClass().getResource(  "/img/kingw.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image queenB  = new Image(getClass().getResource( "/img/queenb.png").toExternalForm(), imgSize, imgSize, false, false);
-		final Image queenW  = new Image(getClass().getResource( "/img/queenw.png").toExternalForm(), imgSize, imgSize, false, false);
-		imageMap.put(FigureType.PAWN_BLACK,     pawnB);
-		imageMap.put(FigureType.PAWN_WHITE,     pawnW);
-		imageMap.put(FigureType.ROOK_BLACK,     rookB);
-		imageMap.put(FigureType.ROOK_WHITE,     rookW);
-		imageMap.put(FigureType.KNIGHT_BLACK, knightB);
-		imageMap.put(FigureType.KNIGHT_WHITE, knightW);
-		imageMap.put(FigureType.BISHOP_BLACK, bishopB);
-		imageMap.put(FigureType.BISHOP_WHITE, bishopW);
-		imageMap.put(FigureType.KING_BLACK,     kingB);
-		imageMap.put(FigureType.KING_WHITE,     kingW);
-		imageMap.put(FigureType.QUEEN_BLACK,   queenB);
-		imageMap.put(FigureType.QUEEN_WHITE,   queenW);
-		// @formatter:on
 	}
 
 	/**
