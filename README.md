@@ -2,6 +2,10 @@
 
 Chessy is a simple Chess A.I. using a look-ahead strategy. Its provided as a Maven project, encoded in UTF8, written in Java and published under [GPLv3](http://www.gnu.de/documents/gpl.de.html). The chess images used were published by Igor Krizanovskij under [Public Domain](https://creativecommons.org/publicdomain/zero/1.0/). JetBrains Mono is released under [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
 
+![overview 1](doc/overview1.png)
+
+![overview 2](doc/overview2.png)
+
 ## Prerequisites
 
 - Maven
