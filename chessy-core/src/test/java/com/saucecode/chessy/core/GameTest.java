@@ -8,7 +8,17 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.saucecode.chessy.core.logic.Board;
+
 class GameTest {
+	
+	public static final long WAIT_INTERVAL = 1L;
+	
+	private void wait(Game game) throws InterruptedException {
+		while (game.isLocked()) {
+			Thread.sleep(WAIT_INTERVAL);
+		}
+	}
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -49,19 +59,60 @@ class GameTest {
 		assertEquals(Player.WHITE, game.currentPlayerProperty().get());
 	}
 
-	// TODO
-	void testABCD() throws InterruptedException {
+	@Test
+	void testCurrentPlayer() throws InterruptedException {
 		final Game game = new Game();
-		while (game.busyProperty().get()) {
-			Thread.sleep(1L);
-		}
+		wait(game);
 		assertEquals(Player.WHITE, game.currentPlayerProperty().get());
 		game.select(new Position(0, 1));
+		wait(game);
 		game.select(new Position(0, 2));
-		while (game.busyProperty().get()) {
-			Thread.sleep(1L);
-		}
+		wait(game); // a.i. move happens here
 		assertEquals(Player.WHITE, game.currentPlayerProperty().get());
+	}
+	
+	@Test
+	void testCheckMate() throws InterruptedException {
+		final Game game = new Game();
+		wait(game);
+		game.aiBlackActiveProperty().set(false);
+		
+		assertEquals(Player.WHITE, game.currentPlayerProperty().get());
+		
+		// move white pawn f2 f3
+		game.select(new Position(5, 1));
+		wait(game);
+		game.select(new Position(5, 2));
+		wait(game);
+		
+		assertEquals(Player.BLACK, game.currentPlayerProperty().get());
+		
+		// move black pawn e7 e6
+		game.select(new Position(4, 6));
+		wait(game);
+		game.select(new Position(4, 5));
+		wait(game);
+		
+		assertEquals(Player.WHITE, game.currentPlayerProperty().get());
+		
+		// move white pawn g2 g4
+		game.select(new Position(6, 1));
+		wait(game);
+		game.select(new Position(6, 3));
+		wait(game);
+		
+		assertEquals(Player.BLACK, game.currentPlayerProperty().get());
+		
+		// move black queen d8 h4
+		game.select(new Position(3, 7));
+		wait(game);
+		game.select(new Position(7, 3));
+		wait(game);
+		
+		// white should be in checkmate now
+		assertEquals(Player.WHITE, game.inCheckmateProperty().get());
+		assertEquals(-Board.CHECKMATE_SCORE, game.scoreWhiteProperty().get());
+		assertEquals(Board.CHECKMATE_SCORE, game.scoreBlackProperty().get());
 	}
 
 	@Test

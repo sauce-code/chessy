@@ -49,7 +49,7 @@ public class Position implements PositionI {
 
 	@Override
 	public String toString() {
-		return "(" + x + "," + y + ")";
+		return (char) (x + 97) + Integer.toString(y);
 	}
 
 	@Override

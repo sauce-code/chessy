@@ -27,6 +27,8 @@ import javafx.beans.property.SimpleObjectProperty;
  * @author Torben Kr&uuml;ger
  */
 public class Board {
+	
+	public static final int CHECKMATE_SCORE = 100_000;
 
 	/**
 	 * Static {@link Logger} instance for the class {@link Board}.
@@ -536,15 +538,15 @@ public class Board {
 		switch (state) {
 		case CHECKMATE_BLACK:
 			if (player == Player.WHITE) {
-				return 100_000;
+				return CHECKMATE_SCORE;
 			} else {
-				return -100_000;
+				return -CHECKMATE_SCORE;
 			}
 		case CHECKMATE_WHITE:
 			if (player == Player.WHITE) {
-				return -100_000;
+				return -CHECKMATE_SCORE;
 			} else {
-				return 100_000;
+				return CHECKMATE_SCORE;
 			}
 		case STALEMATE_BLACK:
 			return 0;

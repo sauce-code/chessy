@@ -18,28 +18,28 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 public interface GameI {
 
 	/**
-	 * Default value for {@link #plyProperty()}.
+	 * Default value for {@link #aiBlackPlyProperty()}.
 	 *
 	 * @since 1.0.0
 	 */
 	int PLY_STD = 4;
 
 	/**
-	 * Minimum value for {@link #plyProperty()}.
+	 * Minimum value for {@link #aiBlackPlyProperty()}.
 	 *
 	 * @since 1.0.0
 	 */
 	int PLY_MIN = 1;
 
 	/**
-	 * Maximum value for {@link #plyProperty()}.
+	 * Maximum value for {@link #aiBlackPlyProperty()}.
 	 *
 	 * @since 1.0.0
 	 */
 	int PLY_MAX = 5;
 
 	/**
-	 * Default value for {@link #blackAIProperty()}.
+	 * Default value for {@link #aiBlackActiveProperty()}.
 	 *
 	 * @since 1.0.0
 	 */
@@ -228,31 +228,34 @@ public interface GameI {
 	ReadOnlyObjectProperty<FieldI> fieldProperty(Position position);
 
 	/**
-	 * Returns the ply property. Changing this during an A.I. operation has no effect.
+	 * Returns the ply property for A.I. black ply. Changing this during an A.I. operation has no effect.
 	 *
-	 * @return ply property
-	 *
-	 * @since 1.0.0
-	 */
-	IntegerProperty plyProperty();
-
-	/**
-	 * Returns the read-only black a.i. property.
-	 *
-	 * @return read-only black a.i. property
+	 * @return A.I. black ply
 	 *
 	 * @since 1.0.0
 	 */
-	BooleanProperty blackAIProperty();
+	IntegerProperty aiBlackPlyProperty();
 
 	/**
-	 * Returns the read-only multi threaded property.
+	 * Returns the A.I. black active property.
 	 *
-	 * @return read-only multi threaded property
+	 * @return A.I. black active
+	 *
+	 * @since 1.0.0
+	 */
+	BooleanProperty aiBlackActiveProperty();
+
+	/**
+	 * Returns the multi threaded property.
+	 *
+	 * @return multi threaded property
 	 *
 	 * @since 1.0.0
 	 */
 	BooleanProperty multiThreadedProperty();
+	
+	// TODO
+	boolean isLocked();
 
 	/**
 	 * Performs an undo.
@@ -288,8 +291,8 @@ public interface GameI {
 	 * <li>if a field was selected before and the position contains no figure belonging the current player, the previous
 	 * selected field will be unselected</li>
 	 * <li>if a field has been selected before and the position is a valid target, a move will be done. If the move was
-	 * done by {@link Player#WHITE} and {@link #blackAIProperty()} is set {@code true}, an A.I. move will be performed
-	 * for {@link Player#BLACK}.
+	 * done by {@link Player#WHITE} and {@link #aiBlackActiveProperty()} is set {@code true}, an A.I. move will be
+	 * performed for {@link Player#BLACK}.
 	 * </ul>
 	 *
 	 * @param position target position
