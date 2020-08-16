@@ -413,7 +413,7 @@ public class Board {
 	}
 
 	/**
-	 * Resets the x marker for the current palyer.
+	 * Resets the x marker for the current player.
 	 */
 	public void resetMarker() {
 		switch (currentPlayer) {

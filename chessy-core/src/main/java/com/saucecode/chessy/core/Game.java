@@ -116,6 +116,14 @@ public class Game implements GameI {
 		undoEnabled.bind(resetEnabled);
 
 		board.addListener((ChangeListener<Board>) (observable, oldValue, newValue) -> Platform.runLater(() -> {
+			new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					
+				}
+			}.run();
 			scoreWhite.set(board.get().getScore(Player.WHITE));
 			scoreBlack.set(board.get().getScore(Player.BLACK));
 			scoreWhiteTotal.set(board.get().getScoreTotal(Player.WHITE));
