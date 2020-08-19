@@ -167,7 +167,7 @@ public interface GameI {
 	 *
 	 * @since 1.0.0
 	 */
-	ReadOnlyBooleanProperty undoEnabledPropoerty();
+	ReadOnlyBooleanProperty undoEnabledProperty();
 
 	/**
 	 * Returns the read-only progress property.

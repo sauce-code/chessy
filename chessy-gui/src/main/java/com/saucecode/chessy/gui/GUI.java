@@ -118,7 +118,7 @@ public class GUI extends Application {
 	 */
 	private Menu initMenuEdit() {
 		final MenuItem undo = new MenuItem("_Undo");
-		undo.disableProperty().bind(game.undoEnabledPropoerty().not());
+		undo.disableProperty().bind(game.undoEnabledProperty().not());
 		undo.setAccelerator(KeyCombination.keyCombination("Ctrl + Z"));
 		undo.setOnAction(e -> {
 			if (game.aiBlackActiveProperty().get()) {

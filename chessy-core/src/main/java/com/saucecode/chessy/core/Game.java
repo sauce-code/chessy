@@ -97,6 +97,8 @@ public class Game implements GameI {
 
 	private final AtomicBoolean locked = new AtomicBoolean(true);
 	
+//	private final ReadOnlyBooleanWrapper locked = new ReadOnlyBooleanWrapper(true);
+	
 	private final AtomicBoolean aiMove = new AtomicBoolean();
 
 	/**
@@ -116,14 +118,14 @@ public class Game implements GameI {
 		undoEnabled.bind(resetEnabled);
 
 		board.addListener((ChangeListener<Board>) (observable, oldValue, newValue) -> Platform.runLater(() -> {
-			new Runnable() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					
-				}
-			}.run();
+//			new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					// TODO Auto-generated method stub
+//					
+//				}
+//			}.run();
 			scoreWhite.set(board.get().getScore(Player.WHITE));
 			scoreBlack.set(board.get().getScore(Player.BLACK));
 			scoreWhiteTotal.set(board.get().getScoreTotal(Player.WHITE));
@@ -187,14 +189,14 @@ public class Game implements GameI {
 						.set(new Field(board.get().getBoard()[x2][y2].getFigureType(), Modifier.TO));
 			}
 
-			for (int x3 = 0; x3 < 8; x3++) {
-				for (int y3 = 0; y3 < 8; y3++) {
-					final Position pos = new Position(x3, y3);
+			for (int x = 0; x < 8; x++) {
+				for (int y = 0; y < 8; y++) {
+					final Position pos = new Position(x, y);
 					final ReadOnlyObjectWrapper<FieldI> field = fieldMap.get(pos);
 					FigureType figureType2 = FigureType.NONE;
 					Modifier modifier = Modifier.NONE;
-					if (board.get().getBoard()[x3][y3] != null) {
-						figureType2 = board.get().getBoard()[x3][y3].getFigureType();
+					if (board.get().getBoard()[x][y] != null) {
+						figureType2 = board.get().getBoard()[x][y].getFigureType();
 					}
 					if (selection.get() != null && selection.get().equals(pos)) {
 						modifier = Modifier.SELECTED;
@@ -362,6 +364,10 @@ public class Game implements GameI {
 	public ReadOnlyObjectProperty<Player> currentPlayerProperty() {
 		return currentPlayer.getReadOnlyProperty();
 	}
+	
+	public Player getCurrentPlayer() {
+		return currentPlayer.get();
+	}
 
 	@Override
 	public ReadOnlyBooleanProperty resetEnabledProperty() {
@@ -369,7 +375,7 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public ReadOnlyBooleanProperty undoEnabledPropoerty() {
+	public ReadOnlyBooleanProperty undoEnabledProperty() {
 		return undoEnabled.getReadOnlyProperty();
 	}
 
