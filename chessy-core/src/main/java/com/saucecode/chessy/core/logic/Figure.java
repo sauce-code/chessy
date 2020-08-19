@@ -188,7 +188,7 @@ public abstract class Figure {
 	 * @return chess code of this figure
 	 */
 	public String getCode() {
-		return (char) (x + 97) + Integer.toString(y);
+		return new Position(x, y).toString();
 	}
 
 	@Override

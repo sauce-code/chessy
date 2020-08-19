@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
@@ -76,7 +77,7 @@ public class Game implements GameI {
 
 	private final ReadOnlyBooleanWrapper undoEnabled = new ReadOnlyBooleanWrapper();
 
-	private final ReadOnlyDoubleWrapper progressProperty = new ReadOnlyDoubleWrapper();
+	private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
 
 	private final ReadOnlyObjectWrapper<Position> from = new ReadOnlyObjectWrapper<>();
 
@@ -90,9 +91,15 @@ public class Game implements GameI {
 
 	private final SimpleBooleanProperty multiThreaded = new SimpleBooleanProperty(MULTI_THREADED_STD);
 
-	private final SimpleBooleanProperty blackAI = new SimpleBooleanProperty(BLACK_AI_STD);
+	private final SimpleBooleanProperty aiBlackActive = new SimpleBooleanProperty(BLACK_AI_STD);
 
-	private final BoundedIntegerProperty ply = new BoundedIntegerProperty(PLY_STD, PLY_MIN, PLY_MAX);
+	private final BoundedIntegerProperty aiBlackPly = new BoundedIntegerProperty(PLY_STD, PLY_MIN, PLY_MAX);
+
+	private final AtomicBoolean locked = new AtomicBoolean(true);
+	
+//	private final ReadOnlyBooleanWrapper locked = new ReadOnlyBooleanWrapper(true);
+	
+	private final AtomicBoolean aiMove = new AtomicBoolean();
 
 	/**
 	 * Creates a new game.
@@ -111,6 +118,14 @@ public class Game implements GameI {
 		undoEnabled.bind(resetEnabled);
 
 		board.addListener((ChangeListener<Board>) (observable, oldValue, newValue) -> Platform.runLater(() -> {
+//			new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					// TODO Auto-generated method stub
+//					
+//				}
+//			}.run();
 			scoreWhite.set(board.get().getScore(Player.WHITE));
 			scoreBlack.set(board.get().getScore(Player.BLACK));
 			scoreWhiteTotal.set(board.get().getScoreTotal(Player.WHITE));
@@ -118,30 +133,43 @@ public class Game implements GameI {
 			switch (board.get().getCurrentState()) {
 			case CHECK_BLACK:
 				inCheck.set(Player.BLACK);
+				inStalemate.set(null);
+				inCheckmate.set(null);
 				break;
 			case CHECK_WHITE:
 				inCheck.set(Player.WHITE);
+				inStalemate.set(null);
+				inCheckmate.set(null);
 				break;
 			case CHECKMATE_BLACK:
+				inCheck.set(null);
+				inStalemate.set(null);
 				inCheckmate.set(Player.BLACK);
 				break;
 			case CHECKMATE_WHITE:
+				inCheck.set(null);
+				inStalemate.set(null);
 				inCheckmate.set(Player.WHITE);
 				break;
 			case STALEMATE_BLACK:
+				inCheck.set(null);
 				inStalemate.set(Player.BLACK);
+				inCheckmate.set(null);
 				break;
 			case STALEMATE_WHITE:
+				inCheck.set(null);
 				inStalemate.set(Player.WHITE);
+				inCheckmate.set(null);
 				break;
 			case NONE:
 				inCheck.set(null);
 				inStalemate.set(null);
+				inCheckmate.set(null);
 				break;
 			default:
 				throw new IllegalStateException("no such state");
 			}
-			currentPlayer.set(board.get().getCurrentPlayer());
+			currentPlayer.set(newValue.getCurrentPlayer());
 
 			resetEnabled.set(history.size() > 0);
 
@@ -161,14 +189,14 @@ public class Game implements GameI {
 						.set(new Field(board.get().getBoard()[x2][y2].getFigureType(), Modifier.TO));
 			}
 
-			for (int x3 = 0; x3 < 8; x3++) {
-				for (int y3 = 0; y3 < 8; y3++) {
-					final Position pos = new Position(x3, y3);
+			for (int x = 0; x < 8; x++) {
+				for (int y = 0; y < 8; y++) {
+					final Position pos = new Position(x, y);
 					final ReadOnlyObjectWrapper<FieldI> field = fieldMap.get(pos);
 					FigureType figureType2 = FigureType.NONE;
 					Modifier modifier = Modifier.NONE;
-					if (board.get().getBoard()[x3][y3] != null) {
-						figureType2 = board.get().getBoard()[x3][y3].getFigureType();
+					if (board.get().getBoard()[x][y] != null) {
+						figureType2 = board.get().getBoard()[x][y].getFigureType();
 					}
 					if (selection.get() != null && selection.get().equals(pos)) {
 						modifier = Modifier.SELECTED;
@@ -188,17 +216,20 @@ public class Game implements GameI {
 				}
 			}
 			busy.set(false);
+			if (!aiMove.get()) {
+				unlock();
+			}
 		}));
 
-		blackAI.addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+		aiBlackActive.addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 			if (board.get().getCurrentPlayer() == Player.BLACK) {
-				move(ply.get());
+				move(aiBlackPly.get());
 			}
 		});
 
 		busy.addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 			if (!newValue) {
-				Platform.runLater(() -> progressProperty.set(0.0)); // TODO beibelassen?
+				Platform.runLater(() -> progress.set(0.0)); // TODO beibelassen?
 			}
 		});
 
@@ -218,6 +249,9 @@ public class Game implements GameI {
 	private boolean move(int fromX, int fromY, int toX, int toY) {
 		final Board temp = board.get().move(fromX, fromY, toX, toY);
 		if (temp != null) {
+			if (aiBlackActiveProperty().get() && board.get().getCurrentPlayer() == Player.WHITE) {
+				aiMove.set(true);
+			}
 			history.push(board.get());
 			board.set(temp);
 			return true;
@@ -240,11 +274,12 @@ public class Game implements GameI {
 				Platform.runLater(() -> busy.set(true)); // TODO sollte nicht sein
 				Board temp = null;
 				final AtomicInteger count = new AtomicInteger();
-				temp = board.get().getMax(ply, progressProperty, multiThreaded.get(), count);
+				temp = board.get().getMax(ply, progress, multiThreaded.get(), count);
 				if (temp != null) {
 					for (int i = 0; i < ply - 1; i++) {
 						temp = temp.getPrevious();
 					}
+					aiMove.set(false);
 					history.push(board.get());
 					board.set(temp);
 				}
@@ -254,7 +289,9 @@ public class Game implements GameI {
 				Platform.runLater(() -> calculationTime.set(timeDiff));
 				Platform.runLater(() -> busy.set(false)); // TODO sollte nicht sein
 				String countString = new DecimalFormat().format(count).toString();
-				logger.debug("finished, calculated a total of " + countString + " possible moves in " + timeDiff + " ms");
+				logger.debug(
+						"finished, calculated a total of " + countString + " possible moves in " + timeDiff + " ms");
+//				unlock();
 				return null;
 			}
 		};
@@ -299,8 +336,8 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public BooleanProperty blackAIProperty() {
-		return blackAI;
+	public BooleanProperty aiBlackActiveProperty() {
+		return aiBlackActive;
 	}
 
 	@Override
@@ -327,6 +364,10 @@ public class Game implements GameI {
 	public ReadOnlyObjectProperty<Player> currentPlayerProperty() {
 		return currentPlayer.getReadOnlyProperty();
 	}
+	
+	public Player getCurrentPlayer() {
+		return currentPlayer.get();
+	}
 
 	@Override
 	public ReadOnlyBooleanProperty resetEnabledProperty() {
@@ -334,13 +375,13 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public ReadOnlyBooleanProperty undoEnabledPropoerty() {
+	public ReadOnlyBooleanProperty undoEnabledProperty() {
 		return undoEnabled.getReadOnlyProperty();
 	}
 
 	@Override
 	public ReadOnlyDoubleProperty progressProperty() {
-		return progressProperty.getReadOnlyProperty();
+		return progress.getReadOnlyProperty();
 	}
 
 	@Override
@@ -359,8 +400,8 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public IntegerProperty plyProperty() {
-		return ply;
+	public IntegerProperty aiBlackPlyProperty() {
+		return aiBlackPly;
 	}
 
 	@Override
@@ -380,12 +421,53 @@ public class Game implements GameI {
 	}
 
 	@Override
+	public boolean isLocked() {
+		return locked.get();
+	}
+
+	private void lock() {
+		boolean wasLocked = locked.getAndSet(true);
+		if (wasLocked) {
+			throw new IllegalStateException();
+		}
+		logger.debug("locked");
+	}
+
+	private void unlock() {
+		locked.set(false);
+		logger.debug("unlocked");
+	}
+
+	@Override
+	public void undo() {
+		lock();
+		if (history.size() > 0) {
+			unselect();
+			board.set(history.pop());
+		}
+		unlock();
+	}
+
+	@Override
+	public void reset() {
+		lock();
+		if (resetEnabled.get()) {
+			history.clear();
+			board.set(new Board());
+		}
+		unlock();
+	}
+
+	@Override
 	public void select(Position position) {
+		lock();
+		// TODO if game over, do nothing?
 		Objects.requireNonNull(position, "position must not be null");
 
 		// clicked selected field => unselect
 		if (position.equals(selection.get())) {
 			unselect();
+			unlock();
 
 		} else {
 			final int x = position.getX();
@@ -394,33 +476,45 @@ public class Game implements GameI {
 			// empty space clicked or enemy figure clicked
 			if (board.get().getFigure(x, y) == null
 					|| board.get().getFigure(x, y).getOwner() != board.get().getCurrentPlayer()) {
+				
 
 				// means a figure was clicked in previous click
 				if (selection.get() != null) {
 
 					if (move(selection.get().getX(), selection.get().getY(), x, y)) {
 
-						if (blackAIProperty().get() && board.get().getCurrentPlayer() == Player.BLACK) {
+						if (aiBlackActiveProperty().get() && board.get().getCurrentPlayer() == Player.BLACK) {
 
-							move(ply.get());
+							move(aiBlackPly.get());
 
-						}
+						} 
 					}
 				}
 				unselect();
-			} else {
-				// own figure clicked
-				if (board.get().getFigure(x, y).getOwner() == board.get().getCurrentPlayer()) {
-					if (selection.get() != null) {
-						fieldMap.get(selection.get()).set(new Field(
-								board.get().getBoard()[selection.get().getX()][selection.get().getY()].getFigureType(),
-								Modifier.NONE));
-					}
-					selection.set(new Position(x, y));
-					fieldMap.get(position)
-							.set(new Field(board.get().getBoard()[position.getX()][position.getY()].getFigureType(),
-									Modifier.SELECTED));
+				if (!aiMove.get()) {
+					unlock();
 				}
+			}
+
+			// own figure clicked
+			else {
+//				if (board.get().getFigure(x, y).getOwner() == board.get().getCurrentPlayer()) {
+					Platform.runLater(() -> {
+						if (selection.get() != null) {
+							fieldMap.get(selection.get()).set(new Field(
+									board.get().getBoard()[selection.get().getX()][selection.get().getY()].getFigureType(),
+									Modifier.NONE));
+						}
+						selection.set(new Position(x, y));
+						fieldMap.get(position)
+								.set(new Field(board.get().getBoard()[position.getX()][position.getY()].getFigureType(),
+										Modifier.SELECTED));
+						unlock();
+					});
+//				} 
+//			else {
+//					unlock();	
+//				}
 			}
 		}
 
@@ -441,15 +535,8 @@ public class Game implements GameI {
 	}
 
 	@Override
-	public void reset() {
-		// TODO check if busy
-		if (resetEnabled.get()) {
-			history.clear();
-			board.set(new Board());
-		}
-	}
-
-	@Override
+	// TODO include all values
+	// TODO Exception if busy?
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -458,6 +545,8 @@ public class Game implements GameI {
 	}
 
 	@Override
+	// TODO include all values
+	// TODO Exception if busy?
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -477,15 +566,6 @@ public class Game implements GameI {
 			return false;
 		}
 		return true;
-	}
-
-	@Override
-	public void undo() {
-		// TODO check if busy
-		if (history.size() > 0) {
-			unselect();
-			board.set(history.pop());
-		}
 	}
 
 }
