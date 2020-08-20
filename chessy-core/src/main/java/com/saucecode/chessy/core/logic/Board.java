@@ -27,7 +27,7 @@ import javafx.beans.property.SimpleObjectProperty;
  * @author Torben Kr&uuml;ger
  */
 public class Board {
-	
+
 	public static final int CHECKMATE_SCORE = 100_000;
 
 	/**
@@ -582,7 +582,7 @@ public class Board {
 			return chain(ply);
 		}
 		if (multiThreaded) {
-			return getMaxMultiThreaded(ply, progress, count);
+			return getMaxMultiThreaded(ply, progress, count, true);
 		} else {
 			int figuresToMove = 0;
 
@@ -665,7 +665,7 @@ public class Board {
 		return max;
 	}
 
-	private Board getMaxMultiThreaded(int ply, DoubleProperty progress, AtomicInteger count) {
+	private Board getMaxMultiThreaded(int ply, DoubleProperty progress, AtomicInteger count, boolean parent) {
 		if (isGameOVer()) {
 			return chain(ply);
 		}
@@ -673,7 +673,9 @@ public class Board {
 		final ObjectProperty<Board> max = new SimpleObjectProperty<>(null);
 		int threadCount = 0;
 
-		progress.set(0.0); // TODO eventuell verschieben
+		if (parent) {
+			Platform.runLater(() -> progress.set(0.0)); // TODO eventuell verschieben, loest manchmal bugs aus
+		}
 
 		for (int fromX = 0; fromX < 8; fromX++) {
 			for (int fromY = 0; fromY < 8; fromY++) {
@@ -692,7 +694,9 @@ public class Board {
 					final int y = fromY;
 					final double step = 1.0 / threadCount;
 					final Thread thread = new Thread(() -> {
-						logger.debug(figures[x][y].getCode() + " started");
+						if (parent) {
+							logger.debug(figures[x][y].getCode() + " started");
+						}
 						Board temp = null;
 						final AtomicInteger countInternal = new AtomicInteger();
 						for (int toX = 0; toX < 8; toX++) {
@@ -704,8 +708,11 @@ public class Board {
 								if ((temp != null) && (ply > 1)) {
 									// TODO DEBUG
 									final Board a = temp;
-									final Board b = a.getMaxSingleThreaded(ply - 1, countInternal);
-									temp = b;
+									if (ply > 3) {
+										temp = a.getMaxMultiThreaded(ply - 1, progress, countInternal, false);
+									} else {
+										temp = a.getMaxSingleThreaded(ply - 1, countInternal);
+									}
 								}
 								if ((max.get() == null) || ((temp != null)
 										&& (temp.getScore(currentPlayer) > max.get().getScore(currentPlayer)))) {
@@ -716,9 +723,11 @@ public class Board {
 						count.addAndGet(countInternal.get());
 						String countInternalString = new DecimalFormat().format(countInternal.get()).toString();
 						latch.countDown();
-						Platform.runLater(() -> progress.set(progress.get() + step));
-						logger.debug(figures[x][y].getCode() + " finished, calculated " + countInternalString
-								+ " possible moves");
+						if (parent) {
+							Platform.runLater(() -> progress.set(progress.get() + step));
+							logger.debug(figures[x][y].getCode() + " finished, calculated " + countInternalString
+									+ " possible moves");
+						}
 					});
 					thread.setDaemon(true);
 					thread.start();
@@ -734,6 +743,7 @@ public class Board {
 		return max.get();
 	}
 
+	// TODO wird nicht genutzt
 	public Board getMin(int ply, AtomicInteger count) {
 		if (isGameOVer()) {
 			return chain(ply);
